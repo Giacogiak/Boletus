@@ -77,6 +77,33 @@ and the startup assert deferred (D-08), because a version check cannot catch a v
 stands is the pin by commit in [`native/README.md`](../../../native/README.md) and the upstream
 ask of § 8 for a version bump or a capability query.)*
 
+## 10. A bounded rename retry in `AtomicOutput::commit` on Windows — *ask*
+
+**PLANNED** — asked 2026-10-06, open upstream. Every DualC export writes `<path>.part` and
+`std::filesystem::rename`s it over `<path>` once the stream is closed (`AtomicOutput::commit`
+in `examples/example_common.cpp`); on failure the driver returns rc 2, the C ABI reports
+`DUALC_ERR_IO` "tiled STL export failed (writer or validation error)", and the
+`error_code` message goes to `std::cerr` only.
+
+**Evidence** (Boletus CI, [10/03 § The flaky Windows gate](../10-public-delivery/03-ci.md#the-flaky-windows-gate--open)):
+on the `windows-2022` runner, four of nine gate runs lost one file-writing test — twice the
+tiled STL export, once the CLI parity, once one of six parallel exports with exactly that
+`Io` error — on an unchanged library built from the pinned commit, never on Linux, never
+the same test twice in a row, and a second pass on the same build always 180/180. No facet
+count ever differed; the mesh is right and the file is not. The shape is a sharing
+violation on the rename while an on-access scanner or indexer still holds the file it just
+saw closed.
+
+**Want:** in `AtomicOutput::commit()`, retry the rename a bounded number of times with a short
+back-off when the error is `ERROR_SHARING_VIOLATION` or `ERROR_ACCESS_DENIED` (Windows
+only; the practice of git and of most installers), and carry the `error_code` message into
+the C ABI's `err` buffer so a host can show it. **Not a blocker** for the plugin: a user who
+hits it re-clicks `Write ▶`; it blocks a green Windows gate on every push, since the
+concurrency test exercises the plugin's own two-exports-at-once scenario.
+
+**Boletus side:** nothing to change once it lands beyond the pin bump; until then the
+workflow's retry step tells a reviewer that a red Windows gate is this item.
+
 ---
 
 ← Back to the [Roadmap index](../README.md) · prev: [06 — Distribution & packaging](../06-phase4-distribution-and-packaging.md) · next: [08 — Strut lattices](../08-strut-lattices.md)

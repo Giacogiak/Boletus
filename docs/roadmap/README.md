@@ -90,11 +90,12 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    ([05/06 § Phase C](05-phase3-grasshopper-components/06-write-to-file.md#phase-c--cooperative-cancel-and-a-real-percentage)),
    the records list as pending: install the `boletus-yak` artifact of a green run on a Windows
    machine with Rhino 8 — the first time the Windows DLL runs at the pin. **NEXT.**
-2. **The flaky Windows gate** — three of seven Windows CI runs went red on one file-writing
-   test (`ExportTiledStl`'s facet count twice, the CLI parity once) on an unchanged library,
-   never on Linux, and the workflow's retry passed; the next red run carries the assertion
-   (the gate's report now keeps it), then the fix or the hand-off to DualC
-   ([10 #34](10-public-delivery/03-ci.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak)). **PLANNED.**
+2. **The flaky Windows gate** — four of nine Windows CI runs lost one file-writing test, the
+   captured one a DualC `Io` error from the `.part` rename, never a wrong mesh, never on
+   Linux, a second pass always green: a bounded rename retry is asked of DualC
+   ([07 § 10](07-upstream-coordination/README.md#10-a-bounded-rename-retry-in-atomicoutputcommit-on-windows--ask),
+   [10/03](10-public-delivery/03-ci.md#the-flaky-windows-gate--open)); until it lands and the
+   pin moves, a red Windows gate whose retry passes is this item. **PLANNED.**
 3. **Re-pin the submodule to a DualC `main` commit** once DualC's `main` is pushed past
    `2fcd19f` ([10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed));
    until then the gitlink resolves through DualC's `ci/gate-workflow` branch. **PLANNED.**
@@ -126,7 +127,7 @@ present-tense effect is [design 06](../design/06-conventions.md).
 | 04 | [Phase 3a — field-graph model & serializer](04-phase3-field-graph-serializer.md#04--phase-3a-field-graph-model--serializer) | The managed node tree, the canonical serializer, the builders, the validator; the full op vocabulary pinned. | DONE |
 | 05 | [Phase 3b — Grasshopper components](05-phase3-grasshopper-components/README.md#05--phase-3b-grasshopper-components-mvp) | The `.gha`: the plan, then every increment — the thin slice, the `Volume` palette, the diskless flip, tiled STL, the proxy, the icons, the warps, the example graph, `Write to File` and its Phase C, the strut lattices, the broader `Primitive` set. | DONE — the Rhino smoke tests pending on Windows |
 | 06 | [Phase 4 — distribution & packaging](06-phase4-distribution-and-packaging.md#06--phase-4-distribution--packaging) | The local Yak and the zero-prerequisite install; the local-only constraint. | PLANNED |
-| 07 | [Upstream coordination with DualC](07-upstream-coordination/README.md#07--upstream-coordination-with-dualc) | What Boletus needs from or triggers in DualC: the in-memory mesh resolver, the viewer binary and the file-watch, the uniform push, the export callback, the strut-vocabulary sync, the version trap, the inventory at the pin. | PARTIAL — per item |
+| 07 | [Upstream coordination with DualC](07-upstream-coordination/README.md#07--upstream-coordination-with-dualc) | What Boletus needs from or triggers in DualC: the in-memory mesh resolver, the viewer binary and the file-watch, the uniform push, the export callback, the strut-vocabulary sync, the version trap, the inventory at the pin, the rename retry on Windows. | PARTIAL — per item |
 | 08 | [Strut lattices](08-strut-lattices.md) | The strut-lattice node vocabulary as pinned, the `--expr` exemplars the tests round-trip, the Boletus-side implementation (#20). | DONE |
 | 09 | [Docs layers](09-docs-layers/README.md#docs-layers--the-documentation-restructuring) | The 2026-09-21 documentation restructuring: the plan, items #21–#31, the phase table, the per-phase records, the post-close gate portability, loss audit and Linux build, the DualC handoff. | DONE — Phases 0–5 and three post-close children; the semantic-lint runs accumulate under it |
 | 10 | [Public delivery](10-public-delivery/README.md#10--public-delivery-the-repo-as-others-build-it) | Taking Boletus public: the fresh root and the offline archive (#32), DualC as a git submodule the build compiles (#33), the gate as CI with one `.yak` artifact (#34). | DONE |
