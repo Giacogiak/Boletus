@@ -166,7 +166,27 @@ red in the staging step: `dotnet build` of the *project* lands in `bin/Release/`
 (`Platform=AnyCPU`), the solution's rows map it to x64 and `bin/x64/Release/`, which is
 where the step looked. The workflow builds the solution in Release; the result is on the
 line below.
-- Result: *(the first green run.)*
+- Result: the fifth run (commit `de47956`) **green on both jobs** — Ubuntu 1 min wall with
+  the DualC build tree restored from the cache (21 s to confirm it, the gate 34 s, strict
+  docs and the selftest after it); Windows 7 min, of which the native build with the viewer
+  353 s (uncached, the first Windows run to reach the cache-save step), the gate 66 s
+  with the 178 tests, the Release build and `yak build` seconds each; two artifacts,
+  `boletus-yak` (0.9 MB) and `boletus-gha-folder`.
+
+**One flaky test on the Windows runner, open.** Between the second and the fifth run the
+Windows gate went red twice in `dotnet-test` on one test, `WrapperTests.ExportTiledStl_writes_a_binary_stl_with_the_golden_facet_count`
+— the tiled STL export's facet count against the golden 163,740 — and green twice, on an
+unchanged library (every run built DualC `2fcd19f` from scratch) and unchanged test code.
+On Linux the same test passes on every run, locally and in CI. DualC's own invariant is that
+the output is bit-identical at every thread count ([DualC design 10](../../external/DualC/docs/design/10-invariants-and-tolerances.md)),
+so a varying facet count on the 4-core Windows runner points at the engine's tiled path
+under MSVC, not at the binding — unproven while the assertion's actual value is unknown: the
+runs that failed predate the report that carries it. The gate's `dotnet-test` report keeps
+each failing test's assertion lines from here on, and the workflow re-runs the test project
+once on a failed gate and annotates the verdict, so the next red run names the actual count
+and says whether a second pass agrees. Until then the item is open and the hand-off to DualC
+waits for that evidence; the Rhino smoke test on the `.yak` (§ Next up) is the other place
+the tiled writer runs on Windows.
 
 ---
 

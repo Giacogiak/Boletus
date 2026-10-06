@@ -90,17 +90,22 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    ([05/06 § Phase C](05-phase3-grasshopper-components/06-write-to-file.md#phase-c--cooperative-cancel-and-a-real-percentage)),
    the records list as pending: install the `boletus-yak` artifact of a green run on a Windows
    machine with Rhino 8 — the first time the Windows DLL runs at the pin. **NEXT.**
-2. **Re-pin the submodule to a DualC `main` commit** once DualC's `main` is pushed past
+2. **The flaky Windows test** — `ExportTiledStl`'s golden facet count went red on two of
+   four Windows CI runs on an unchanged library, never on Linux; the next red run carries the
+   actual count (the gate's report and the workflow's retry now keep it), then the hand-off to
+   DualC if the engine's tiled path is the cause
+   ([10 #34](10-public-delivery.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak)). **PLANNED.**
+3. **Re-pin the submodule to a DualC `main` commit** once DualC's `main` is pushed past
    `2fcd19f` ([10 #33](10-public-delivery.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed));
    until then the gitlink resolves through DualC's `ci/gate-workflow` branch. **PLANNED.**
-3. **Distribution & packaging** ([06](06-phase4-distribution-and-packaging.md)) — the `.yak`
+4. **Distribution & packaging** ([06](06-phase4-distribution-and-packaging.md)) — the `.yak`
    exists as a CI artifact; zero-prerequisite install waits on DualC's static-runtime build
    ([D-05](../decisions/README.md)); a Yak-server release is the owner's call. **PLANNED.**
-4. **What the pinned DualC offers and Boletus does not bind**, each on its trigger
+5. **What the pinned DualC offers and Boletus does not bind**, each on its trigger
    ([07 § 9](07-upstream-coordination/03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use)):
    tiled 3MF through the ABI (D-32), a version bump per vocabulary change (D-08); and the standing asks — the
    uniform-push channel (D-27), DAG-ref serialization (D-06).
-5. **Palette gaps, DEFERRED on a canvas that needs them**: `Mirror` / `Elongate` / `Repeat`
+6. **Palette gaps, DEFERRED on a canvas that needs them**: `Mirror` / `Elongate` / `Repeat`
    (D-23), `Triangle` / `Quad` plates (D-45), proxy refinements past the depth ceiling (D-19);
    a single-file `.gha` with embedded natives (D-48).
 
