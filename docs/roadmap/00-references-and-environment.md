@@ -77,7 +77,7 @@ only" is reversed by D-46 — Boletus is public, the git row's rule is "no push 
 pre-publication history, no `yak push` or NuGet publish without the owner's say-so, no
 committed binary"; and the DualC repository of the table is the git submodule
 `external/DualC` at the pin, public at `https://github.com/Giacogiak/DualC` — the `D:\DualC`
-paths stand as the sibling checkout of the time; [10](10-public-delivery.md).)*
+paths stand as the sibling checkout of the time; [10](10-public-delivery/README.md).)*
 
 ---
 

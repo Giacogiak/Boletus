@@ -77,7 +77,7 @@ rule is that the *native code* is never published; Phase 3b's `.gha` build, for 
 restores Rhino/GH packages online). See [00](00-references-and-environment.md) and the
 [local-only convention](../design/06-conventions.md#local-only) (decision D-02). *(2026-10-06:
 D-02 reversed by D-46 — the repository is public; the hard rule is that no native binary is
-committed, [10](10-public-delivery.md).)*
+committed, [10](10-public-delivery/README.md).)*
 
 ## RAM caution
 

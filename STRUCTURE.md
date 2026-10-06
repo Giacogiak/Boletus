@@ -113,6 +113,7 @@ Boletus/
 │       ├── MeshMaterializingResolverTests.cs  mem:// → temp OBJ + mesh(path=…) rewrite; mesh-free graphs pass through
 │       ├── ExportPlanTests.cs  ExportPlan.Resolve: extension rules, strategy table, tile-depth default and warnings, error cases
 │       ├── ProgressAndCancelTests.cs  The 0.5.0 overloads: golden counts through the hooked calls, stage shapes, a pre-cancelled token, a cancel from the callback and from another thread (no file, no .part), a throwing consumer
+│       ├── ConcurrencyTests.cs Independent handles on independent threads at once in one process — six exports (tiled and monolithic) and four contours in parallel, each at the golden counts
 │       ├── DiagnosticsTests.cs The 0.4.0 out DualcDiagnostics overloads: the probe, DualC's far-away-sphere empty contour (placeholder counts, flagged), the golden counts through the diagnostics twin (the struct's layout), progress twins returning the same struct, the exported STL's facet count against OutputTriangles for the healthy and the empty field
 │       └── cube.obj            Minimal unit-cube fixture for the mesh-source tests
 │

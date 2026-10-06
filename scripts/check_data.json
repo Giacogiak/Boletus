@@ -146,6 +146,7 @@
     "docs/roadmap/07-upstream-coordination",
     "docs/roadmap/09-docs-layers",
     "docs/roadmap/09-docs-layers/06-semantic-lint",
+    "docs/roadmap/10-public-delivery",
     "docs/raw"
   ],
   "ordered_item_files": [],
@@ -206,7 +207,7 @@
     "solution": "Boletus.sln",
     "configuration": "Debug",
     "test_project": "tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj",
-    "tests_expected_min": 178,
+    "tests_expected_min": 180,
     "warnings_allowed": [],
     "non_windows_args": [
       "-p:EnableWindowsTargeting=true"

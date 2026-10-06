@@ -23,7 +23,7 @@ full MVP palette becomes a clean second increment (see § Next increment below).
   supersedes the older "NuGet is offline" framing in [00](../00-references-and-environment.md)
   and `CLAUDE.md`. *(2026-10-06: the "never leaves the machine" half is reversed by D-46 —
   the repository is public and CI builds the native side from the DualC submodule; the rule
-  that holds is "no native binary is ever committed", [10](../10-public-delivery.md).)*
+  that holds is "no native binary is ever committed", [10](../10-public-delivery/README.md).)*
 - **Rhino/GH referenced via the `Grasshopper` 8.0.x NuGet metapackage**, compile-only
   (`IncludeAssets=compile;build`, `ExcludeAssets=runtime`, `Private=false`) — the real
   RhinoCommon/Grasshopper assemblies load from the running Rhino process and are never

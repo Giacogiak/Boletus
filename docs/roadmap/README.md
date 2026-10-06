@@ -24,7 +24,7 @@ stays under the cap by rule, not by baseline ([D-43](../decisions/01-settled.md)
 
 ## Current focus
 
-**Boletus is public** ([10](10-public-delivery.md), 2026-10-06): the repository at
+**Boletus is public** ([10](10-public-delivery/README.md), 2026-10-06): the repository at
 `https://github.com/Giacogiak/Boletus` under MIT, with a fresh root commit and the
 pre-publication history archived offline on DualC's procedure (#32, D-46); the vendored
 binaries replaced by the DualC git submodule `external/DualC` that `scripts/build_native.py`
@@ -73,8 +73,8 @@ pending in their records.
 
 | Date | What landed | Record |
 | --- | --- | --- |
-| 2026-10-06 | **Boletus is public** — a fresh root commit, the history archived offline on DualC's procedure, MIT + `CITATION.cff`; the local-only rule reversed (D-46). | [10 #32](10-public-delivery.md#32-published-with-a-fresh-root-the-history-archived-offline) |
-| 2026-10-06 | **DualC as a submodule, the gate as CI** — `external/DualC` at the pin, `build_native.py` in place of the committed binaries (D-47, D-10 settled), GitHub Actions on Ubuntu and Windows with one `.yak` artifact. | [10 #33](10-public-delivery.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed) · [10 #34](10-public-delivery.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak) |
+| 2026-10-06 | **Boletus is public** — a fresh root commit, the history archived offline on DualC's procedure, MIT + `CITATION.cff`; the local-only rule reversed (D-46). | [10 #32](10-public-delivery/01-fresh-root.md#32-published-with-a-fresh-root-the-history-archived-offline) |
+| 2026-10-06 | **DualC as a submodule, the gate as CI** — `external/DualC` at the pin, `build_native.py` in place of the committed binaries (D-47, D-10 settled), GitHub Actions on Ubuntu and Windows with one `.yak` artifact. | [10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed) · [10 #34](10-public-delivery/03-ci.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak) |
 | 2026-10-05 | **The contour diagnostics bound** — DualC's 0.4.0 `DualcDiagnostics` behind `out` overloads and a second entry-point probe; `Proxy preview` warns and draws nothing on an empty contour, `Write to File` warns after one; D-37 settled. | [05/09](05-phase3-grasshopper-components/09-contour-diagnostics.md) · [07 § 9](07-upstream-coordination/03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use) |
 | 2026-10-05 | **`Write to File` Phase C + the pin at DualC `2fcd19f`** — cooperative cancel and the engine's percentage over ABI 0.5.0, the Linux library rebuilt at the pin, the old-DLL fallback probed at runtime; the Windows binaries owe a rebuild. | [05/06 § Phase C](05-phase3-grasshopper-components/06-write-to-file.md#phase-c--cooperative-cancel-and-a-real-percentage) · [07 § 7](07-upstream-coordination/03-export-callback-and-strut-sync.md#7-export-progress--cancel-callback--unlocks-true-abort--a-real-progress-bar-phase-c) |
 | 2026-10-03 | **The broader `Primitive` set** — `Segment Primitive` and `Axial Primitive` over a Core catalog, `Primitive` grown by BoxFrame and Ellipsoid; 21 shapes contoured through the native library; increment 3b.3 closed. | [05/08](05-phase3-grasshopper-components/08-broader-primitive-set.md) |
@@ -94,9 +94,9 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    test (`ExportTiledStl`'s facet count twice, the CLI parity once) on an unchanged library,
    never on Linux, and the workflow's retry passed; the next red run carries the assertion
    (the gate's report now keeps it), then the fix or the hand-off to DualC
-   ([10 #34](10-public-delivery.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak)). **PLANNED.**
+   ([10 #34](10-public-delivery/03-ci.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak)). **PLANNED.**
 3. **Re-pin the submodule to a DualC `main` commit** once DualC's `main` is pushed past
-   `2fcd19f` ([10 #33](10-public-delivery.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed));
+   `2fcd19f` ([10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed));
    until then the gitlink resolves through DualC's `ci/gate-workflow` branch. **PLANNED.**
 4. **Distribution & packaging** ([06](06-phase4-distribution-and-packaging.md)) — the `.yak`
    exists as a CI artifact; zero-prerequisite install waits on DualC's static-runtime build
@@ -129,7 +129,7 @@ present-tense effect is [design 06](../design/06-conventions.md).
 | 07 | [Upstream coordination with DualC](07-upstream-coordination/README.md#07--upstream-coordination-with-dualc) | What Boletus needs from or triggers in DualC: the in-memory mesh resolver, the viewer binary and the file-watch, the uniform push, the export callback, the strut-vocabulary sync, the version trap, the inventory at the pin. | PARTIAL — per item |
 | 08 | [Strut lattices](08-strut-lattices.md) | The strut-lattice node vocabulary as pinned, the `--expr` exemplars the tests round-trip, the Boletus-side implementation (#20). | DONE |
 | 09 | [Docs layers](09-docs-layers/README.md#docs-layers--the-documentation-restructuring) | The 2026-09-21 documentation restructuring: the plan, items #21–#31, the phase table, the per-phase records, the post-close gate portability, loss audit and Linux build, the DualC handoff. | DONE — Phases 0–5 and three post-close children; the semantic-lint runs accumulate under it |
-| 10 | [Public delivery](10-public-delivery.md#10--public-delivery-the-repo-as-others-build-it) | Taking Boletus public: the fresh root and the offline archive (#32), DualC as a git submodule the build compiles (#33), the gate as CI with one `.yak` artifact (#34). | DONE |
+| 10 | [Public delivery](10-public-delivery/README.md#10--public-delivery-the-repo-as-others-build-it) | Taking Boletus public: the fresh root and the offline archive (#32), DualC as a git submodule the build compiles (#33), the gate as CI with one `.yak` artifact (#34). | DONE |
 
 ## How the blocks relate
 

@@ -124,7 +124,7 @@ Boletus consumes DualC two ways, by the most maintainable mechanism for each:
 
 Rationale and the NuGet / vendored-DLL / submodule / project-reference trade-off:
 [`docs/roadmap/02-dependency-strategy.md`](docs/roadmap/02-dependency-strategy.md) and
-[`docs/roadmap/10-public-delivery.md`](docs/roadmap/10-public-delivery.md); the build
+[`docs/roadmap/10-public-delivery/README.md`](docs/roadmap/10-public-delivery/README.md); the build
 procedure: [`native/README.md`](native/README.md). The DualC repo's authoritative files (the
 ABI header, the field-graph vocabulary, its design layer, fixtures) are catalogued in
 [`docs/roadmap/00-references-and-environment.md`](docs/roadmap/00-references-and-environment.md).

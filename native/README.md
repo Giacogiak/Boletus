@@ -6,7 +6,7 @@ viewer** the Phase-5 live-preview side-car launches. Everything below `x64/` and
 `linux-x64/` is a build output and gitignored: nothing prebuilt is in the repository, on the
 developer's machine or in CI. Rationale and alternatives:
 [`../docs/roadmap/02-dependency-strategy.md`](../docs/roadmap/02-dependency-strategy.md) and
-[`../docs/roadmap/10-public-delivery.md`](../docs/roadmap/10-public-delivery.md).
+[`../docs/roadmap/10-public-delivery/README.md`](../docs/roadmap/10-public-delivery/README.md).
 
 ## The pin
 
@@ -101,4 +101,4 @@ managed build runs on both and the component chooses its path at runtime.
 
 The provenance tables of the vendored era (the `d6b2808` DLL, the `2fcd19f` `.so` with its
 sha256) are history: roadmap [09/10](../docs/roadmap/09-docs-layers/10-linux-native.md) and
-[10 #33](../docs/roadmap/10-public-delivery.md).
+[10 #33](../docs/roadmap/10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed).

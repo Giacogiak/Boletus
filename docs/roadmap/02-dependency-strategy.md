@@ -106,7 +106,7 @@ migration is a sourcing change, **not** a code change.
 
 ### Best-practice guardrails for the vendored native dependency
 
-**DEFERRED** (guardrails 3, 4) and **DROPPED** (guardrail 2); guardrail 1 exists; guardrail 5 **DONE** (2026-10-06, as `scripts/build_native.py` — D-10 settled, [10 #33](10-public-delivery.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed)) — see the follow-up at the end of the section. *(2026-09-21, roadmap 09 Phase 3: status line added as the first body line so the `decisions-index` gate finds this entry; the rows are D-07 to D-10 in the [decisions index](../decisions/README.md), one per guardrail with its disposition and trigger.)*
+**DEFERRED** (guardrails 3, 4) and **DROPPED** (guardrail 2); guardrail 1 exists; guardrail 5 **DONE** (2026-10-06, as `scripts/build_native.py` — D-10 settled, [10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed)) — see the follow-up at the end of the section. *(2026-09-21, roadmap 09 Phase 3: status line added as the first body line so the `decisions-index` gate finds this entry; the rows are D-07 to D-10 in the [decisions index](../decisions/README.md), one per guardrail with its disposition and trigger.)*
 
 To keep the vendored DLL maintainable rather than a mystery binary:
 
@@ -135,7 +135,7 @@ never built; the refresh procedure in `native/README.md` is manual. Each gets a 
 
 ### Triggers to migrate the native dep to a local NuGet feed
 
-**DROPPED** (2026-10-06): the CI trigger fired and was answered by a git submodule built in CI, not a feed — [10 #33](10-public-delivery.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed), D-47; the row is D-04 in the [decisions index](../decisions/README.md). *(2026-09-21, roadmap 09 Phase 3: status line added as the first body line so the `decisions-index` gate finds this entry; it read DEFERRED — the four triggers below — until 2026-10-06.)*
+**DROPPED** (2026-10-06): the CI trigger fired and was answered by a git submodule built in CI, not a feed — [10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed), D-47; the row is D-04 in the [decisions index](../decisions/README.md). *(2026-09-21, roadmap 09 Phase 3: status line added as the first body line so the `decisions-index` gate finds this entry; it read DEFERRED — the four triggers below — until 2026-10-06.)*
 
 - A **second consumer** of `dualc_capi.dll` appears (e.g. a separate viewer/CLI shell).
 - DualC adopts a **release cadence / versioned artifacts** worth pinning explicitly.
@@ -151,7 +151,7 @@ public since 2026-10-03 and Boletus going public, the native dependency became *
 gitignored `native/<rid>/` on every machine and in CI. It keeps A's "build from source"
 without A's rejected cost (the C++ toolchain stays outside MSBuild, in one script), B's
 pin-by-commit without a committed binary, and makes C moot. The argument, what landed and
-what was rejected are [10 #33](10-public-delivery.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed);
+what was rejected are [10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed);
 D-01 (vendored) is reversed by D-47 in the [settled decisions](../decisions/01-settled.md).
 
 ---
@@ -166,7 +166,7 @@ eventually *package the built output as a local Yak*. See
 [06 — Distribution & packaging](06-phase4-distribution-and-packaging.md). Note the
 standing constraint: **everything local, no publishing** without explicit authorization.
 *(2026-10-06: reversed by D-46 — the repository is public and CI builds the `.yak`;
-[10](10-public-delivery.md).)*
+[10](10-public-delivery/README.md).)*
 
 ---
 

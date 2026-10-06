@@ -25,7 +25,7 @@ viewer; no new ABI. Caveat: GPU-dependent, so it cannot run headless/CI.
    `.gitignore` un-ignore mirror the DLL. **Never publish** (same local-only rule).
    *(2026-10-06, roadmap 10: the viewer is built from the DualC submodule by
    `scripts/build_native.py` on Windows and in CI, never committed; the local-only rule is
-   reversed by D-46 — [10 #33](../10-public-delivery.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed).)*
+   reversed by D-46 — [10 #33](../10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed).)*
 2. ✅ `MeshMaterializingResolver` (Rhino-free, in `Boletus.Core`): the viewer twin of `VolumeResolver`
    — because a **separate process can't read the in-RAM mesh buffers** (`*_with_meshes` reaches only
    the in-process DLL), it writes each in-memory `mesh`/`winding` leaf to a temp OBJ and rewrites

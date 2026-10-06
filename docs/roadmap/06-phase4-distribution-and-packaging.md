@@ -23,7 +23,7 @@ thing that is off the table** by default.
 
 *(2026-10-06, roadmap 10: the constraint is reversed by [D-46](../decisions/01-settled.md).
 Boletus is public at `https://github.com/Giacogiak/Boletus` with a fresh root commit, and CI's
-Windows job builds the `.yak` as a run artifact ([10 #34](10-public-delivery.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak)).
+Windows job builds the `.yak` as a run artifact ([10 #34](10-public-delivery/03-ci.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak)).
 What stays the owner's say-so is the `yak push` and a NuGet publish; the hard rule under it
 is that no native binary is ever committed — the present-tense statement is
 [design 06 § Local only](../design/06-conventions.md#local-only). The heading keeps its

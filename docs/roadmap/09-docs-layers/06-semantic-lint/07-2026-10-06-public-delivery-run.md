@@ -1,7 +1,7 @@
 # Semantic-lint run 07 — after the publication
 
 Run on 2026-10-06, the seventh run of [`/docs-semantic-lint`](README.md) on Boletus, owed by
-the publication session ([roadmap 10](../../10-public-delivery.md)): the DualC submodule in
+the publication session ([roadmap 10](../../10-public-delivery/README.md)): the DualC submodule in
 place of the vendored binaries, the build script, the CI workflow and five `design/` pages
 rewritten in the preparation commit `fd8ede7` of the old history — the commit the fresh root
 `407738d` carries as its tree. Gate green before reading (`python3 scripts/check.py --fast`,
@@ -41,7 +41,7 @@ index's own pointer sentence ("for how the plugin *is* today see design"), which
 not a description. The new block 10 and the new rewritable sentences in `native/README.md`
 describe the mechanism in the present tense where the design layer links them
 (`design/01` § Where the DLL is found, `design/06` § Provenance by commit).
-**(d) — 0.** `10-public-delivery.md` is cited by eight pages, the raw plan by block 10 and
+**(d) — 0.** `10-public-delivery/README.md` is cited by eight pages, the raw plan by block 10 and
 its index row; no page under `docs/` lost its last citation.
 **(e) — 0 met.** D-10 (carried from runs 03–06) is settled: `scripts/build_native.py` is the
 script the trigger asked for. D-05's trigger — "before the first Yak intended for a machine

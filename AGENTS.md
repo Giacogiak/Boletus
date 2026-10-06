@@ -23,7 +23,7 @@ dotnet test tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj -c Debug
 ```
 
 The remote is `https://github.com/Giacogiak/Boletus`, its history a fresh root commit (why:
-`docs/roadmap/10-public-delivery.md`); CI (`.github/workflows/ci.yml`) runs the gate on Ubuntu
+`docs/roadmap/10-public-delivery/README.md`); CI (`.github/workflows/ci.yml`) runs the gate on Ubuntu
 and Windows and packages one `.yak`. **The gate is the one command CI and you both run**; run
 it before every push (the pre-commit hook runs the fast tier once enabled):
 
