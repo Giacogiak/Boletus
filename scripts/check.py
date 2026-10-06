@@ -1452,6 +1452,8 @@ def check_dotnet_test(ctx):
         # Two shapes in `dotnet test`'s output: xunit's own `[FAIL]` line as the
         # test fails, and the runner's `Failed <name> [t]` block afterwards with
         # `Error Message:` and the assertion under it, then `Stack Trace:`.
+        # The engine's own stderr lines (`[dualc] error: ...`) name the writer
+        # failure behind a DualcException, so they are kept too.
         lines, names, keep = out.splitlines(), [], 0
         for l in lines:
             s = l.strip()
@@ -1461,6 +1463,8 @@ def check_dotnet_test(ctx):
             elif keep and s and not s.startswith("Stack Trace:"):
                 names.append("    " + s)
                 keep -= 1
+            elif "[dualc] error" in s or "[dualc] warning" in s:
+                names.append(s)
             else:
                 keep = 0
         return Result(FAIL, "%d of %d tests failed" % (failed, total), names[:60])

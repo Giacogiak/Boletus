@@ -64,7 +64,7 @@ jobs:
           if grep -q '^\[FAIL\] dotnet-test' gate.log; then
             extra=""; [ "$RUNNER_OS" != "Windows" ] && extra="-p:EnableWindowsTargeting=true"
             dotnet test tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj -c Debug --no-build --nologo $extra 2>&1 \
-              | grep -E 'Passed!|Failed!|\[FAIL\]|Assert|Expected|Actual' | head -40 \
+              | grep -E 'Passed!|Failed!|\[FAIL\]|Assert|Expected|Actual|\[dualc\] (error|warning)|DualcException' | head -40 \
               | while IFS= read -r l; do echo "::error title=retry::$l"; done || true
           fi
 
@@ -116,7 +116,7 @@ jobs:
           if grep -q '^\[FAIL\] dotnet-test' gate.log; then
             extra=""; [ "$RUNNER_OS" != "Windows" ] && extra="-p:EnableWindowsTargeting=true"
             dotnet test tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj -c Debug --no-build --nologo $extra 2>&1 \
-              | grep -E 'Passed!|Failed!|\[FAIL\]|Assert|Expected|Actual' | head -40 \
+              | grep -E 'Passed!|Failed!|\[FAIL\]|Assert|Expected|Actual|\[dualc\] (error|warning)|DualcException' | head -40 \
               | while IFS= read -r l; do echo "::error title=retry::$l"; done || true
           fi
 
