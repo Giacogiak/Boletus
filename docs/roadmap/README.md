@@ -90,10 +90,10 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    ([05/06 § Phase C](05-phase3-grasshopper-components/06-write-to-file.md#phase-c--cooperative-cancel-and-a-real-percentage)),
    the records list as pending: install the `boletus-yak` artifact of a green run on a Windows
    machine with Rhino 8 — the first time the Windows DLL runs at the pin. **NEXT.**
-2. **The flaky Windows test** — `ExportTiledStl`'s golden facet count went red on two of
-   four Windows CI runs on an unchanged library, never on Linux; the next red run carries the
-   actual count (the gate's report and the workflow's retry now keep it), then the hand-off to
-   DualC if the engine's tiled path is the cause
+2. **The flaky Windows gate** — three of seven Windows CI runs went red on one file-writing
+   test (`ExportTiledStl`'s facet count twice, the CLI parity once) on an unchanged library,
+   never on Linux, and the workflow's retry passed; the next red run carries the assertion
+   (the gate's report now keeps it), then the fix or the hand-off to DualC
    ([10 #34](10-public-delivery.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak)). **PLANNED.**
 3. **Re-pin the submodule to a DualC `main` commit** once DualC's `main` is pushed past
    `2fcd19f` ([10 #33](10-public-delivery.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed));

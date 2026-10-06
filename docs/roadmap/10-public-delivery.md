@@ -188,6 +188,18 @@ and says whether a second pass agrees. Until then the item is open and the hand-
 waits for that evidence; the Rhino smoke test on the `.yak` (§ Next up) is the other place
 the tiled writer runs on Windows.
 
+*Same day, two runs later:* the sixth run (a docs-only commit) went red on a **different**
+test, `CliParityTests.Wrapper_export_is_byte_identical_to_the_cli` — the wrapper's STL
+against `dualc_field.exe`'s — and the workflow's retry of the whole project on the same
+build passed 178/178; the seventh run was green on both jobs. Three red Windows gates in
+seven, each on one file-writing test, never the same twice in a row, never on Linux, and a
+second pass always green: the first run of the test project on a fresh Windows runner is
+the suspect (what a freshly written STL meets there in the seconds after the native library
+first loads), not a facet count the engine gets wrong. The gate's report could not yet show
+the assertion — xunit's `[FAIL]` line is followed by a blank line and the runner's `Failed
+<test>` block with the `Error Message` comes later; `dotnet-test` keeps that block from the
+eighth run on, so the next red names the value and the `.part`-rename or read that failed.
+
 ---
 
 ← Back to the [Roadmap index](README.md).
