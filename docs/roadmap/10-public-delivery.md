@@ -45,8 +45,15 @@ written; the rewritable pages point at the submodule.
 (version `0.1.0`, the plugin's own, equal to `BoletusInfo.Version` and the Yak manifest —
 the gate's `yak-version` check keeps the last two equal).
 
-**Update — publication.** *(filled in by the session that pushes: the root hash, the archive's
-tip hash and commit count, the date.)*
+**Update — 2026-10-06: published.** The remote is <https://github.com/Giacogiak/Boletus>; its
+history is one root commit, `407738d` ("Initial public release of Boletus"), with no parent,
+and `git ls-remote` showed `refs/heads/main` alone after the push. The archive
+`~/Documents/Boletus-history-2026-10-06.zip` holds the 70 pre-publication commits, tip
+`fd8ede7` (the preparation commit of #33 and #34), verified and test-cloned before the
+reset; the untracked `pre-push` guard of the guide's Method B is installed in the working
+repo with this root. The pre-commit hook was bypassed for the root commit alone (the fast
+tier's `git log` has nothing to read on an unborn branch); the same tree had passed the full
+gate as `fd8ede7`, and the fast tier passed again on the root.
 
 ## #33 DualC as a git submodule — the binaries built, never committed
 
@@ -93,9 +100,11 @@ whenever one platform cannot build), and DualC is public at
 
 **Verification.** The Linux build from the submodule: `libdualc_capi.so` 2,052,776 bytes,
 the same size as the committed one it replaced, 20 `dualc_` exports, `ldd` libstdc++ / libm /
-libgcc_s / libc, `dualc_c_demo … cancel` green; the gate's build tier — recorded on the line
-below once the run that follows this record finishes.
-- Result: *(filled by the closing gate run.)*
+libgcc_s / libc, `dualc_c_demo … cancel` green; then the gate on the prepared tree.
+- Result: `--fast` 26 checks green (27 with `yak-version`), `--selftest` 30 fixture runs,
+  `--build` 178 tests passed at the floor of 178 with 0 warnings — the CLI-parity and fixture
+  round-trips among them, run against the `dualc_field` built from the submodule; `--docs
+  --strict` green after the commit.
 
 **Rejected.**
 - *Keep vendoring, publish the binaries.* Opaque, unverifiable, and the Windows pair would
@@ -140,6 +149,17 @@ ref. Two jobs, each `actions/checkout` with `submodules: true`, the DualC gitlin
 
 Rhino itself never runs in CI: the `.gha` is compiled and packaged, and the Rhino smoke tests
 stay a manual step on a Windows machine — on the CI `.yak` from here on.
+
+**What the first run found.** The native build from the submodule succeeded on both runners
+on the first try (the Linux C ABI with `-DCMAKE_POSITION_INDEPENDENT_CODE=ON`, the Windows
+one with the viewer), and the Ubuntu job failed in the gate's `links` check: ten
+cross-repo links from pages nested two and three folders deep under `docs/roadmap/` use
+four or five `../` to reach the sibling DualC, and `out_of_repo_links.prefixes` declared
+only the one-, two- and three-deep forms — on every machine so far the sibling checkout
+existed, so the links resolved and the gap never showed. Reproduced in a fresh clone from
+GitHub with an empty NuGet cache (where `dotnet build` and the 178 tests passed), fixed by
+declaring the two missing depths in `scripts/check_data.json`, re-run on the line below.
+- Result: *(the first green run.)*
 
 ---
 

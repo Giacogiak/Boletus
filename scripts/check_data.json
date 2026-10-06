@@ -156,8 +156,10 @@
     "file:"
   ],
   "out_of_repo_links": {
-    "_comment": "Relative links that deliberately leave the repo. They resolve only where the sibling DualC checkout is present, so they are reported as informational, never as broken; dualc-links stats them for real.",
+    "_comment": "Relative links that deliberately leave the repo. They resolve only where the sibling DualC checkout is present, so they are reported as informational, never as broken; dualc-links stats them for real (against the submodule first). One prefix per folder depth the docs link from: a page under docs/roadmap/NN-slug/ needs four `../`, one under docs/roadmap/09-docs-layers/06-semantic-lint/ five -- the two depths CI's first run found missing (roadmap 10 #34).",
     "prefixes": [
+      "../../../../../DualC/",
+      "../../../../DualC/",
       "../../../DualC/",
       "../../DualC/",
       "../DualC/"
