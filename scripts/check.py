@@ -1449,13 +1449,17 @@ def check_dotnet_test(ctx):
         # The failing test's name and the assertion lines xunit prints under it
         # (until the next blank line), so the gate's report says *what* failed
         # where the full log is not at hand -- CI's annotations carry this list.
+        # Two shapes in `dotnet test`'s output: xunit's own `[FAIL]` line as the
+        # test fails, and the runner's `Failed <name> [t]` block afterwards with
+        # `Error Message:` and the assertion under it, then `Stack Trace:`.
         lines, names, keep = out.splitlines(), [], 0
         for l in lines:
-            if "[FAIL]" in l:
-                names.append(l.strip())
+            s = l.strip()
+            if "[FAIL]" in s or s.startswith("Failed ") and "Failed:" not in s:
+                names.append(s)
                 keep = 12
-            elif keep and l.strip():
-                names.append("    " + l.strip())
+            elif keep and s and not s.startswith("Stack Trace:"):
+                names.append("    " + s)
                 keep -= 1
             else:
                 keep = 0
