@@ -158,7 +158,14 @@ four or five `../` to reach the sibling DualC, and `out_of_repo_links.prefixes` 
 only the one-, two- and three-deep forms — on every machine so far the sibling checkout
 existed, so the links resolved and the gap never showed. Reproduced in a fresh clone from
 GitHub with an empty NuGet cache (where `dotnet build` and the 178 tests passed), fixed by
-declaring the two missing depths in `scripts/check_data.json`, re-run on the line below.
+declaring the two missing depths in `scripts/check_data.json`. The second run: the Ubuntu
+job green end to end (native build, the full gate, `--docs --strict`, `--selftest`); the
+Windows job green through the native build with the viewer, the gate — the 178 tests on
+Windows against the DLL built at the pin, the first time ever — and the Release build, then
+red in the staging step: `dotnet build` of the *project* lands in `bin/Release/`
+(`Platform=AnyCPU`), the solution's rows map it to x64 and `bin/x64/Release/`, which is
+where the step looked. The workflow builds the solution in Release; the result is on the
+line below.
 - Result: *(the first green run.)*
 
 ---

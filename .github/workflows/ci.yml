@@ -82,8 +82,11 @@ jobs:
       - name: Gate
         run: python scripts/check.py
 
+      # The solution, not the project: its configuration rows map every project to x64,
+      # which puts the .gha under bin/x64/Release/ (a bare project build lands in
+      # bin/Release/ with Platform=AnyCPU and the staging step finds nothing).
       - name: Release build of the plugin
-        run: dotnet build src/Boletus.Grasshopper/Boletus.Grasshopper.csproj -c Release
+        run: dotnet build Boletus.sln -c Release
 
       - name: Stage the package
         shell: pwsh
