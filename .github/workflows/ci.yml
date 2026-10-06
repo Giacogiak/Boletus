@@ -59,6 +59,14 @@ jobs:
         run: |
           grep -E '^\[FAIL\]' gate.log | while IFS= read -r l; do echo "::error title=gate::$l"; done || true
           awk '/^--- /{p=1} p' gate.log | head -80 | while IFS= read -r l; do echo "::error title=gate detail::$l"; done || true
+          # A failed test is run once more on the same build: a second verdict tells a
+          # flaky test from a broken one, and the assertion lines reach the annotations.
+          if grep -q '^\[FAIL\] dotnet-test' gate.log; then
+            extra=""; [ "$RUNNER_OS" != "Windows" ] && extra="-p:EnableWindowsTargeting=true"
+            dotnet test tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj -c Debug --no-build --nologo $extra 2>&1 \
+              | grep -E 'Passed!|Failed!|\[FAIL\]|Assert|Expected|Actual' | head -40 \
+              | while IFS= read -r l; do echo "::error title=retry::$l"; done || true
+          fi
 
       - name: Gate, strict docs
         run: python3 scripts/check.py --docs --strict
@@ -103,6 +111,14 @@ jobs:
         run: |
           grep -E '^\[FAIL\]' gate.log | while IFS= read -r l; do echo "::error title=gate::$l"; done || true
           awk '/^--- /{p=1} p' gate.log | head -80 | while IFS= read -r l; do echo "::error title=gate detail::$l"; done || true
+          # A failed test is run once more on the same build: a second verdict tells a
+          # flaky test from a broken one, and the assertion lines reach the annotations.
+          if grep -q '^\[FAIL\] dotnet-test' gate.log; then
+            extra=""; [ "$RUNNER_OS" != "Windows" ] && extra="-p:EnableWindowsTargeting=true"
+            dotnet test tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj -c Debug --no-build --nologo $extra 2>&1 \
+              | grep -E 'Passed!|Failed!|\[FAIL\]|Assert|Expected|Actual' | head -40 \
+              | while IFS= read -r l; do echo "::error title=retry::$l"; done || true
+          fi
 
       # The solution, not the project: its configuration rows map every project to x64,
       # which puts the .gha under bin/x64/Release/ (a bare project build lands in

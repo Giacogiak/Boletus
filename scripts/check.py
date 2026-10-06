@@ -1446,8 +1446,20 @@ def check_dotnet_test(ctx):
     failed, passed, total = int(m.group(1)), int(m.group(2)), int(m.group(4))
     floor = cfg["tests_expected_min"]
     if failed or rc != 0:
-        names = [l.strip() for l in out.splitlines() if "[FAIL]" in l][:20]
-        return Result(FAIL, "%d of %d tests failed" % (failed, total), names)
+        # The failing test's name and the assertion lines xunit prints under it
+        # (until the next blank line), so the gate's report says *what* failed
+        # where the full log is not at hand -- CI's annotations carry this list.
+        lines, names, keep = out.splitlines(), [], 0
+        for l in lines:
+            if "[FAIL]" in l:
+                names.append(l.strip())
+                keep = 12
+            elif keep and l.strip():
+                names.append("    " + l.strip())
+                keep -= 1
+            else:
+                keep = 0
+        return Result(FAIL, "%d of %d tests failed" % (failed, total), names[:60])
     if passed < floor:
         return Result(FAIL, "%d passed, below the recorded floor of %d" % (passed, floor),
                       ["dotnet.tests_expected_min in scripts/check_data.json only goes "
