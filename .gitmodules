@@ -1,0 +1,3 @@
+[submodule "external/DualC"]
+	path = external/DualC
+	url = https://github.com/Giacogiak/DualC.git

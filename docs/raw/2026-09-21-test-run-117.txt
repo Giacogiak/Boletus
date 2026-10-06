@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Boletus.Core -> D:\Boletus\src\Boletus.Core\bin\Debug\netstandard2.0\Boletus.Core.dll
+  Boletus.Core.Tests -> D:\Boletus\tests\Boletus.Core.Tests\bin\Debug\net9.0\win-x64\Boletus.Core.Tests.dll
+Test run for D:\Boletus\tests\Boletus.Core.Tests\bin\Debug\net9.0\win-x64\Boletus.Core.Tests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.14.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   117, Skipped:     0, Total:   117, Duration: 25 s - Boletus.Core.Tests.dll (net9.0)
+
+Workload updates are available. Run `dotnet workload list` for more information.

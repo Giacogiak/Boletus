@@ -1,0 +1,1 @@
+{ "dualc_links": { "dualc_roots": ["no-such-checkout", "dualc"], "build_output_prefixes": ["build/"], "scan_prefixes": ["docs/", "src/"], "scan_suffixes": [".md", ".cs"] } }

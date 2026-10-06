@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use Boletus, please credit it as below."
+title: "Boletus"
+abstract: >-
+  A Rhino 8 / Grasshopper front-end for the DualC implicit-field engine: components
+  compose a field-graph of TPMS and strut lattices, primitives, booleans and warps,
+  preview it in the viewport or a GPU side-car, and export a printable STL or 3MF.
+type: software
+authors:
+  - given-names: Giacomo
+    family-names: Forcina
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/Giacogiak/Boletus"

@@ -1,0 +1,19 @@
+# The Yak package manifest. CI stages this file beside Boletus.Grasshopper.gha,
+# Boletus.Core.dll, dualc_capi.dll and dualc_field_view.exe and runs `yak build`;
+# the .yak is a CI artifact, never pushed to the Yak server. The version must equal
+# BoletusInfo.Version (the gate's `yak-version` check).
+name: boletus
+version: 0.1.0
+authors:
+  - Giacomo Forcina
+description: >-
+  Grasshopper components that compose, preview and export TPMS-lattice and
+  implicit-field parts through the DualC engine: a field-graph on the canvas, a
+  proxy mesh in the viewport, a GPU raymarch side-car, exact STL / 3MF export.
+url: https://github.com/Giacogiak/Boletus
+keywords:
+  - grasshopper
+  - lattice
+  - tpms
+  - implicit
+  - dualc

@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Rhino 8.32's .NET Core host runs on the .NET 7 runtime; net8/9 assemblies
+         won't load into Rhino. net*-windows because Grasshopper pulls
+         System.Drawing / WinForms. -->
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+
+    <AssemblyName>Boletus.Grasshopper</AssemblyName>
+    <RootNamespace>Boletus.Grasshopper</RootNamespace>
+
+    <!-- A .gha is a renamed managed DLL. Emit Boletus.Grasshopper.gha. -->
+    <TargetExt>.gha</TargetExt>
+
+    <!-- Grasshopper needs System.Drawing + WinForms (pulls the WindowsDesktop ref pack). -->
+    <UseWindowsForms>true</UseWindowsForms>
+
+    <!-- Plugin is loaded by Rhino, not run standalone. -->
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!-- McNeel ships the RhinoCommon/Grasshopper NuGet packages with net48-only ref
+         assemblies; consuming them from net7 via AssetTargetFallback is the endorsed
+         Rhino 8 plugin workflow (the API surface is source-compatible and Rhino loads
+         the real net7 assemblies at runtime). NU1701 is expected, not actionable. -->
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <!-- Compile-only reference assemblies. The metapackage transitively pulls
+       RhinoCommon + GH_IO. Marked NON copy-local: the real assemblies load from the
+       running Rhino process; we never ship them in the .gha folder. -->
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="8.0.23304.9001">
+      <IncludeAssets>compile; build</IncludeAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <Private>false</Private>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- The managed wrapper + field-graph model. netstandard2.0 loads fine on net7. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Boletus.Core\Boletus.Core.csproj" />
+  </ItemGroup>
+
+  <!-- The native C ABI — built from the DualC submodule by scripts/build_native.py into
+       native/x64/ (gitignored, never committed) and copied beside the .gha so the startup
+       resolver (BoletusPriority) can load it from the assembly's own directory. The OS
+       loader searches Rhino.exe's dir, not the .gha's, hence the resolver. Identical
+       pattern to Boletus.Core.csproj; Exists-conditioned so the .gha compiles (on Linux,
+       for the gate) before or without the native build. -->
+  <ItemGroup>
+    <None Include="..\..\native\x64\dualc_capi.dll" Condition="Exists('..\..\native\x64\dualc_capi.dll')">
+      <Link>dualc_capi.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <!-- The GPU raymarch viewer (Phase 5 live-preview side-car), built by the same script
+         with -DDUALC_BUILD_FIELD_VIEW=ON. A self-contained .exe (GLFW/glad static, no
+         companion DLLs) the LivePreviewComponent launches as a separate process, located
+         beside the .gha via the same directory idiom as the DLL. -->
+    <None Include="..\..\native\x64\dualc_field_view.exe" Condition="Exists('..\..\native\x64\dualc_field_view.exe')">
+      <Link>dualc_field_view.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

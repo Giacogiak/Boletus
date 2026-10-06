@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- netstandard2.0 so the same wrapper loads in Rhino 8's .NET 7 host AND
+         a .NET Framework 4.8 host, and in the net9 test runner. No Rhino
+         dependency lives here by design (keeps it unit-testable, reusable). -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Boletus.Core</AssemblyName>
+    <RootNamespace>Boletus.Core</RootNamespace>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <!-- The native C ABI, built from the DualC submodule by scripts/build_native.py into
+       native/<rid>/ (gitignored; never committed). Copied to output so the wrapper's bin
+       (and any consumer's bin, incl. the test runner) has dualc_capi.dll beside it.
+       The Grasshopper plugin additionally installs a DllImport resolver at startup so
+       the .gha finds it. On Linux the same ABI, built from the same DualC commit, is
+       libdualc_capi.so: [DllImport("dualc_capi")] probes that name there, so the test
+       runner loads it with no resolver. The items are Exists-conditioned so the managed
+       code still compiles before the native build has run; the gate's `native-built`
+       check names the script when the library is missing. dualc_field (DualC's CLI)
+       rides along for the CLI-parity tests, which skip when it is absent. -->
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <None Include="..\..\native\x64\dualc_capi.dll" Condition="Exists('..\..\native\x64\dualc_capi.dll')">
+      <Link>dualc_capi.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\native\x64\dualc_field.exe" Condition="Exists('..\..\native\x64\dualc_field.exe')">
+      <Link>dualc_field.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <None Include="..\..\native\linux-x64\libdualc_capi.so" Condition="Exists('..\..\native\linux-x64\libdualc_capi.so')">
+      <Link>libdualc_capi.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\native\linux-x64\dualc_field" Condition="Exists('..\..\native\linux-x64\dualc_field')">
+      <Link>dualc_field</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

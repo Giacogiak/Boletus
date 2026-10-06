@@ -1,0 +1,217 @@
+{
+  "_comment": [
+    "Declared exceptions for scripts/check.py. Everything here is a deliberate,",
+    "reviewable decision -- widening any list should show up in a diff.",
+    "",
+    "Ported from DualC's check_data.json on 2026-09-21 (roadmap 09, Phase 1).",
+    "The size contract (~300 lines / ~2,500 words / 15 KB) applies to every page",
+    "under docs/ except docs/raw/; nothing is frozen (`frozen` is empty and stays",
+    "empty). Its prose home is docs/README.md, section Conventions (Phase 2)."
+  ],
+  "size_caps": {
+    "lines": 300,
+    "words": 2500,
+    "bytes": 15360
+  },
+  "size_scope": [
+    "docs/"
+  ],
+  "frozen_sections": {
+    "_comment": "The paragraph, in each index, that declares files frozen. Empty: nothing in Boletus is frozen; add a marker here together with any future `frozen` entry."
+  },
+  "frozen": [],
+  "frozen_prefixes": [
+    "docs/raw/"
+  ],
+  "footer_roots": [
+    "docs/roadmap/",
+    "docs/command_reference/",
+    "docs/design/",
+    "docs/decisions/"
+  ],
+  "footer_marker": "← Back to",
+  "status_words": [
+    "DONE",
+    "NEXT",
+    "PLANNED",
+    "DEFERRED",
+    "DROPPED",
+    "PARTIAL"
+  ],
+  "status_tables": [
+    "docs/roadmap/README.md",
+    "docs/roadmap/09-docs-layers/README.md"
+  ],
+  "status_vocab_only": {
+    "_comment": "Tables status-vocab reads in addition to status_tables and status-sync does not: their Status cells use the legend, but their links land on the record anchor of the decision, so the first-body-line comparison status-sync makes would be false disagreement. decisions-index checks these rows' anchors and triggers instead. Written by roadmap 09 Phase 3: the open/rejected table on the README and the settled table on 01-settled.md.",
+    "tables": [
+      "docs/decisions/README.md",
+      "docs/decisions/01-settled.md"
+    ]
+  },
+  "heading_status_baseline": {
+    "_comment": "Headings that carried a status word or a date when the gate landed (2026-09-21). The contract freezes headings at birth; these predate it and are live link targets, so they are not rewritten. Per-file counts may only go DOWN. When roadmap 05 (13) and 07 (2) were split into folders (roadmap 09 Phase 4) their dated headings moved verbatim into the children, so the entries became one per child with the same sum. The plan import under raw/ was committed before the gate landed and is immutable; its one dated heading is grandfathered.",
+    "docs/roadmap/04-phase3-field-graph-serializer.md": 1,
+    "docs/roadmap/05-phase3-grasshopper-components/02-thin-slice-and-volume-palette.md": 3,
+    "docs/roadmap/05-phase3-grasshopper-components/03-diskless-mesh-and-tiled-stl.md": 3,
+    "docs/roadmap/05-phase3-grasshopper-components/04-proxy-preview-and-icons.md": 2,
+    "docs/roadmap/05-phase3-grasshopper-components/05-domain-warps-and-example-graph.md": 2,
+    "docs/roadmap/05-phase3-grasshopper-components/06-write-to-file.md": 1,
+    "docs/roadmap/05-phase3-grasshopper-components/07-strut-lattice-components.md": 2,
+    "docs/roadmap/07-upstream-coordination/01-in-memory-mesh.md": 1,
+    "docs/roadmap/07-upstream-coordination/03-export-callback-and-strut-sync.md": 1,
+    "docs/raw/2026-09-21-docs-restructuring-plan.md": 1
+  },
+  "root_entry_files": {
+    "_comment": "The entry files, each with its line cap (0 = none), read by claude-md (restated facts) and root-entry (shape). AGENTS.md is the canonical entry file from roadmap 09 Phase 2; CLAUDE.md is its one-line `@AGENTS.md` import.",
+    "AGENTS.md": 80,
+    "CLAUDE.md": 0
+  },
+  "claude_md_forbidden": {
+    "test count": "\\b\\d{2,3}/\\d{2,3}\\b",
+    "version number": "\\bv?0\\.\\d\\.\\d\\b",
+    "item range": "#\\d+–#\\d+",
+    "entry-point count": "\\b\\d+ (ABI )?entry points",
+    "op count": "~?\\d+-op\\b"
+  },
+  "root_entry_forbidden": {
+    "_comment": "Shape rules for the entry files (the root-entry check); restated facts are claude_md_forbidden's. Digits before a slash catch both an NN/NN count and a 09/01 pointer -- the entry file links, it never cites.",
+    "digits before a slash": "\\d/",
+    "version": "\\bv0\\.",
+    "item range": "#\\d+–#\\d+",
+    "ISO date": "\\b20\\d\\d-\\d\\d-\\d\\d\\b"
+  },
+  "doc_lag": {
+    "_comment": "doc-lag (report only; --strict fails): the newest code commit is more than max_commits code commits or max_days days past the newest docs/ commit.",
+    "code_paths": [
+      "src/",
+      "tests/",
+      "native/"
+    ],
+    "max_commits": 5,
+    "max_days": 7
+  },
+  "decisions_index": {
+    "_comment": "decisions-index: every DROPPED/DEFERRED entry under scope needs a row in index whose link lands on its heading. SKIPs while the index does not exist (roadmap 09 Phase 3 creates it).",
+    "index": "docs/decisions/README.md",
+    "scope": "docs/roadmap/"
+  },
+  "design_no_history": {
+    "_comment": "design-no-history: the compiled layer describes the present. SKIPs while the folder does not exist (roadmap 09 Phase 3 creates it). Case-insensitive regexes.",
+    "scope": "docs/design/",
+    "patterns": {
+      "ISO date": "\\b20\\d\\d-\\d\\d-\\d\\d\\b",
+      "since": "\\bsince\\b",
+      "used to": "\\bused to\\b",
+      "now": "\\bnow\\b",
+      "no longer": "\\bno longer\\b",
+      "fixed since": "\\bfixed since\\b"
+    }
+  },
+  "heading_hierarchy_baseline": {
+    "_comment": "A ### directly under the H1, or a second heading repeating the H1, grandfathered per file when the gate landed (2026-09-21). Counts may only go DOWN."
+  },
+  "stale_paths_baseline": {
+    "_comment": "Prose and link text still naming NN-slug.md where NN-slug/ is a folder, grandfathered per file when the gate landed (2026-09-21). Counts may only go DOWN."
+  },
+  "directional_words": [
+    "above",
+    "below",
+    "this section"
+  ],
+  "usage_in_record": {
+    "_comment": "usage-in-record (report only): a table in the record whose header has one of these columns is a copy of the usage contract (a component's Inputs/Outputs table belongs on its command_reference page).",
+    "scope": "docs/roadmap/",
+    "headers": [
+      "Flag",
+      "Default",
+      "Option",
+      "Input",
+      "Output"
+    ]
+  },
+  "size_baseline": {
+    "_comment": "Files already over a cap when the gate landed (2026-09-21): components.md, roadmap 04, 05 and 07. Empty since roadmap 09 Phase 4 split or moved every entry (components.md -> command_reference/, 05 and 07 -> same-numbered folders, 04's op tables -> command_reference/05). The check fails if any file crosses a cap; to keep an oversize file anyway, add it here in the same commit -- the diff is the point -- and the list only shrinks afterwards."
+  },
+  "semantic_lint_runs": {
+    "_comment": "Where /docs-semantic-lint writes its runs. The owner's command (~/.claude/commands/, outside every repo) is one file for DualC and Boletus alike; the only per-repo fact it needs -- this folder -- is read from here instead of being hardcoded in the command (roadmap 09/07, decision D-41). The folder is also an index root; the `semantic-lint-runs` check keeps the two in step and every run named NN-<date>-<slug>.md with its date on the first body line.",
+    "folder": "docs/roadmap/09-docs-layers/06-semantic-lint"
+  },
+  "index_roots": [
+    "docs/command_reference",
+    "docs/design",
+    "docs/decisions",
+    "docs/roadmap",
+    "docs/roadmap/05-phase3-grasshopper-components",
+    "docs/roadmap/07-upstream-coordination",
+    "docs/roadmap/09-docs-layers",
+    "docs/roadmap/09-docs-layers/06-semantic-lint",
+    "docs/raw"
+  ],
+  "ordered_item_files": [],
+  "external_link_prefixes": [
+    "http://",
+    "https://",
+    "mailto:",
+    "file:"
+  ],
+  "out_of_repo_links": {
+    "_comment": "Relative links that deliberately leave the repo. They resolve only where the sibling DualC checkout is present, so they are reported as informational, never as broken; dualc-links stats them for real.",
+    "prefixes": [
+      "../../../DualC/",
+      "../../DualC/",
+      "../DualC/"
+    ]
+  },
+  "structure_summarized_prefixes": {
+    "_comment": "Directories STRUCTURE.md documents with a one-line summary instead of file-by-file. Listing one here is a decision, not a silent widening. Each docs/ folder is one line: its README is the file-by-file index.",
+    "docs/roadmap/": "one line; indexed by docs/roadmap/README.md",
+    "docs/raw/": "one line; indexed by docs/raw/README.md",
+    "docs/design/": "one line; indexed by docs/design/README.md",
+    "docs/decisions/": "one line; indexed by docs/decisions/README.md",
+    "docs/command_reference/": "one line; indexed by docs/command_reference/README.md",
+    "scripts/check_fixtures/": "one line; miniature pass/fail trees for `check.py --selftest`, one pair per docs check",
+    "external/DualC": "one line; the DualC git submodule -- its files are DualC's, indexed by DualC's own docs/README.md"
+  },
+  "structure_ignore": [
+    ".gitignore",
+    ".gitattributes"
+  ],
+  "dualc_links": {
+    "_comment": "dualc-links: where the DualC tree is (the first existing entry, relative to the repo root; DUALC_ROOT in the environment overrides) -- the submodule at the pin first, then a sibling checkout -- which trees are scanned for citations into it, and which file types. build_output_prefixes: cited paths that are build products (historical provenance rows, the CLI the parity tests run), stat'ed only when the checkout has built the configuration they name (the cited file's folder exists) -- decisions D-42, D-44.",
+    "dualc_roots": [
+      "external/DualC",
+      "D:/DualC",
+      "../DualC"
+    ],
+    "build_output_prefixes": [
+      "build/"
+    ],
+    "scan_prefixes": [
+      "docs/",
+      "native/",
+      "examples/",
+      "src/",
+      "tests/"
+    ],
+    "scan_suffixes": [
+      ".md",
+      ".cs"
+    ]
+  },
+  "dotnet": {
+    "_comment": "The build tier. tests_expected_min is a floor that only goes up: roadmap 09 edits .cs comments only and an unchanged count is its proof. non_windows_args: what dotnet needs off Windows (the net7.0-windows .gha project); the native side is built by scripts/build_native.py into native/<rid>/ (native-built checks it is there). yak: the package manifest whose version must equal BoletusInfo.Version (yak-version).",
+    "solution": "Boletus.sln",
+    "configuration": "Debug",
+    "test_project": "tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj",
+    "tests_expected_min": 178,
+    "warnings_allowed": [],
+    "non_windows_args": [
+      "-p:EnableWindowsTargeting=true"
+    ]
+  },
+  "yak": {
+    "manifest": "yak/manifest.yml",
+    "plugin_info": "src/Boletus.Grasshopper/BoletusInfo.cs"
+  }
+}

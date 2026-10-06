@@ -1,0 +1,119 @@
+# The gate, hosted. Both jobs build DualC's C ABI from the submodule with
+# scripts/build_native.py and then run scripts/check.py -- the same command the
+# developer runs. The Windows job additionally packages the plugin as one .yak
+# (an artifact of the run; nothing is ever pushed to the Yak server).
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: gate (ubuntu)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: DualC pin
+        id: pin
+        run: echo "sha=$(git rev-parse HEAD:external/DualC)" >> "$GITHUB_OUTPUT"
+
+      - name: Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake ninja-build g++
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      # The DualC build tree changes only when the pin or the recipe moves, so the
+      # whole tree (objects included) is cached on those two keys.
+      - uses: actions/cache@v4
+        with:
+          path: build-native
+          key: native-${{ runner.os }}-${{ steps.pin.outputs.sha }}-${{ hashFiles('scripts/build_native.py') }}
+
+      - name: Build the native side from the submodule
+        run: python3 scripts/build_native.py
+
+      - name: Gate
+        run: python3 scripts/check.py
+
+      - name: Gate, strict docs
+        run: python3 scripts/check.py --docs --strict
+
+      - name: Gate selftest
+        run: python3 scripts/check.py --selftest
+
+  windows:
+    name: gate + package (windows)
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: DualC pin
+        id: pin
+        shell: bash
+        run: echo "sha=$(git rev-parse HEAD:external/DualC)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - uses: actions/cache@v4
+        with:
+          path: build-native
+          key: native-${{ runner.os }}-${{ steps.pin.outputs.sha }}-${{ hashFiles('scripts/build_native.py') }}
+
+      - name: Build the native side from the submodule (C ABI + viewer)
+        run: python scripts/build_native.py
+
+      - name: Gate
+        run: python scripts/check.py
+
+      - name: Release build of the plugin
+        run: dotnet build src/Boletus.Grasshopper/Boletus.Grasshopper.csproj -c Release
+
+      - name: Stage the package
+        shell: pwsh
+        run: |
+          $out = "src/Boletus.Grasshopper/bin/x64/Release"
+          New-Item -ItemType Directory -Force dist/boletus | Out-Null
+          Copy-Item yak/manifest.yml dist/boletus/
+          foreach ($f in "Boletus.Grasshopper.gha", "Boletus.Core.dll", "dualc_capi.dll", "dualc_field_view.exe") {
+            Copy-Item "$out/$f" dist/boletus/
+          }
+          Get-ChildItem dist/boletus
+
+      - name: yak build
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri https://files.mcneel.com/yak/tools/latest/yak.exe -OutFile yak.exe
+          Set-Location dist/boletus
+          & ../../yak.exe build --platform win
+          Get-ChildItem *.yak
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: boletus-yak
+          path: dist/boletus/*.yak
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: boletus-gha-folder
+          path: |
+            dist/boletus/
+            !dist/boletus/*.yak
+          if-no-files-found: error

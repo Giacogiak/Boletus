@@ -1,0 +1,31 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+
+# Test / coverage
+TestResults/
+*.trx
+
+# Rhino / Grasshopper build artifacts (Phase 3)
+*.gha
+*.rhp
+
+# Yak packages (Phase 3 distribution)
+*.yak
+
+# Native binaries are never committed. scripts/build_native.py builds them from the
+# DualC submodule (external/DualC) into native/<rid>/ -- the C ABI library, DualC's
+# dualc_field CLI and, on Windows, the Phase-5 GPU viewer -- and CI does the same.
+native/x64/
+native/linux-x64/
+build-native/
+
+# Python bytecode from scripts/check.py
+__pycache__/
+
+# The dualc-links fixtures model a multi-config DualC build tree (build/examples/Release/);
+# the [Rr]elease/ rule above must not drop it.
+!scripts/check_fixtures/**/[Rr]elease/
