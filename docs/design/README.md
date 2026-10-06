@@ -85,7 +85,7 @@ for the in-process DLL, as a temp OBJ for the out-of-process viewer — is
 
 | Page | Holds |
 | --- | --- |
-| [01-native-interop.md](01-native-interop.md) | `DualcField`, the two entry-point probes and the `DualcDiagnostics` overloads, the `SafeHandle`s, the blittable structs, UTF-8 marshaling, status → exception, the entry points as a link to DualC, the single-threaded rule |
+| [01-native-interop.md](01-native-interop.md) | `DualcField`, the two entry-point probes and the `DualcDiagnostics` overloads, the `SafeHandle`s, the blittable structs, UTF-8 marshaling, status → exception, the entry points as a link to DualC, the single-threaded rule, where the built library is found |
 | [02-field-graph-model.md](02-field-graph-model.md) | `FieldNode` / `FieldValue`, the serializer's byte-match rules, `Ops` / `OpSchema`, the `Field` builders, the validator, metric vs non-metric, tree-only |
 | [03-volume-and-resolvers.md](03-volume-and-resolvers.md) | `Volume`, `MeshBuffer`, `FieldTree.Rewrite`, `VolumeResolver` (`mem://` → `id=`), `MeshMaterializingResolver` (`mem://` → `path=`), the pinned-for-the-call-only rule |
 | [04-grasshopper-plugin.md](04-grasshopper-plugin.md) | the `.gha` project, the DLL resolver, `VolumeGoo` / `VolumeParameter`, the component families, the proxy cap and its empty-contour warning, the `Write to File` threading model, the `Live Preview` process model, the icons |

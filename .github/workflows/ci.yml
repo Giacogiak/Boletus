@@ -46,7 +46,19 @@ jobs:
         run: python3 scripts/build_native.py
 
       - name: Gate
-        run: python3 scripts/check.py
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 scripts/check.py 2>&1 | tee gate.log
+
+      # The gate's own report, as annotations: which check failed and its detail
+      # lines, readable from the run page and the public API without the full log.
+      - name: Gate report as annotations
+        if: failure()
+        shell: bash
+        run: |
+          grep -E '^\[FAIL\]' gate.log | while IFS= read -r l; do echo "::error title=gate::$l"; done || true
+          awk '/^--- /{p=1} p' gate.log | head -80 | while IFS= read -r l; do echo "::error title=gate detail::$l"; done || true
 
       - name: Gate, strict docs
         run: python3 scripts/check.py --docs --strict
@@ -80,7 +92,17 @@ jobs:
         run: python scripts/build_native.py
 
       - name: Gate
-        run: python scripts/check.py
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/check.py 2>&1 | tee gate.log
+
+      - name: Gate report as annotations
+        if: failure()
+        shell: bash
+        run: |
+          grep -E '^\[FAIL\]' gate.log | while IFS= read -r l; do echo "::error title=gate::$l"; done || true
+          awk '/^--- /{p=1} p' gate.log | head -80 | while IFS= read -r l; do echo "::error title=gate detail::$l"; done || true
 
       # The solution, not the project: its configuration rows map every project to x64,
       # which puts the .gha under bin/x64/Release/ (a bare project build lands in
