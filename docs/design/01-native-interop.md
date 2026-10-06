@@ -77,7 +77,7 @@ one pointer-typed alias of the contour diagnostics twin (a second `[DllImport]` 
 same `EntryPoint`) that exists only so `SupportsDiagnostics` can call it with NULLs. The two
 monolithic 0.5.0 twins take a real `DualcDiagnosticsNative` out-struct, which the overloads
 without the `out` parameter discard; the tiled one has no `diag` in the ABI. Every older call is a forwarder of its newer twin, so the binding is
-additive and the Windows DLL that predates 0.4.0 still serves every original entry point
+additive and a library built from a commit that predates 0.4.0 still serves every original entry point
 ([`native/README.md`](../../native/README.md)). Every fallible call returns an `int` status and takes an `err` buffer; no C++
 exception ever crosses the boundary. The four interop structs are **blittable** so no custom
 marshaling runs and the layout matches the header exactly:

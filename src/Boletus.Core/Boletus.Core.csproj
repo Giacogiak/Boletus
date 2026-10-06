@@ -20,25 +20,18 @@
        libdualc_capi.so: [DllImport("dualc_capi")] probes that name there, so the test
        runner loads it with no resolver. The items are Exists-conditioned so the managed
        code still compiles before the native build has run; the gate's `native-built`
-       check names the script when the library is missing. dualc_field (DualC's CLI)
-       rides along for the CLI-parity tests, which skip when it is absent. -->
+       check names the script when the library is missing. The dualc_field CLI the
+       parity tests run is copied by the test project alone, so it never reaches the
+       .gha's folder. -->
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
     <None Include="..\..\native\x64\dualc_capi.dll" Condition="Exists('..\..\native\x64\dualc_capi.dll')">
       <Link>dualc_capi.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\native\x64\dualc_field.exe" Condition="Exists('..\..\native\x64\dualc_field.exe')">
-      <Link>dualc_field.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
     <None Include="..\..\native\linux-x64\libdualc_capi.so" Condition="Exists('..\..\native\linux-x64\libdualc_capi.so')">
       <Link>libdualc_capi.so</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\native\linux-x64\dualc_field" Condition="Exists('..\..\native\linux-x64\dualc_field')">
-      <Link>dualc_field</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

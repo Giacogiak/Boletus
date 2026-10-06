@@ -44,7 +44,7 @@ third (2026-10-03) made Linux a build-and-test platform, the full gate green the
 ([09/06](09-docs-layers/06-semantic-lint/README.md), 2026-10-03, after the broader-`Primitive`
 session) handed twelve findings on; the 2026-10-05 session applied all twelve (the
 design-prose fixes, and the three that converged on DualC's ABI 0.5.0 with the re-vendor), so
-the fifth and sixth runs ([09/06](09-docs-layers/06-semantic-lint/README.md), both 2026-10-05, after Phase C and after the contour diagnostics) found four, then seven design sentences behind the code, each fixed the same day; the next is due by 2026-11-05. **Block 05 is DONE** (2026-10-05): the broader
+the fifth and sixth runs ([09/06](09-docs-layers/06-semantic-lint/README.md), both 2026-10-05, after Phase C and after the contour diagnostics) found four, then seven design sentences behind the code, each fixed the same day; the seventh ([09/06](09-docs-layers/06-semantic-lint/README.md), 2026-10-06, after the publication) found three, one of them in the code; the next is due by 2026-11-06. **Block 05 is DONE** (2026-10-05): the broader
 `Primitive` set closed increment 3b.3 on 2026-10-03
 ([05/08](05-phase3-grasshopper-components/08-broader-primitive-set.md)), and `Write to File`
 Phase C — a `Cancel ■` button that stops a write at the engine's next checkpoint and the

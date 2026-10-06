@@ -28,4 +28,21 @@
     </None>
   </ItemGroup>
 
+  <!-- DualC's dualc_field CLI, the oracle of the CLI-parity and round-trip tests: built
+       into native/<rid>/ by scripts/build_native.py and copied beside the test assembly
+       (TestPaths.FindCli looks there first; the tests return early without it). Only the
+       test project copies it, so it never lands beside the .gha. -->
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <None Include="..\..\native\x64\dualc_field.exe" Condition="Exists('..\..\native\x64\dualc_field.exe')">
+      <Link>dualc_field.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <None Include="..\..\native\linux-x64\dualc_field" Condition="Exists('..\..\native\linux-x64\dualc_field')">
+      <Link>dualc_field</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

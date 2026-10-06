@@ -39,7 +39,7 @@ Boletus/
 │
 ├── src/
 │   ├── Boletus.Core/           The Rhino-free managed layer: P/Invoke wrapper + field-graph model + the Volume datatype (netstandard2.0, no NuGet deps)
-│   │   ├── Boletus.Core.csproj netstandard2.0; Platforms=x64; Exists-conditioned <None> items copy the built native/<rid>/ library (and dualc_field) to the output — flows to consumers; Windows items on Windows, Linux items on Linux
+│   │   ├── Boletus.Core.csproj netstandard2.0; Platforms=x64; an Exists-conditioned <None> item per platform copies the built native/<rid>/ library to the output (flows to consumers)
 │   │   ├── NativeMethods.cs    Raw P/Invoke surface (internal): every dualc_* entry point of the pinned library (Cdecl; the 0.4.0 *_with_diagnostics twins, the 0.5.0 cancel token and *_with_progress twins included) plus a pointer-typed probe alias of the contour diagnostics twin, the DualcProgressFnNative delegate + the blittable ContourParamsNative / MeshNative / DualcMeshSourceNative / DualcDiagnosticsNative structs
 │   │   ├── DualcFieldHandle.cs SafeHandle over the native field: ReleaseHandle → dualc_field_destroy, exactly once
 │   │   ├── DualcCancelTokenHandle.cs  SafeHandle over DualC's host-owned cancel token (ABI 0.5.0): ReleaseHandle → dualc_cancel_token_destroy
@@ -99,7 +99,7 @@ Boletus/
 │
 ├── tests/
 │   └── Boletus.Core.Tests/     xUnit, net9.0 / win-x64, Rhino-free — the marshaling gate, the field-graph round-trips, the resolvers, the export planner
-│       ├── Boletus.Core.Tests.csproj  References Boletus.Core; copies cube.obj to the output; test packages pinned to the local cache
+│       ├── Boletus.Core.Tests.csproj  References Boletus.Core; copies cube.obj and the built dualc_field CLI (Exists-conditioned, per platform) to the output; test packages pinned to the local cache
 │       ├── TestPaths.cs        Where the CLI-backed suites find dualc_field (beside the assembly, DUALC_FIELD_EXE, the historical D:\ path) and DualC's examples/samples (DUALC_SAMPLES_DIR, the submodule)
 │       ├── WrapperTests.cs     Version, defaults, the golden-count contour (the marshaling gate), export, the error statuses, the mesh-path source
 │       ├── CliParityTests.cs   Wrapper STL byte-identical to dualc_field (skips when the CLI is absent)

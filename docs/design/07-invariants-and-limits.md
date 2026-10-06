@@ -106,10 +106,10 @@ lifetime of a write stays on its worker thread
 the project version was not bumped, while the field-graph **parser is compiled inside the
 DLL** — so a DLL can reject an op (`DUALC_ERR_GRAPH`, "unknown op") that a same-version DLL
 from a later commit accepts, and **no runtime check on the version string can detect a
-vocabulary gap**. Hence the DLL is pinned and refreshed by commit
-([`native/README.md`](../../native/README.md)), `Boletus.Core` asserts nothing at startup,
-and reaching a new DualC op always means re-vendoring the DLL, not only teaching `Ops.cs`
-the token. The version string does move with the **ABI** (each additive set of entry points
+vocabulary gap**. Hence DualC is pinned by commit — the submodule's gitlink
+([`native/README.md`](../../native/README.md)) — `Boletus.Core` asserts nothing at startup,
+and reaching a new DualC op always means bumping the pin and rebuilding the library, not
+only teaching `Ops.cs` the token. The version string does move with the **ABI** (each additive set of entry points
 bumped it), but Boletus does not read it for that either: the ABI level is probed by entry
 point (`DualcField.SupportsProgress` for 0.5.0, `DualcField.SupportsDiagnostics` for 0.4.0 —
 one probe per capability, each a call that an older library cannot resolve), which cannot
