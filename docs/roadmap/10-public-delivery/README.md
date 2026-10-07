@@ -5,7 +5,7 @@ The record of taking Boletus public: the fresh root and the offline archive of t
 that preceded it, DualC turned from vendored binaries into a git submodule the build
 compiles, and the gate hosted as CI with one `.yak` as its artifact. Born 2026-10-06 from
 the owner's decision to publish, on the model of DualC's own
-`docs/roadmap/20-public-delivery.md` (2026-10-03); split into this folder the same day when
+`docs/roadmap/20-public-delivery/README.md` (2026-10-03); split into this folder the same day when
 the page crossed the size cap, every heading verbatim in its child. Headings are frozen at
 ID + title; status, date and evidence live on the body lines. The present-tense rules live
 in [design 06 § Local only](../../design/06-conventions.md#local-only) and

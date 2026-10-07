@@ -73,11 +73,11 @@ pending in their records.
 
 | Date | What landed | Record |
 | --- | --- | --- |
+| 2026-10-07 | **The flaky Windows gate explained and fixed upstream** — DualC measured it on the runner image: an inherited handle, not a scanner; output handles non-inheritable, ABI 0.5.1; the pin moved to `350cb3a`. | [07 § 10](07-upstream-coordination/README.md#10-a-bounded-rename-retry-in-atomicoutputcommit-on-windows--ask) |
 | 2026-10-06 | **Boletus is public** — a fresh root commit, the history archived offline on DualC's procedure, MIT + `CITATION.cff`; the local-only rule reversed (D-46). | [10 #32](10-public-delivery/01-fresh-root.md#32-published-with-a-fresh-root-the-history-archived-offline) |
 | 2026-10-06 | **DualC as a submodule, the gate as CI** — `external/DualC` at the pin, `build_native.py` in place of the committed binaries (D-47, D-10 settled), GitHub Actions on Ubuntu and Windows with one `.yak` artifact. | [10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed) · [10 #34](10-public-delivery/03-ci.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak) |
 | 2026-10-05 | **The contour diagnostics bound** — DualC's 0.4.0 `DualcDiagnostics` behind `out` overloads and a second entry-point probe; `Proxy preview` warns and draws nothing on an empty contour, `Write to File` warns after one; D-37 settled. | [05/09](05-phase3-grasshopper-components/09-contour-diagnostics.md) · [07 § 9](07-upstream-coordination/03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use) |
 | 2026-10-05 | **`Write to File` Phase C + the pin at DualC `2fcd19f`** — cooperative cancel and the engine's percentage over ABI 0.5.0, the Linux library rebuilt at the pin, the old-DLL fallback probed at runtime; the Windows binaries owe a rebuild. | [05/06 § Phase C](05-phase3-grasshopper-components/06-write-to-file.md#phase-c--cooperative-cancel-and-a-real-percentage) · [07 § 7](07-upstream-coordination/03-export-callback-and-strut-sync.md#7-export-progress--cancel-callback--unlocks-true-abort--a-real-progress-bar-phase-c) |
-| 2026-10-03 | **The broader `Primitive` set** — `Segment Primitive` and `Axial Primitive` over a Core catalog, `Primitive` grown by BoxFrame and Ellipsoid; 21 shapes contoured through the native library; increment 3b.3 closed. | [05/08](05-phase3-grasshopper-components/08-broader-primitive-set.md) |
 
 ## Next up
 
@@ -92,10 +92,12 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    machine with Rhino 8 — the first time the Windows DLL runs at the pin. **NEXT.**
 2. **The flaky Windows gate** — four of nine Windows CI runs lost one file-writing test, the
    captured one a DualC `Io` error from the `.part` rename, never a wrong mesh, never on
-   Linux, a second pass always green: a bounded rename retry is asked of DualC
+   Linux, a second pass always green. DualC measured it: an inherited handle (the CLI child
+   `CliParityTests` starts), not a scanner; fixed upstream by non-inheritable output handles,
+   the pin moved to `350cb3a` (ABI 0.5.1)
    ([07 § 10](07-upstream-coordination/README.md#10-a-bounded-rename-retry-in-atomicoutputcommit-on-windows--ask),
-   [10/03](10-public-delivery/03-ci.md#the-flaky-windows-gate--open)); until it lands and the
-   pin moves, a red Windows gate whose retry passes is this item. **PLANNED.**
+   [10/03](10-public-delivery/03-ci.md#the-flaky-windows-gate--open)). **DONE** (2026-10-07);
+   the Windows runs at the new pin are the confirmation owed.
 3. **Re-pin the submodule to a DualC `main` commit** once DualC's `main` is pushed past
    `2fcd19f` ([10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed));
    until then the gitlink resolves through DualC's `ci/gate-workflow` branch. **PLANNED.**

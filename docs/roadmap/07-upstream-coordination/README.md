@@ -79,7 +79,26 @@ ask of § 8 for a version bump or a capability query.)*
 
 ## 10. A bounded rename retry in `AtomicOutput::commit` on Windows — *ask*
 
-**PLANNED** — asked 2026-10-06, open upstream. Every DualC export writes `<path>.part` and
+**DONE (2026-10-07) — answered upstream with a different fix than asked; the pin moved to
+DualC `350cb3a`.** DualC measured the flake on the same `windows-2022` image with a stress
+harness (its record: `docs/roadmap/17-code-audit-and-hardening/16-windows-rename-race/` in the
+submodule; raw runs `docs/raw/2026-10-07-io-stress-windows-runs.md` and `docs/raw/2026-10-07-io-stress-windows-runs-after-fix.md`): no on-access
+scanner runs on that image (real-time protection off, `C:\` and `D:\` excluded), 1,890 exports
+of this repo's exact `ConcurrencyTests` scenario never failed, and a child process started
+with handle inheritance while a tiled export had its `.part` open made every such export
+fail at the rename with error 32 — the holder was the `dualc_field.exe` child that
+`CliParityTests` starts with redirected streams (.NET's `Process.Start` passes
+`bInheritHandles = TRUE`) while xunit runs the other classes' exports in parallel, and the
+MSVC CRT opens files inheritable. A retry would have waited for a whole CLI run. What
+landed in DualC: every output handle non-inheritable (the fix), a bounded Windows rename
+retry (hardening for a scanner's momentary hold on a user's machine), and on `DUALC_ERR_IO`
+the writer's own line in `err` — e.g. `tiled STL export failed: cannot move '<p>.part' to
+'<p>': <OS text>` — ABI 0.5.1, feature-detected as before (`SupportsProgress` unchanged).
+Boletus's side: this pin bump, nothing else; `DualcException.Message` already carries `err`,
+so the next `Io` names its cause; no `File.Delete` retry is needed (no delete ever failed in
+the measurements). The ask as it was written:
+
+*Asked 2026-10-06, open upstream.* Every DualC export writes `<path>.part` and
 `std::filesystem::rename`s it over `<path>` once the stream is closed (`AtomicOutput::commit`
 in `examples/example_common.cpp`); on failure the driver returns rc 2, the C ABI reports
 `DUALC_ERR_IO` "tiled STL export failed (writer or validation error)", and the
