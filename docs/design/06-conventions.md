@@ -116,7 +116,7 @@ they implement is DualC's header in the submodule, linked and never copied
 Anything that can be expressed without Rhino — the graph model, the resolvers, the export
 planner, the marshaling — lives in `Boletus.Core` and is unit-tested on the plain runner;
 the `.gha` holds only what needs Rhino types, a thread or a process
-([04](04-grasshopper-plugin.md)). A component wires inputs to an already-tested `Field`
+([04](04-grasshopper-plugin/README.md)). A component wires inputs to an already-tested `Field`
 builder and adds no serialization of its own; the whole risk surface of a new decorator
 component is its dropdown map. Grasshopper cannot run headless, so the `.gha` has no
 automated coverage and every increment closes on a manual Rhino smoke test.

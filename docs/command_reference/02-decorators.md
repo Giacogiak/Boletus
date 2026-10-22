@@ -24,7 +24,7 @@ No parameters.
 Where: immediately after a raw `TPMS` and before the `Onion`, `Graded Onion` base, `Graded
 Offset` base, smooth `Boolean`, `Offset` or `Displace` that consumes it. The canonical chain
 is `TPMS → Normalize → Onion`. Not after `Mesh → Volume`, `Primitive` or `Strut Lattice`,
-and not always wanted on a TPMS ([01 § Keep the TPMS raw](01-sources.md#keep-the-tpms-raw-or-normalize-it)).
+and not always wanted on a TPMS ([01 § Keep the TPMS raw](01-sources/01-tpms.md#keep-the-tpms-raw-or-normalize-it)).
 
 ## Onion
 

@@ -36,9 +36,9 @@ they look alike and are not.
 | **`DualcStatus` / `DualcException`** | The ABI's status codes as an enum, and the exception a non-OK return becomes, carrying the native message and locator. |
 | **Locator** | The position DualC reports with a graph error: a JSON pointer such as `/root/in/0/radius`, or a character offset for `--expr`. |
 | **Golden counts** | The exact vertex / triangle counts of two reference graphs at depth 6 that the tests assert as the marshaling gate ([07](07-invariants-and-limits.md#the-golden-contour-counts)). |
-| **Proxy** | A coarse-depth contour used as a drawable stand-in; lossy on a lattice. `Proxy preview` is the capped viewport-only one ([04](04-grasshopper-plugin.md#proxy-preview--the-capped-viewport-lod)). |
+| **Proxy** | A coarse-depth contour used as a drawable stand-in; lossy on a lattice. `Proxy preview` is the capped viewport-only one ([04](04-grasshopper-plugin/05-proxy-preview.md#proxy-preview--the-capped-viewport-lod)). |
 | **`MaxProxyDepth`** | The hard depth ceiling of `Proxy preview`, the only mechanism that prevents rather than detects an out-of-memory ([07](07-invariants-and-limits.md#maxproxydepth)). |
-| **Side-car** | DualC's GPU viewer `dualc_field_view.exe`, launched by `Live Preview` as a separate process on a temp file; the true-fidelity lattice preview, with its own camera ([04](04-grasshopper-plugin.md#live-preview--the-process-model)). |
+| **Side-car** | DualC's GPU viewer `dualc_field_view.exe`, launched by `Live Preview` as a separate process on a temp file; the true-fidelity lattice preview, with its own camera ([04](04-grasshopper-plugin/07-live-preview.md#live-preview--the-process-model)). |
 | **File-watch** | The viewer's own polling of its input file's mtime, which makes rewriting the temp file the whole update channel: no keypress, no IPC. |
 | **Uniform push** | The deferred instant-scrub tier: sending one changed number to the running viewer without a shader recompile; needs a real IPC channel. |
 | **Terminal** | A component that hands a graph to the engine or the viewer: `Write to File`, `Proxy preview`, `Live Preview`. Everything upstream is tree surgery. |

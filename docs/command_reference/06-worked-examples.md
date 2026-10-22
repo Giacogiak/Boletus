@@ -2,7 +2,7 @@
 
 Three canvases end to end — the canonical sheet lattice, the four-step printable part and a
 strut-lattice infill — plus the demo definition under `examples/`. Each names the components
-by their page (families [1](01-sources.md)–[4](04-terminals.md)) and the graph it emits.
+by their page (families [1](01-sources/README.md)–[4](04-terminals.md)) and the graph it emits.
 
 ## W1 — a clipped sheet lattice
 
@@ -106,6 +106,27 @@ The `--expr` forms of these graphs, round-tripped by the Core tests:
 canvas — `TPMS` / `Normalize`, `Primitive`, `Mesh → Volume`, `Onion` / `Graded Onion`, the
 domain warps, `Boolean` and `Proxy preview`; how to open it (the `.gha` must be installed
 first) is [`examples/README.md`](../../examples/README.md).
+
+## W5 — a sponge (Porous Shell → Graded Onion → smooth intersection)
+
+A sphere filled with closed cells whose walls thicken towards the rim, the rim rounded — the
+graph of DualC's `porous-sponge.json`, which a Core test pins byte for byte:
+
+1. **`Primitive`** — Type = Sphere, A = origin, N0 = 1 → the volume.
+2. **`Porous Shell`** — Volume = the sphere, Spacing = 0.4 → the Voronoi walls of the
+   cells of Poisson seeds, zero-thick.
+3. **`Primitive`** — Type = Sphere, N0 = 0 → the control: its value is the distance from the
+   centre.
+4. **`Graded Onion`** — Base = the Porous Shell, Control = the second sphere, t1 = 0.04,
+   t2 = 0.08, d1 = 1 → walls 0.08 thick at the centre, 0.16 at the rim.
+5. **`Boolean`** — Operation = Smooth Intersection, A = the first sphere, B = the Graded Onion,
+   k = 0.1 → the sponge clipped to the sphere, the pores open at the rim and the rim rounded.
+6. A terminal — `Proxy preview` at Depth 6 for a look; `Write to File` at Depth 7 to `.3mf`.
+
+A crisp `Intersection` (or the `Graded Onion` `Boundary`) leaves a few non-manifold edges where
+a pore nearly breaks through a curved rim; the smooth one closes them
+([DualC 11/16 § The recipes](../../../DualC/docs/command_reference/11-dualc_field/16-porous-shell.md#the-recipes)).
+The other porous recipes: [01 § Recipes](01-sources/README.md#recipes) (S11–S14).
 
 ---
 

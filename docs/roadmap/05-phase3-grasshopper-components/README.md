@@ -18,7 +18,7 @@ one dated entry per increment as it landed; page 01 is the plan as drafted on 20
 sections framed by a dated note that names the pages owning the present tense. How the plugin
 *is* today — the component
 families, the proxy cap, the writer's threading model, the viewer's process model — is
-[design 04](../../design/04-grasshopper-plugin.md); how each component is driven is the
+[design 04](../../design/04-grasshopper-plugin/README.md); how each component is driven is the
 [command reference](../../command_reference/README.md). Split on 2026-09-21 (roadmap 09
 Phase 4) from one page into this folder; every heading is verbatim and every increment keeps
 its anchor on the child that holds it.

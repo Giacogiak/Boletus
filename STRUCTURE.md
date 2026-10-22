@@ -61,10 +61,10 @@ Boletus/
 │   │       ├── FieldGraphSerializer.cs  The canonical emitter: op → ordinal-sorted params → in; integral doubles forced to `.0`
 │   │       ├── OpSchema.cs     Schema descriptors: OpSchema, ParamSpec, OpCategory, ParamKind
 │   │       ├── Ops.cs          The pinned op registry: every token DualC's field-graph parser accepts, with arity and param specs
-│   │       ├── Field.cs        Typed fluent builders: TPMS, mesh/winding sources, strut lattices, every primitive, booleans, decorators, domain ops
+│   │       ├── Field.cs        Typed fluent builders: TPMS, mesh/winding sources, strut lattices, every primitive, the porous source, booleans, decorators, domain ops
 │   │       ├── PrimitiveCatalog.cs  The Segment / Axial primitive families: per-shape slot names, tooltips, engine defaults, degree→radian, the builder each calls
 │   │       ├── FieldTree.cs    Generic bottom-up immutable rewrite (shared by both resolvers)
-│   │       └── FieldGraphValidator.cs  Schema errors (arity, required, unknown) + metric-ness warnings; ValidateOrThrow; IsMetric
+│   │       └── FieldGraphValidator.cs  Schema errors (arity range, required, unknown, choices) + metric-ness and porous warnings; ValidateOrThrow; IsMetric
 │   │
 │   └── Boletus.Grasshopper/    The GH .gha (net7.0-windows, x64) over Boletus.Core by project reference
 │       ├── Boletus.Grasshopper.csproj  TargetExt=.gha; Grasshopper metapackage compile-only (NU1701 suppressed); copies the built DLL + the viewer exe from native/x64/ beside the .gha (Exists-conditioned)
@@ -82,6 +82,7 @@ Boletus/
 │       ├── AxialPrimitiveComponent.cs   Source: one point + four numbers — the sixteen centred shapes, cone to infinitecone
 │       ├── MeshToVolumeComponent.cs  Source: Rhino mesh → in-memory MeshBuffer + mesh/winding leaf
 │       ├── StrutLatticeComponent.cs  Source: sc/bcc/fcc/octet strut lattice (+ optional node-radius taper) → Volume
+│       ├── PorousShellComponent.cs   Source: DualC's porous node over a volume (+ optional grading control) — cells/mode/distribution/ramp dropdowns, every key off DualC's default only → a zero-thick, metric Volume
 │       ├── OnionComponent.cs   Decorator: shell of a thickness, optional boundary clip applied after the thickness
 │       ├── GradedOnionComponent.cs  Decorator: thickness graded by a control field, optional boundary clip
 │       ├── NormalizeComponent.cs    Decorator: normalize — the metric-correctness gate
@@ -114,6 +115,7 @@ Boletus/
 │       ├── ExportPlanTests.cs  ExportPlan.Resolve: extension rules, strategy table, tile-depth default and warnings, error cases
 │       ├── ProgressAndCancelTests.cs  The 0.5.0 overloads: golden counts through the hooked calls, stage shapes, a pre-cancelled token, a cancel from the callback and from another thread (no file, no .part), a throwing consumer
 │       ├── ConcurrencyTests.cs Independent handles on independent threads at once in one process — six exports (tiled and monolithic) and four contours in parallel, each at the golden counts
+│       ├── PorousShellTests.cs The porous source end to end: the sponge against DualC's porous-sponge.json, CLI export parity, an in-memory mesh used twice, a cancel mid-export, the Live Preview OBJ path builds the same cells
 │       ├── DiagnosticsTests.cs The 0.4.0 out DualcDiagnostics overloads: the probe, DualC's far-away-sphere empty contour (placeholder counts, flagged), the golden counts through the diagnostics twin (the struct's layout), progress twins returning the same struct, the exported STL's facet count against OutputTriangles for the healthy and the empty field
 │       └── cube.obj            Minimal unit-cube fixture for the mesh-source tests
 │

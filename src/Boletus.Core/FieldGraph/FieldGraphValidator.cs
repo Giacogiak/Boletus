@@ -56,7 +56,7 @@ namespace Boletus.Core.FieldGraph
         {
             if (root is null) throw new ArgumentNullException(nameof(root));
             var issues = new List<ValidationIssue>();
-            Walk(root, "/root", issues);
+            Walk(root, "/root", null, -1, issues);
             return issues;
         }
 
@@ -74,7 +74,7 @@ namespace Boletus.Core.FieldGraph
             if (errors.Count > 0) throw new FieldGraphValidationException(errors);
         }
 
-        private static void Walk(FieldNode node, string path, List<ValidationIssue> issues)
+        private static void Walk(FieldNode node, string path, FieldNode? parent, int index, List<ValidationIssue> issues)
         {
             if (!Ops.TryGet(node.Op, out var schema))
             {
@@ -84,11 +84,14 @@ namespace Boletus.Core.FieldGraph
                 return;
             }
 
-            // Tier 1a — child arity.
-            if (node.Children.Count != schema.ChildCount)
+            // Tier 1a — child arity (exact, or a range such as porous's 1–2).
+            if (node.Children.Count < schema.MinChildren || node.Children.Count > schema.MaxChildren)
             {
+                string arity = schema.MinChildren == schema.MaxChildren
+                    ? schema.MinChildren.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                    : $"{schema.MinChildren}–{schema.MaxChildren}";
                 issues.Add(new ValidationIssue(path,
-                    $"op '{node.Op}' takes {schema.ChildCount} child(ren), got {node.Children.Count}",
+                    $"op '{node.Op}' takes {arity} child(ren), got {node.Children.Count}",
                     ValidationSeverity.Error));
             }
 
@@ -112,6 +115,10 @@ namespace Boletus.Core.FieldGraph
                 if (!KindMatches(spec, kv.Value))
                     issues.Add(new ValidationIssue(path + "/" + kv.Key,
                         $"param '{kv.Key}' should be {Describe(spec)}, got {kv.Value.Kind}", ValidationSeverity.Error));
+                else if (spec.Choices != null && !Contains(spec.Choices, kv.Value.AsText))
+                    issues.Add(new ValidationIssue(path + "/" + kv.Key,
+                        $"param '{kv.Key}' is '{kv.Value.AsText}', expected one of {string.Join(", ", spec.Choices)}",
+                        ValidationSeverity.Error));
             }
 
             // Tier 1d — mesh/winding: exactly one of path / id (a constraint the generic
@@ -130,6 +137,10 @@ namespace Boletus.Core.FieldGraph
                         ValidationSeverity.Error));
             }
 
+            // Tier 1d — porous: the grading's own rules (DualC's readPorousParams).
+            if (schema.Category == OpCategory.Porous)
+                CheckPorous(node, path, parent, index, issues);
+
             // Tier 2 — metric-ness requirements for the ops that need a metric input.
             CheckMetricInputs(node, schema, path, issues);
 
@@ -139,7 +150,77 @@ namespace Boletus.Core.FieldGraph
         private static void WalkChildren(FieldNode node, string path, List<ValidationIssue> issues)
         {
             for (int i = 0; i < node.Children.Count; i++)
-                Walk(node.Children[i], $"{path}/in/{i}", issues);
+                Walk(node.Children[i], $"{path}/in/{i}", node, i, issues);
+        }
+
+        /// <summary>
+        /// <c>porous</c>: a <c>spacing2</c> that differs from <c>spacing</c> needs the control
+        /// child and <c>d1</c> (DualC rejects it otherwise); a control without the grading is
+        /// ignored; a non-metric volume misplaces the boundary seeds; and the bare node contours
+        /// empty, so a parent that gives it no thickness is worth a warning.
+        /// </summary>
+        private static void CheckPorous(FieldNode node, string path, FieldNode? parent, int index, List<ValidationIssue> issues)
+        {
+            bool graded = node.Params.TryGetValue("spacing2", out var s2) && s2.Kind == FieldValueKind.Scalar
+                && !(node.Params.TryGetValue("spacing", out var s1) && s1.Kind == FieldValueKind.Scalar
+                     && s1.AsScalar == s2.AsScalar);
+            if (graded && node.Children.Count < 2)
+                issues.Add(new ValidationIssue(path,
+                    "'porous' spacing2 differs from spacing: give a control field as the second child",
+                    ValidationSeverity.Error));
+            if (graded && !node.Params.ContainsKey("d1"))
+                issues.Add(new ValidationIssue(path + "/d1",
+                    "'porous' spacing2 differs from spacing: 'd1' (the control value where the spacing is spacing2) is required",
+                    ValidationSeverity.Error));
+            if (!graded && node.Children.Count == 2)
+                issues.Add(new ValidationIssue(path + "/in/1",
+                    "'porous' ignores its control unless spacing2 differs from spacing",
+                    ValidationSeverity.Warning));
+
+            if (node.Children.Count >= 1 && !IsMetric(node.Children[0]))
+                issues.Add(new ValidationIssue(path + "/in/0",
+                    $"'porous' places its seeds by the volume's distance, but '{node.Children[0].Op}' is non-metric — " +
+                    "wrap it in 'normalize' so the boundary pores are placed right",
+                    ValidationSeverity.Warning));
+
+            if (!GivesThickness(parent, index))
+                issues.Add(new ValidationIssue(path,
+                    "the porous field has no thickness — its contour is empty; wrap it in onion / offset " +
+                    "(or graded-onion / graded-offset)",
+                    ValidationSeverity.Warning));
+        }
+
+        /// <summary>
+        /// Whether <paramref name="parent"/> thickens its child at <paramref name="index"/>
+        /// (onion, offset, round; the base of graded-onion / graded-offset), or reads it as a
+        /// control value (the control of graded-onion / graded-offset / porous, mix's third
+        /// child), where an unthickened porous field is meaningful.
+        /// </summary>
+        private static bool GivesThickness(FieldNode? parent, int index)
+        {
+            if (parent is null) return false;
+            switch (parent.Op)
+            {
+                case "onion":
+                case "offset":
+                case "round":
+                case "graded-onion":
+                case "graded-offset":
+                    return true;
+                case "porous":
+                    return index == 1;
+                case "mix":
+                    return index == 2;
+                default:
+                    return false;
+            }
+        }
+
+        private static bool Contains(IReadOnlyList<string> choices, string value)
+        {
+            foreach (var c in choices)
+                if (string.Equals(c, value, StringComparison.Ordinal)) return true;
+            return false;
         }
 
         private static void CheckMetricInputs(FieldNode node, OpSchema schema, string path, List<ValidationIssue> issues)
@@ -174,7 +255,7 @@ namespace Boletus.Core.FieldGraph
         /// <summary>
         /// Whether a sub-tree yields a (first-order) metric field. Raw TPMS and <c>winding</c>
         /// are non-metric; <c>normalize</c> makes any child metric; metric sources, shells and
-        /// smooth booleans are metric; one-child decorators propagate their child; a hard
+        /// smooth booleans and <c>porous</c> (1-Lipschitz) are metric; one-child decorators propagate their child; a hard
         /// boolean is metric only when both operands are.
         /// </summary>
         public static bool IsMetric(FieldNode node)
@@ -193,6 +274,7 @@ namespace Boletus.Core.FieldGraph
                 case OpCategory.Onion:
                 case OpCategory.GradedOnion:
                 case OpCategory.SmoothBoolean:
+                case OpCategory.Porous:
                     return true;
 
                 case OpCategory.Decorator:

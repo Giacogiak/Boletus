@@ -207,7 +207,7 @@
     "solution": "Boletus.sln",
     "configuration": "Debug",
     "test_project": "tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj",
-    "tests_expected_min": 180,
+    "tests_expected_min": 196,
     "warnings_allowed": [],
     "non_windows_args": [
       "-p:EnableWindowsTargeting=true"

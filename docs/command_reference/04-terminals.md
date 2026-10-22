@@ -52,7 +52,7 @@ The component's own `Message` label shows the same running text as `Info`, then 
 `Write ▶`, `Cancel ■`, `Cancelling…`, or `Writing…` on an older library. Which native writer
 runs, how the extension and the tile depth are decided and what each warning means:
 [design 05](../design/05-export-planning.md); the threading model and the cancel path:
-[design 04 § Write to File](../design/04-grasshopper-plugin.md#write-to-file--the-threading-model).
+[design 04 § Write to File](../design/04-grasshopper-plugin/06-write-to-file.md#write-to-file--the-threading-model).
 
 Messages — Remark: `The vendored DualC library predates ABI 0.5.0: no progress or cancel — a
 running write always finishes; a Write click while running queues one restart.` Warning:
@@ -95,7 +95,7 @@ is dialled ([design 07 § `MaxProxyDepth`](../design/07-invariants-and-limits.md
 No outputs: it draws into the viewport, and Zoom Extents frames it.
 
 It contours **once** per solve and caches, so pan and zoom stay smooth
-([design 04 § Proxy preview](../design/04-grasshopper-plugin.md#proxy-preview--the-capped-viewport-lod)).
+([design 04 § Proxy preview](../design/04-grasshopper-plugin/05-proxy-preview.md#proxy-preview--the-capped-viewport-lod)).
 A coarse proxy of a dense lattice is lossy — thin walls drop out — so it is never the surface
 for judging fidelity; `Write to File` gives the real mesh and `Live Preview` the exact field.
 
@@ -132,7 +132,7 @@ Each solve serializes the volume to a temp `.json` and the viewer watches that f
 window **refreshes on its own** whenever a parameter changes — no keypress, no IPC. An
 imported mesh (`Mesh → Volume`) is written to a temp `.obj` for the viewer automatically, so
 mesh-based parts preview too. Toggle `On` off, or delete the component, to close the window
-([design 04 § Live Preview](../design/04-grasshopper-plugin.md#live-preview--the-process-model)).
+([design 04 § Live Preview](../design/04-grasshopper-plugin/07-live-preview.md#live-preview--the-process-model)).
 Every change pays a shader recompile; the instant per-parameter push that would avoid it is a
 deferred optimisation ([D-27](../decisions/README.md)).
 

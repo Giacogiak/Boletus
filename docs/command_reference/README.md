@@ -20,22 +20,23 @@ right: one or more Sources → Decorators / Booleans → a Terminal.
 | # | Family | Components | Page |
 | --- | --- | --- | --- |
 | 0 | Shared behaviour | the `Volume` wire, the Normalize rule, bounds, messages, troubleshooting | [00-shared-behaviour.md](00-shared-behaviour.md) |
-| 1 | Sources | `TPMS`, `Primitive`, `Segment Primitive`, `Axial Primitive`, `Mesh → Volume`, `Strut Lattice` | [01-sources.md](01-sources.md) |
+| 1 | Sources | `TPMS`, `Primitive`, `Segment Primitive`, `Axial Primitive`, `Mesh → Volume`, `Strut Lattice`, `Porous Shell` — one page each | [01-sources/](01-sources/README.md) |
 | 2 | Decorators | `Normalize`, `Onion`, `Graded Onion`, `Transform`, `Offset`, `Twist`, `Bend`, `Displace`, `Graded Offset`, `Mix` | [02-decorators.md](02-decorators.md) |
 | 3 | Booleans | `Boolean` | [03-booleans.md](03-booleans.md) |
 | 4 | Terminals | `Write to File`, `Proxy preview`, `Live Preview` | [04-terminals.md](04-terminals.md) |
 | 5 | Field-graph ops | the `Field` builder ↔ DualC op-token table (what a canvas can emit through Core) | [05-field-graph-ops.md](05-field-graph-ops.md) |
-| 6 | Worked examples | a clipped sheet lattice, a printable part, a strut-lattice infill, `examples/demo.gh` | [06-worked-examples.md](06-worked-examples.md) |
+| 6 | Worked examples | a clipped sheet lattice, a printable part, a strut-lattice infill, `examples/demo.gh`, a sponge | [06-worked-examples.md](06-worked-examples.md) |
 
 ## Where a task is documented
 
 | Task | Components | Where |
 | --- | --- | --- |
-| Make a sheet lattice with a real wall thickness | `TPMS → Normalize → Onion(Boundary)` | [01 § TPMS](01-sources.md#tpms) · [02 § Onion](02-decorators.md#onion) · [06 W1](06-worked-examples.md#w1--a-clipped-sheet-lattice) |
+| Make a sheet lattice with a real wall thickness | `TPMS → Normalize → Onion(Boundary)` | [01 § TPMS](01-sources/01-tpms.md#tpms) · [02 § Onion](02-decorators.md#onion) · [06 W1](06-worked-examples.md#w1--a-clipped-sheet-lattice) |
 | Crop a lattice without hollowing it (a network solid) | `Boolean` (Intersection) | [03 § Boolean](03-booleans.md#boolean) |
-| Bring a Rhino mesh into the graph as a clip body or operand | `Mesh → Volume` | [01 § Mesh → Volume](01-sources.md#mesh--volume) |
-| An analytic solid — a clip box, a strut between two points, a cone or prism | `Primitive`, `Segment Primitive`, `Axial Primitive` | [01 § Primitive](01-sources.md#primitive) · [§ Segment](01-sources.md#segment-primitive) · [§ Axial](01-sources.md#axial-primitive) |
-| A strut (beam) lattice, tapered or graded | `Strut Lattice`, `Graded Offset`, `Mix` | [01 § Strut Lattice](01-sources.md#strut-lattice) · [02 § Graded Offset](02-decorators.md#graded-offset) · [06 W3](06-worked-examples.md#w3--a-strut-lattice-infill-clip--grade) |
+| Bring a Rhino mesh into the graph as a clip body or operand | `Mesh → Volume` | [01 § Mesh → Volume](01-sources/05-mesh-to-volume.md#mesh--volume) |
+| An analytic solid — a clip box, a strut between two points, a cone or prism | `Primitive`, `Segment Primitive`, `Axial Primitive` | [01 § Primitive](01-sources/02-primitive.md#primitive) · [§ Segment](01-sources/03-segment-primitive.md#segment-primitive) · [§ Axial](01-sources/04-axial-primitive.md#axial-primitive) |
+| A strut (beam) lattice, tapered or graded | `Strut Lattice`, `Graded Offset`, `Mix` | [01 § Strut Lattice](01-sources/06-strut-lattice.md#strut-lattice) · [02 § Graded Offset](02-decorators.md#graded-offset) · [06 W3](06-worked-examples.md#w3--a-strut-lattice-infill-clip--grade) |
+| A sponge, foam or bone inside a volume (sealed cells, open cells, graded) | `Porous Shell` → `Onion` / `Graded Onion` / `Offset` → `Boolean` | [01 § Porous Shell](01-sources/07-porous-shell.md#porous-shell) · [06 W5](06-worked-examples.md#w5--a-sponge-porous-shell--graded-onion--smooth-intersection) |
 | Vary a shell's wall thickness across the part | `Graded Onion` | [02 § Graded Onion](02-decorators.md#graded-onion) |
 | Twist, bend, inflate or texture a volume | `Twist`, `Bend`, `Offset`, `Displace` | [02](02-decorators.md) |
 | Export a printable STL or 3MF | `Write to File` | [04 § Write to File](04-terminals.md#write-to-file) |

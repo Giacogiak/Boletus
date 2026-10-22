@@ -96,6 +96,17 @@ mapping and degree → radian conversion `PrimitiveCatalogTests` pins per shape.
 | `quad` | a xyz, b xyz, c xyz, d xyz (12) | `Field.Quad(…)` | — (D-45) |
 | `infinitecone` | cx, cy, cz, angleRad (4) | `Field.InfiniteCone(…)` | `Axial Primitive` (15) |
 
+**Porous source** (1–2 children: the volume, then an optional control; metric — the
+1-Lipschitz distance to a cell complex, empty until thickened). `spacing` **req**; `cells`,
+`mode`, `dist`, `ramp` text, each one of a closed set the validator checks; `spacing2`, `d0`,
+`d1`, `relax`, `seed`, `smooth`, `jitter` scalars, *opt*. A `spacing2` that differs from
+`spacing` needs the control child and `d1`. What each key means, its default and range:
+[DualC 11/16](../../../DualC/docs/command_reference/11-dualc_field/16-porous-shell.md#parameters).
+
+| Token | Builder | Component |
+| --- | --- | --- |
+| `porous` | `Field.Porous(volume, spacing, control?, cells?, mode?, dist?, spacing2?, d0?, d1?, ramp?, relax?, seed?, smooth?, jitter?)` | `Porous Shell` |
+
 `plane`, `infinitecylinder`, `infinitecone` and anything under `repeat` are unbounded —
 bounds are a contour-time setting on the terminal, never a node.
 

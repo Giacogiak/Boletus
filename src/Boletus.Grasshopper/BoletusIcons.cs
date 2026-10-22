@@ -42,6 +42,7 @@ namespace Boletus.Grasshopper
         public static Bitmap AxialPrimitive => Render(DrawAxialPrimitive);
         public static Bitmap MeshToVolume => Render(DrawMeshToVolume);
         public static Bitmap Strut => Render(DrawStrut);
+        public static Bitmap PorousShell => Render(DrawPorousShell);
 
         // ── Decorators ───────────────────────────────────────────────────────────────────────────
         public static Bitmap Onion => Render(DrawOnion);
@@ -179,6 +180,35 @@ namespace Boletus.Grasshopper
             foreach (var p in new[] { tl, tr, bl, br }) g.FillEllipse(node, p.X - 1.6f, p.Y - 1.6f, 3.2f, 3.2f);
             using var hub = new SolidBrush(AccentDark);
             g.FillEllipse(hub, c.X - 2f, c.Y - 2f, 4f, 4f);
+        }
+
+        /// <summary>Porous shell: Voronoi cell walls (degree-3 junctions) clipped to a disk — a foam
+        /// filling a volume, distinct from the Strut crystal and the TPMS wave.</summary>
+        private static void DrawPorousShell(Graphics g)
+        {
+            PointF j1 = new(10f, 9.5f), j2 = new(14.5f, 10.5f), j3 = new(12f, 14.5f);
+            PointF k1 = new(6.5f, 7f), k2 = new(18f, 8f), k3 = new(11.5f, 18.5f);
+
+            using (var disk = new GraphicsPath())
+            {
+                disk.AddEllipse(2f, 2f, 20f, 20f);
+                g.SetClip(disk);
+                using var wall = new Pen(Accent, 1.6f) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+                g.DrawPolygon(wall, new[] { j1, j2, j3 });
+                g.DrawLine(wall, j1, k1);
+                g.DrawLine(wall, j2, k2);
+                g.DrawLine(wall, j3, k3);
+                g.DrawLine(wall, k1, new PointF(1f, 10f));
+                g.DrawLine(wall, k1, new PointF(8f, 0f));
+                g.DrawLine(wall, k2, new PointF(16f, 0f));
+                g.DrawLine(wall, k2, new PointF(24f, 11.5f));
+                g.DrawLine(wall, k3, new PointF(3f, 17f));
+                g.DrawLine(wall, k3, new PointF(19f, 22f));
+                g.ResetClip();
+            }
+
+            using var rim = new Pen(Neutral, 1.4f);
+            g.DrawEllipse(rim, 2f, 2f, 20f, 20f);
         }
 
         /// <summary>Graded offset: three parallel struts whose thickness grows across the glyph — a

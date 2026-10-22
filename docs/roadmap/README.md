@@ -18,11 +18,16 @@ plus a link to the topic file that holds the evidence. Detail belongs there, nev
 count, a version or a commit hash is stated only in its home — the test floor in the gate's
 `check_data.json`, the DLL commit in [`native/README.md`](../../native/README.md), the entry
 points in [design 01](../design/01-native-interop.md), the glyphs in
-[design 04](../design/04-grasshopper-plugin.md#the-icons). **Recent milestones** is a rolling
+[design 04](../design/04-grasshopper-plugin/08-icons.md#the-icons). **Recent milestones** is a rolling
 window of the last five rows — an older row lives in the block record it linked — so the page
 stays under the cap by rule, not by baseline ([D-43](../decisions/01-settled.md)).
 
 ## Current focus
+
+**The porous shell is bound** ([11](11-porous-shell.md), 2026-10-22): the pin moved to DualC
+`main` with its `porous` source, Core gained the arity range and the closed-set keys it needs,
+and the `Porous Shell` source reaches the canvas, Core-tested; its Rhino smoke test (#38) is
+pending with the others.
 
 **Boletus is public** ([10](10-public-delivery/README.md), 2026-10-06): the repository at
 `https://github.com/Giacogiak/Boletus` under MIT, with a fresh root commit and the
@@ -53,13 +58,8 @@ engine's percentage in the label — landed on 2026-10-05 over DualC ABI 0.5.0
 D-30 settled); the same day the 0.4.0 diagnostics twins were bound, so `Proxy preview` warns
 instead of drawing the engine's placeholder triangle when a contour is empty, and
 `Write to File` after such a write
-([05/09](05-phase3-grasshopper-components/09-contour-diagnostics.md), D-37 settled). **The pin moved to DualC `2fcd19f`**: the Linux library was rebuilt from it
-while the Windows DLL and the viewer trailed it, waiting for a Windows machine — a gap the
-submodule closed on 2026-10-06, both platforms building from the gitlink in CI; the plugin
-still detects an older DLL at runtime and keeps its Phase-A path
+([05/09](05-phase3-grasshopper-components/09-contour-diagnostics.md), D-37 settled). The plugin still detects an older DLL at runtime and keeps its Phase-A path
 ([07 § 7](07-upstream-coordination/03-export-callback-and-strut-sync.md#7-export-progress--cancel-callback--unlocks-true-abort--a-real-progress-bar-phase-c)).
-What the pinned DualC offers that Boletus does not yet use is inventoried in
-[07 § 9](07-upstream-coordination/03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use).
 Every value pillar of the
 MVP — a TPMS or strut lattice, clipped and shelled, previewed coarse in the viewport or
 exactly in the GPU side-car, exported as a tiled STL or a 3MF, cancellable — shipped between 2026-06-18
@@ -73,11 +73,11 @@ pending in their records.
 
 | Date | What landed | Record |
 | --- | --- | --- |
+| 2026-10-22 | **The porous shell** — the pin at DualC `main` with `porous` (ABI 0.5.2); the arity range and closed-set keys in Core; the `Porous Shell` source, its icon and pages; the OBJ path measured to build the same cells. | [11](11-porous-shell.md) |
 | 2026-10-07 | **The flaky Windows gate explained and fixed upstream** — DualC measured it on the runner image: an inherited handle, not a scanner; output handles non-inheritable, ABI 0.5.1; the pin moved to `350cb3a`. | [07 § 10](07-upstream-coordination/README.md#10-a-bounded-rename-retry-in-atomicoutputcommit-on-windows--ask) |
 | 2026-10-06 | **Boletus is public** — a fresh root commit, the history archived offline on DualC's procedure, MIT + `CITATION.cff`; the local-only rule reversed (D-46). | [10 #32](10-public-delivery/01-fresh-root.md#32-published-with-a-fresh-root-the-history-archived-offline) |
 | 2026-10-06 | **DualC as a submodule, the gate as CI** — `external/DualC` at the pin, `build_native.py` in place of the committed binaries (D-47, D-10 settled), GitHub Actions on Ubuntu and Windows with one `.yak` artifact. | [10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed) · [10 #34](10-public-delivery/03-ci.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak) |
 | 2026-10-05 | **The contour diagnostics bound** — DualC's 0.4.0 `DualcDiagnostics` behind `out` overloads and a second entry-point probe; `Proxy preview` warns and draws nothing on an empty contour, `Write to File` warns after one; D-37 settled. | [05/09](05-phase3-grasshopper-components/09-contour-diagnostics.md) · [07 § 9](07-upstream-coordination/03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use) |
-| 2026-10-05 | **`Write to File` Phase C + the pin at DualC `2fcd19f`** — cooperative cancel and the engine's percentage over ABI 0.5.0, the Linux library rebuilt at the pin, the old-DLL fallback probed at runtime; the Windows binaries owe a rebuild. | [05/06 § Phase C](05-phase3-grasshopper-components/06-write-to-file.md#phase-c--cooperative-cancel-and-a-real-percentage) · [07 § 7](07-upstream-coordination/03-export-callback-and-strut-sync.md#7-export-progress--cancel-callback--unlocks-true-abort--a-real-progress-bar-phase-c) |
 
 ## Next up
 
@@ -88,7 +88,7 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    ([05/08 § Verification](05-phase3-grasshopper-components/08-broader-primitive-set.md#verification-broader-primitive-set))
    and Phase C
    ([05/06 § Phase C](05-phase3-grasshopper-components/06-write-to-file.md#phase-c--cooperative-cancel-and-a-real-percentage)),
-   the records list as pending: install the `boletus-yak` artifact of a green run on a Windows
+   the records list as pending, and the porous shell ([11 #38](11-porous-shell.md#38-the-rhino-smoke-test)): install the `boletus-yak` artifact of a green run on a Windows
    machine with Rhino 8 — the first time the Windows DLL runs at the pin. **NEXT.**
 2. **The flaky Windows gate** — four of nine Windows CI runs lost one file-writing test, the
    captured one a DualC `Io` error from the `.part` rename, never a wrong mesh, never on
@@ -98,17 +98,14 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    ([07 § 10](07-upstream-coordination/README.md#10-a-bounded-rename-retry-in-atomicoutputcommit-on-windows--ask),
    [10/03](10-public-delivery/03-ci.md#the-flaky-windows-gate--open)). **DONE** (2026-10-07);
    the Windows runs at the new pin are the confirmation owed.
-3. **Re-pin the submodule to a DualC `main` commit** once DualC's `main` is pushed past
-   `2fcd19f` ([10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed));
-   until then the gitlink resolves through DualC's `ci/gate-workflow` branch. **PLANNED.**
-4. **Distribution & packaging** ([06](06-phase4-distribution-and-packaging.md)) — the `.yak`
+3. **Distribution & packaging** ([06](06-phase4-distribution-and-packaging.md)) — the `.yak`
    exists as a CI artifact; zero-prerequisite install waits on DualC's static-runtime build
    ([D-05](../decisions/README.md)); a Yak-server release is the owner's call. **PLANNED.**
-5. **What the pinned DualC offers and Boletus does not bind**, each on its trigger
+4. **What the pinned DualC offers and Boletus does not bind**, each on its trigger
    ([07 § 9](07-upstream-coordination/03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use)):
    tiled 3MF through the ABI (D-32), a version bump per vocabulary change (D-08); and the standing asks — the
    uniform-push channel (D-27), DAG-ref serialization (D-06).
-6. **Palette gaps, DEFERRED on a canvas that needs them**: `Mirror` / `Elongate` / `Repeat`
+5. **Palette gaps, DEFERRED on a canvas that needs them**: `Mirror` / `Elongate` / `Repeat`
    (D-23), `Triangle` / `Quad` plates (D-45), proxy refinements past the depth ceiling (D-19);
    a single-file `.gha` with embedded natives (D-48).
 
@@ -133,6 +130,7 @@ present-tense effect is [design 06](../design/06-conventions.md).
 | 08 | [Strut lattices](08-strut-lattices.md) | The strut-lattice node vocabulary as pinned, the `--expr` exemplars the tests round-trip, the Boletus-side implementation (#20). | DONE |
 | 09 | [Docs layers](09-docs-layers/README.md#docs-layers--the-documentation-restructuring) | The 2026-09-21 documentation restructuring: the plan, items #21–#31, the phase table, the per-phase records, the post-close gate portability, loss audit and Linux build, the DualC handoff. | DONE — Phases 0–5 and three post-close children; the semantic-lint runs accumulate under it |
 | 10 | [Public delivery](10-public-delivery/README.md#10--public-delivery-the-repo-as-others-build-it) | Taking Boletus public: the fresh root and the offline archive (#32), DualC as a git submodule the build compiles (#33), the gate as CI with one `.yak` artifact (#34). | DONE |
+| 11 | [Porous shell](11-porous-shell.md) | DualC's `porous` source on the canvas: the re-pin to DualC `main` (#35), the Core vocabulary and tests with the OBJ path measured (#36), the `Porous Shell` component and its pages (#37), the Rhino smoke test (#38). | PARTIAL: DONE (2026-10-22, #35–#37); the rest PLANNED |
 
 ## How the blocks relate
 
@@ -145,4 +143,4 @@ serializer turns a tree into the one string the ABI takes. **05** is the plugin 
 increment dated, and **08** the one vocabulary extension large enough for its own block.
 **07** is the seam with DualC — what landed upstream because Boletus asked, and what is still
 asked. **09** is the documentation system these pages live in, **10** the public repository
-and the CI they are published through.
+and the CI they are published through. **11** binds a DualC source the canvas did not have.

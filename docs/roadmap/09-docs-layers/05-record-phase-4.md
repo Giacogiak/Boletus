@@ -30,7 +30,7 @@ at `7e7c95f`):
 | `components.md` section | Went to |
 | --- | --- |
 | Mental model — the `Volume` wire, the Normalize rule, Onion before clip | [00 § The `Volume` wire](../../command_reference/00-shared-behaviour.md#the-volume-wire), [§ Metric and non-metric](../../command_reference/00-shared-behaviour.md#metric-and-non-metric--the-normalize-rule), [§ Onion before clip](../../command_reference/00-shared-behaviour.md#onion-before-clip); the *why* stays in design 06 |
-| Sources — TPMS (with "Keep the TPMS raw, or Normalize it?"), Primitive, Mesh → Volume, Strut Lattice | [01](../../command_reference/01-sources.md) |
+| Sources — TPMS (with "Keep the TPMS raw, or Normalize it?"), Primitive, Mesh → Volume, Strut Lattice | [01](../../command_reference/01-sources/README.md) |
 | Decorators — Normalize … Mix (ten components) | [02](../../command_reference/02-decorators.md) |
 | Booleans — Boolean | [03](../../command_reference/03-booleans.md) |
 | Terminals — Write to File, Proxy preview, Live Preview; the shared bounds / depth paragraph | [04](../../command_reference/04-terminals.md); [00 § Bounds](../../command_reference/00-shared-behaviour.md#bounds--min--max-on-a-terminal), [§ Depth](../../command_reference/00-shared-behaviour.md#depth) |

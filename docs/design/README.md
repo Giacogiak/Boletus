@@ -40,7 +40,7 @@ libdualc + field-graph parser + STL/3MF/OBJ writers
   ([05](05-export-planning.md)). Logic goes here; the `.gha` stays a thin shell.
 - **`Boletus.Grasshopper`** is the `.gha`: the components, the `Volume` wire type, the
   native-DLL resolver installed at plugin load, Rhino↔DualC mesh conversion, the threading
-  of the file writer and the process model of the live preview ([04](04-grasshopper-plugin.md)).
+  of the file writer and the process model of the live preview ([04](04-grasshopper-plugin/README.md)).
 - **`dualc_capi.dll`** is the native bridge: DualC's C ABI, built from the submodule by
   `scripts/build_native.py` into the gitignored `native/x64/` — never committed, on the
   developer's machine and in CI alike ([`native/README.md`](../../native/README.md)). It is
@@ -88,7 +88,7 @@ for the in-process DLL, as a temp OBJ for the out-of-process viewer — is
 | [01-native-interop.md](01-native-interop.md) | `DualcField`, the two entry-point probes and the `DualcDiagnostics` overloads, the `SafeHandle`s, the blittable structs, UTF-8 marshaling, status → exception, the entry points as a link to DualC, the single-threaded rule, where the built library is found |
 | [02-field-graph-model.md](02-field-graph-model.md) | `FieldNode` / `FieldValue`, the serializer's byte-match rules, `Ops` / `OpSchema`, the `Field` builders, the validator, metric vs non-metric, tree-only |
 | [03-volume-and-resolvers.md](03-volume-and-resolvers.md) | `Volume`, `MeshBuffer`, `FieldTree.Rewrite`, `VolumeResolver` (`mem://` → `id=`), `MeshMaterializingResolver` (`mem://` → `path=`), the pinned-for-the-call-only rule |
-| [04-grasshopper-plugin.md](04-grasshopper-plugin.md) | the `.gha` project, the DLL resolver, `VolumeGoo` / `VolumeParameter`, the component families, the proxy cap and its empty-contour warning, the `Write to File` threading model, the `Live Preview` process model, the icons |
+| [04-grasshopper-plugin/README.md](04-grasshopper-plugin/README.md) | the `.gha` project, the DLL resolver, `VolumeGoo` / `VolumeParameter`, the component families, the proxy cap and its empty-contour warning, the `Write to File` threading model, the `Live Preview` process model, the icons |
 | [05-export-planning.md](05-export-planning.md) | `ExportPlan`: path and extension rules, the strategy table, the tile-depth default, tiled STL and monolithic 3MF |
 | [06-conventions.md](06-conventions.md) | units, metric-by-default sources and the Normalize rule, onion-before-clip, message levels, the dropdown-documentation rule, the GUID rule, provenance by commit, logic in Core |
 | [07-invariants-and-limits.md](07-invariants-and-limits.md) | the golden contour counts (the one home), the coarse-depth rule, `MaxProxyDepth`, the version trap, single-flight writes, the cancel constraint, the test floor |

@@ -17,7 +17,7 @@ and the provenance in [`native/README.md`](../../../native/README.md).
 > `graded-offset` / `mix` signatures with the value-blend caveat, the compose-order cheatsheet, and
 > the `--expr` exemplars — lives in **[08 — Strut lattices](../08-strut-lattices.md)** (the folded-in
 > strut-nodes reference). The user-facing component guide is in the command reference
-> ([01 § Strut Lattice](../../command_reference/01-sources.md#strut-lattice), [02 § Graded Offset](../../command_reference/02-decorators.md#graded-offset),
+> ([01 § Strut Lattice](../../command_reference/01-sources/06-strut-lattice.md#strut-lattice), [02 § Graded Offset](../../command_reference/02-decorators.md#graded-offset),
 > [02 § Mix](../../command_reference/02-decorators.md#mix); *2026-09-21, roadmap 09 Phase 4: it was `docs/components.md`, deleted*).
 > This section is the **development record** of the Boletus-side increment only.
 

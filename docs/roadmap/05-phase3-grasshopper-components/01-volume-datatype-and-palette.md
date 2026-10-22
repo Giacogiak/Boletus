@@ -3,13 +3,13 @@
 Part of [05 — Phase 3b: Grasshopper components](README.md), the record of the `Boletus.Grasshopper` `.gha`; every heading is verbatim from the page this folder replaced (split 2026-09-21, roadmap 09 Phase 4).
 *(2026-09-21, roadmap 09 Phase 5, the first semantic lint: from § Component model on, the page is the plan as
 drafted on 2026-06-18 with its DONE marks; the component model and the Rhino glue as they hold
-are [design 04](../../design/04-grasshopper-plugin.md) and [design 06](../../design/06-conventions.md),
+are [design 04](../../design/04-grasshopper-plugin/README.md) and [design 06](../../design/06-conventions.md),
 and the palette as it is driven is the [command reference](../../command_reference/README.md).)*
 
 ## Project
 
 The `.gha` project as it is — `net7.0-windows`, the project reference to `Boletus.Core`, the
-compile-only `Grasshopper` metapackage — is [design 04 § The project](../../design/04-grasshopper-plugin.md#the-project);
+compile-only `Grasshopper` metapackage — is [design 04 § The project](../../design/04-grasshopper-plugin/01-the-project.md#the-project);
 the build-environment decisions that fixed it are
 [§ Resolved decisions](02-thin-slice-and-volume-palette.md#resolved-decisions-build-environment-pinned-2026-06-18).
 

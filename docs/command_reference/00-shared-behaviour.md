@@ -37,7 +37,7 @@ A `Normalize` is **not** needed after `Mesh → Volume` of any Kind, after any `
 `Strut Lattice`, before the four **hard** booleans (they read only the field's sign), or
 after an `Onion` (the shell is already metric). Nor is it always wanted on a TPMS — for hard
 CSG, bare-surface extraction or a `Graded Onion` *control* input, the raw field is the right
-one ([01 § Keep the TPMS raw, or Normalize it?](01-sources.md#keep-the-tpms-raw-or-normalize-it)).
+one ([01 § Keep the TPMS raw, or Normalize it?](01-sources/01-tpms.md#keep-the-tpms-raw-or-normalize-it)).
 
 Skipping a `Normalize` where one is needed **still contours**: the terminal posts the
 validator's warning (quoted in [§ Troubleshooting](#troubleshooting)) and the wall thickness

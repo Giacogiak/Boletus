@@ -130,6 +130,17 @@ namespace Boletus.Core.Tests
             yield return Case("mix",
                 Field.Mix(Field.Bcc(wavelength: 0.5, radius: 0.03), Field.Bcc(wavelength: 0.5, radius: 0.09), Field.Plane(1, 0, 0, 0), hi: 0.6, lo: -0.6),
                 "mix(bcc(wavelength=0.5,radius=0.03),bcc(wavelength=0.5,radius=0.09),plane(1,0,0,0),lo=-0.6,hi=0.6)");
+
+            // porous (one or two children: volume[, control]) — the minimal node, then every key
+            // off its DualC default with a control (DualC 11-dualc_field/16-porous-shell.md).
+            yield return Case("porous", Field.Porous(Field.Sphere(radius: 1), 0.4),
+                "porous(sphere(radius=1),spacing=0.4)");
+            yield return Case("porous-every-key",
+                Field.Porous(Field.Sphere(radius: 1), 0.4, control: Field.Sphere(radius: 0),
+                    cells: "delaunay", mode: "struts", dist: "jitter", spacing2: 0.6, d0: 0.1, d1: 1,
+                    ramp: "gaussian", relax: 2, seed: 7, smooth: 0.01, jitter: 0.5),
+                "porous(sphere(radius=1),sphere(radius=0),spacing=0.4,cells=delaunay,mode=struts," +
+                "dist=jitter,jitter=0.5,spacing2=0.6,d0=0.1,d1=1,ramp=gaussian,relax=2,seed=7,smooth=0.01)");
         }
 
         private static readonly double[] Identity4x4 = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };

@@ -7,7 +7,7 @@ namespace Boletus.Core.FieldGraph
     /// The pinned op vocabulary — the full ~60-op set. Maps a canonical op token to its
     /// <see cref="OpSchema"/>. Every op (token, params, arity, grouped-vs-flat) is gated by a
     /// <c>--dump-json</c> diff against DualC (roadmap Phase 3a). Sourced from
-    /// <c>11-dualc_field/01-op-vocabulary.md</c>, <c>02-dualc_primitive.md</c>, and <c>dualc_field --list</c>.
+    /// <c>11-dualc_field/01-op-vocabulary.md</c>, <c>12-primitive-catalogue.md</c>, and <c>dualc_field --list</c>.
     /// </summary>
     public static class Ops
     {
@@ -18,9 +18,12 @@ namespace Boletus.Core.FieldGraph
         private static ParamSpec Vec3Opt(string n) => new ParamSpec(n, ParamKind.Vector, required: false, vectorLength: 3);
         private static ParamSpec TextReq(string n) => new ParamSpec(n, ParamKind.Text, required: true);
         private static ParamSpec TextOpt(string n) => new ParamSpec(n, ParamKind.Text, required: false);
+        // A text key whose value is one of a closed set; the first choice is DualC's default.
+        private static ParamSpec TextChoice(string n, params string[] choices) =>
+            new ParamSpec(n, ParamKind.Text, required: false, choices: choices);
         private static ParamSpec VecReq(string n, int len) => new ParamSpec(n, ParamKind.Vector, required: true, vectorLength: len);
         // Universal flat positional array — every primitive accepts params=[…] mapping onto the
-        // documented order (02-dualc_primitive.md). Optional: DualC fills trailing defaults.
+        // documented order (11-dualc_field/12-primitive-catalogue.md). Optional: DualC fills trailing defaults.
         private static ParamSpec FlatParams(int n) => new ParamSpec("params", ParamKind.Vector, required: false, vectorLength: n);
 
         private static readonly Dictionary<string, OpSchema> Registry = BuildRegistry();
@@ -71,7 +74,7 @@ namespace Boletus.Core.FieldGraph
             Add(new OpSchema("ellipsoid", 0, OpCategory.MetricSource, Vec3Opt("center"), Vec3Opt("radii")));
 
             // ---- Analytic primitives: universal flat params=[…] (positional count pinned) -
-            // (token, element count) from `dualc_field --list` / 02-dualc_primitive.md.
+            // (token, element count) from `dualc_field --list` / 11-dualc_field/12-primitive-catalogue.md.
             var flat = new (string token, int n)[]
             {
                 ("plane", 4), ("boxframe", 7), ("cone", 5), ("cappedcone", 6), ("roundcone", 8),
@@ -131,6 +134,19 @@ namespace Boletus.Core.FieldGraph
             // correct metric-ness semantics for a value blend (the control child is ignored). It
             // is NOT a CSG boolean; the enum name is incidental.
             Add(new OpSchema("mix", 3, OpCategory.HardBoolean, ScalarReq("hi"), ScalarOpt("lo")));
+
+            // ---- Porous source (children: volume[, control]) --------------------------------
+            // Unsigned distance to the cell complex of seeds placed in the volume (DualC
+            // 11-dualc_field/16-porous-shell.md). The volume is read only while DualC builds the
+            // node; the control, when present, grades the spacing from `spacing` to `spacing2`.
+            // Keys and defaults as DualC's readPorousParams reads them; the ranges are DualC's.
+            Add(new OpSchema("porous", 1, 2, OpCategory.Porous,
+                ScalarReq("spacing"),
+                TextChoice("cells", "voronoi", "delaunay"), TextChoice("mode", "walls", "struts"),
+                TextChoice("dist", "poisson", "jitter", "random"),
+                ScalarOpt("spacing2"), ScalarOpt("d0"), ScalarOpt("d1"),
+                TextChoice("ramp", "linear", "smooth", "gaussian"),
+                ScalarOpt("relax"), ScalarOpt("seed"), ScalarOpt("smooth"), ScalarOpt("jitter")));
 
             return r;
         }

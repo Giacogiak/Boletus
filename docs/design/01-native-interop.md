@@ -153,7 +153,7 @@ derives them from geometry.
 A `DualcField` is **single-threaded**: create one handle per Grasshopper solve, contour or
 export, dispose — never share a handle across parallel solves. Independent handles are
 independent. The `Write to File` terminal keeps the whole create → export → dispose lifetime
-on its worker thread for this reason ([04](04-grasshopper-plugin.md#write-to-file--the-threading-model)).
+on its worker thread for this reason ([04](04-grasshopper-plugin/06-write-to-file.md#write-to-file--the-threading-model)).
 A field may be contoured repeatedly at different depths; a contoured mesh's lifetime is
 independent of the field's.
 
@@ -169,7 +169,7 @@ native build has run; the gate's `native-built` check fails with the build comma
 library is missing. Inside Rhino the OS loader searches `Rhino.exe`'s directory, not the
 `.gha`'s, so the `.gha` installs a `NativeLibrary.SetDllImportResolver` against the **Core**
 assembly — the one that holds the `[DllImport]`s
-([04](04-grasshopper-plugin.md#the-native-dll-resolver)). On Linux the csproj copies
+([04](04-grasshopper-plugin/02-native-dll-resolver.md#the-native-dll-resolver)). On Linux the csproj copies
 `native/linux-x64/libdualc_capi.so`, the same ABI for Linux, and the default probe finds it
 beside the test assembly; there is no Rhino, hence no resolver. The pin is the submodule's
 commit, the same for both platforms; why it is a commit rather than a version string is

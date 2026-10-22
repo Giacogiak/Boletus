@@ -26,7 +26,7 @@ stands), and its provenance paragraph — which still named `e345bf3` — is a l
 `NativeMethods.cs`; `native/README.md` and the roadmap index link there instead of restating
 it, and roadmap 01 — whose "9 entry points" lines are the Phase-1 record and stay — carries a
 dated note naming the present-tense owner. The glyph count is stated once, in
-[design 04](../../design/04-grasshopper-plugin.md#the-icons), verified as twenty accessors in
+[design 04](../../design/04-grasshopper-plugin/08-icons.md#the-icons), verified as twenty accessors in
 `BoletusIcons.cs`. The DLL commit stays in `native/README.md` and is not restated by any design
 page. **The test count is on no design page**: design carries no dates, so a live count would
 rot there un-datably; its one owner is the gate's floor (`dotnet.tests_expected_min`); the

@@ -4,7 +4,7 @@ The runtime currency of the canvas and the two Rhino-free rewrites that turn it 
 consumer can read: the in-process DLL, which takes an input mesh as RAM buffers, and the
 out-of-process GPU viewer, which can only read a file. All of it lives in `Boletus.Core`
 so the terminal logic unit-tests on the plain runner; only the Grasshopper wrappers
-(`VolumeGoo` / `VolumeParameter`, [04](04-grasshopper-plugin.md)) belong to the `.gha`.
+(`VolumeGoo` / `VolumeParameter`, [04](04-grasshopper-plugin/README.md)) belong to the `.gha`.
 
 ## `Volume`
 
@@ -70,7 +70,23 @@ value replaced by the absolute, **forward-slash** path — the form the DualC pa
 without escaping questions. Identical buffers share one file and are written once — the id is
 a content hash, so a mesh used as both clip and skin bakes once. A mesh-free graph is returned
 **unchanged, by reference**, and no file is written. The `Live Preview` terminal owns the
-directory and its cleanup ([04 § Live Preview — the process model](04-grasshopper-plugin.md#live-preview--the-process-model)).
+directory and its cleanup ([04 § Live Preview — the process model](04-grasshopper-plugin/07-live-preview.md#live-preview--the-process-model)).
+
+## The porous source at the terminals
+
+DualC builds a `porous` node's cells — the seeds, the tetrahedralization, the bins — **inside
+the create call**, which takes no cancel token and no thread count
+([DualC design/12 § The porous source](../../../DualC/docs/design/12-field-graph.md#the-porous-source)).
+Nothing in either resolver changes for it, and three consequences follow in the terminals:
+`Proxy preview` creates on the solve, so the canvas waits for the cells; `Write to File`
+creates on its worker, so the canvas stays live but `Cancel ■` takes effect only once the
+cells exist; and the build uses every hardware thread whatever `NumThreads` says. A mesh
+volume and its clip are the same `Volume` input twice, so `Volume.Combine` hands DualC **one**
+buffer whose `id` the graph references twice. The side-car path writes that buffer to an OBJ,
+and the viewer builds the cells from the file: the seeds are placed by the volume's value, but
+the OBJ path and the in-memory path give the same cells — the same triangles — and differ only
+at the mesh's creases, by the same few vertex shifts any mesh volume shows there
+([roadmap 11 #36](../roadmap/11-porous-shell.md#36-core-the-porous-vocabulary-and-its-tests)).
 
 ## `FieldTree.Rewrite` — the shared skeleton
 

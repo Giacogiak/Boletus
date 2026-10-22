@@ -175,7 +175,7 @@ namespace Boletus.Core.FieldGraph
         // -- Flat-params primitives (universal positional params=[…]) ----------------------
         // Each builder names the positional parameters for call-site clarity, then packs them
         // into the flat `params` array DualC canonicalises to. Order pinned from
-        // 02-dualc_primitive.md / `dualc_field --list`. plane/infinitecylinder/infinitecone are
+        // 11-dualc_field/12-primitive-catalogue.md / `dualc_field --list`. plane/infinitecylinder/infinitecone are
         // unbounded (need a contour-time --bounds); triangle/quad are open surfaces (need onion).
 
         public static FieldNode Plane(double nx, double ny, double nz, double offset) =>
@@ -455,6 +455,42 @@ namespace Boletus.Core.FieldGraph
             p["hi"] = FieldValue.Scalar(hi);
             if (lo.HasValue) p["lo"] = FieldValue.Scalar(lo.Value);
             return new FieldNode("mix", p, new[] { a, b, control });
+        }
+
+        // ---- Porous source (children: volume[, control]) ---------------------------------
+
+        /// <summary>
+        /// The unsigned distance to the cell complex of seeds placed in <paramref name="volume"/>
+        /// — Voronoi walls or Delaunay faces (<c>mode=walls</c>), or their edges
+        /// (<c>mode=struts</c>). Zero on the complex, so it contours empty until thickened
+        /// (<see cref="Onion"/>, <see cref="Offset"/>, <see cref="GradedOnion"/>,
+        /// <see cref="GradedOffset"/>) and clipped by the volume. A <paramref name="spacing2"/>
+        /// that differs from <paramref name="spacing"/> grades the spacing along
+        /// <paramref name="control"/> between <paramref name="d0"/> and <paramref name="d1"/>.
+        /// Every optional key is emitted only when supplied; DualC fills its own default
+        /// (DualC <c>11-dualc_field/16-porous-shell.md</c>).
+        /// </summary>
+        public static FieldNode Porous(FieldNode volume, double spacing, FieldNode? control = null,
+            string? cells = null, string? mode = null, string? dist = null, double? spacing2 = null,
+            double? d0 = null, double? d1 = null, string? ramp = null, int? relax = null,
+            long? seed = null, double? smooth = null, double? jitter = null)
+        {
+            RequireChild(volume, nameof(volume));
+            var p = NewParams();
+            p["spacing"] = FieldValue.Scalar(spacing);
+            if (cells != null) p["cells"] = FieldValue.Text(cells);
+            if (mode != null) p["mode"] = FieldValue.Text(mode);
+            if (dist != null) p["dist"] = FieldValue.Text(dist);
+            if (spacing2.HasValue) p["spacing2"] = FieldValue.Scalar(spacing2.Value);
+            if (d0.HasValue) p["d0"] = FieldValue.Scalar(d0.Value);
+            if (d1.HasValue) p["d1"] = FieldValue.Scalar(d1.Value);
+            if (ramp != null) p["ramp"] = FieldValue.Text(ramp);
+            if (relax.HasValue) p["relax"] = FieldValue.Scalar(relax.Value);
+            if (seed.HasValue) p["seed"] = FieldValue.Scalar(seed.Value);
+            if (smooth.HasValue) p["smooth"] = FieldValue.Scalar(smooth.Value);
+            if (jitter.HasValue) p["jitter"] = FieldValue.Scalar(jitter.Value);
+            var children = control is null ? new[] { volume } : new[] { volume, control };
+            return new FieldNode("porous", p, children);
         }
 
         // ---- helpers ----------------------------------------------------------------------

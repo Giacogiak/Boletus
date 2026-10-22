@@ -91,7 +91,7 @@ tile's contour, honoured up to the end of the contour (the final write phase of 
 monolithic export runs to completion — DualC D-45), and never a file at the path afterwards
 ([01 § Cancel and progress](01-native-interop.md#cancel-and-progress--the-050-twins)). The
 invariant that holds on every library is **never two concurrent native writes** on one
-component ([04](04-grasshopper-plugin.md#write-to-file--the-threading-model)): a cancel
+component ([04](04-grasshopper-plugin/06-write-to-file.md#write-to-file--the-threading-model)): a cancel
 ends the write before another can start, and on a library older than 0.5.0 — where the
 export calls take no token and no callback, so a running write always finishes — a second
 click is a queued restart that fires on completion, and **progress is indeterminate** there,

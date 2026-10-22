@@ -12,7 +12,7 @@ Items Boletus **needs from** or **triggers in** the DualC repo (the submodule `e
 section each — the section numbers are the stable addresses. None blocks the palette; each
 unlocks or simplifies a later step. What Boletus does today with what landed — the diskless
 path, the side-car process model, single-flight writes — is `docs/design/`
-([03](../../design/03-volume-and-resolvers.md), [04](../../design/04-grasshopper-plugin.md),
+([03](../../design/03-volume-and-resolvers.md), [04](../../design/04-grasshopper-plugin/README.md),
 [07](../../design/07-invariants-and-limits.md)); the native build and the pin are
 [`native/README.md`](../../../native/README.md). Split on 2026-09-21 (roadmap 09 Phase 4)
 from one page into this folder: the three short standing asks (§ 2–§ 4) stay on this page,

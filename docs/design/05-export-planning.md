@@ -7,7 +7,7 @@ unit-tested on the plain runner (`tests/Boletus.Core.Tests/ExportPlanTests.cs`) 
 "logic in Core, thin `.gha`" split as the resolvers ([03](03-volume-and-resolvers.md)). The
 component owns only the threading, the actual native calls and what the engine reports
 back from them — the empty-contour warning after a monolithic write
-([04 § Write to File](04-grasshopper-plugin.md#write-to-file--the-threading-model)); the
+([04 § Write to File](04-grasshopper-plugin/06-write-to-file.md#write-to-file--the-threading-model)); the
 inputs table with its defaults and the exact warning strings is the command reference's.
 
 ## `ExportPlan.Resolve(path, format, mode, depth, tileDepth?)`
@@ -62,7 +62,7 @@ the order they apply:
   override, 3MF cannot tile, tile depth ≥ depth) are posted and the write proceeds; the three
   errors (empty path, unknown selector value, missing directory) stop it before any native
   call. The engine's one advisory — an empty contour, after the write — is the component's,
-  not the planner's ([04 § Write to File](04-grasshopper-plugin.md#write-to-file--the-threading-model)).
+  not the planner's ([04 § Write to File](04-grasshopper-plugin/06-write-to-file.md#write-to-file--the-threading-model)).
 
 ---
 

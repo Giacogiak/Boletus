@@ -135,5 +135,112 @@ namespace Boletus.Core.Tests
             var ex = Assert.Throws<FieldGraphValidationException>(() => FieldGraphValidator.ValidateOrThrow(bad));
             Assert.All(ex.Issues, i => Assert.Equal(ValidationSeverity.Error, i.Severity));
         }
+
+        // ---- porous: the arity range, the choices, the grading, the thickness --------------
+
+        private static FieldNode PorousWith(int children, params (string key, FieldValue value)[] ps)
+        {
+            var p = new Dictionary<string, FieldValue>(System.StringComparer.Ordinal)
+            {
+                ["spacing"] = FieldValue.Scalar(0.4),
+            };
+            foreach (var (key, value) in ps) p[key] = value;
+            var kids = Enumerable.Range(0, children).Select(_ => Field.Sphere(radius: 1)).ToArray();
+            return new FieldNode("porous", p, kids);
+        }
+
+        [Fact]
+        public void Porous_takes_one_or_two_children()
+        {
+            foreach (int n in new[] { 0, 3 })
+            {
+                var issue = Assert.Single(Validate(Field.Onion(PorousWith(n), 0.05)),
+                    i => i.Severity == ValidationSeverity.Error);
+                Assert.Equal("/root/in/0", issue.Path);
+                Assert.Contains("takes 1–2 child(ren)", issue.Message);
+            }
+            Assert.Empty(Validate(Field.Onion(PorousWith(1), 0.05)));
+            Assert.DoesNotContain(Validate(Field.Onion(PorousWith(2,
+                    ("spacing2", FieldValue.Scalar(0.6)), ("d1", FieldValue.Scalar(1))), 0.05)),
+                i => i.Severity == ValidationSeverity.Error);
+        }
+
+        [Fact]
+        public void An_exact_arity_keeps_its_message()
+        {
+            var bad = new FieldNode("onion",
+                new Dictionary<string, FieldValue> { ["thickness"] = FieldValue.Scalar(0.1) });
+            var issue = Assert.Single(Validate(bad));
+            Assert.Equal("op 'onion' takes 1 child(ren), got 0", issue.Message);
+        }
+
+        [Fact]
+        public void Porous_rejects_a_name_outside_its_choices()
+        {
+            var issue = Assert.Single(Validate(Field.Onion(
+                Field.Porous(Field.Sphere(radius: 1), 0.4, cells: "hexagonal"), 0.05)));
+            Assert.Equal(ValidationSeverity.Error, issue.Severity);
+            Assert.Equal("/root/in/0/cells", issue.Path);
+            Assert.Contains("voronoi, delaunay", issue.Message);
+        }
+
+        [Fact]
+        public void Graded_porous_needs_a_control_and_d1()
+        {
+            var noControl = Validate(Field.Onion(
+                Field.Porous(Field.Sphere(radius: 1), 0.4, spacing2: 0.6, d1: 1), 0.05));
+            var e1 = Assert.Single(noControl);
+            Assert.Equal("'porous' spacing2 differs from spacing: give a control field as the second child", e1.Message);
+
+            var noD1 = Validate(Field.Onion(
+                Field.Porous(Field.Sphere(radius: 1), 0.4, control: Field.Sphere(radius: 0), spacing2: 0.6), 0.05));
+            var e2 = Assert.Single(noD1);
+            Assert.Equal("/root/in/0/d1", e2.Path);
+            Assert.Equal(ValidationSeverity.Error, e2.Severity);
+        }
+
+        [Fact]
+        public void A_control_without_grading_is_a_warning()
+        {
+            var issue = Assert.Single(Validate(Field.Onion(
+                Field.Porous(Field.Sphere(radius: 1), 0.4, control: Field.Sphere(radius: 0)), 0.05)));
+            Assert.Equal(ValidationSeverity.Warning, issue.Severity);
+            Assert.Equal("/root/in/0/in/1", issue.Path);
+        }
+
+        [Fact]
+        public void Porous_over_a_non_metric_volume_is_a_warning()
+        {
+            var issue = Assert.Single(Validate(Field.Onion(
+                Field.Porous(Field.Intersection(Field.Gyroid(), Field.Sphere(radius: 1)), 0.4), 0.05)));
+            Assert.Equal(ValidationSeverity.Warning, issue.Severity);
+            Assert.Equal("/root/in/0/in/0", issue.Path);
+            Assert.Contains("normalize", issue.Message);
+        }
+
+        [Fact]
+        public void A_porous_field_without_a_thickness_is_a_warning()
+        {
+            var bare = Assert.Single(Validate(Field.Porous(Field.Sphere(radius: 1), 0.4)));
+            Assert.Equal(ValidationSeverity.Warning, bare.Severity);
+            Assert.Contains("no thickness", bare.Message);
+
+            var clipped = Assert.Single(Validate(
+                Field.Intersection(Field.Sphere(radius: 1), Field.Porous(Field.Sphere(radius: 1), 0.4))));
+            Assert.Equal("/root/in/1", clipped.Path);
+
+            // Thickened, or read as a control value: clean.
+            Assert.Empty(Validate(Field.Offset(Field.Porous(Field.Sphere(radius: 1), 0.25, mode: "struts"), 0.015)));
+            Assert.Empty(Validate(Field.GradedOnion(Field.Sphere(radius: 1),
+                Field.Porous(Field.Sphere(radius: 1), 0.4), t1: 0.02, t2: 0.06, d1: 0.1)));
+        }
+
+        [Fact]
+        public void Porous_is_metric()
+        {
+            Assert.True(FieldGraphValidator.IsMetric(Field.Porous(Field.Sphere(radius: 1), 0.4)));
+            Assert.Empty(Validate(Field.SmoothIntersection(Field.Sphere(radius: 1),
+                Field.Onion(Field.Porous(Field.Sphere(radius: 1), 0.4), 0.06), k: 0.1)));
+        }
     }
 }

@@ -29,9 +29,14 @@ the primitives' positional parameter order is
 ## The model
 
 A field graph is an immutable **tree**: sources have no children, decorators and domain ops
-one, booleans and the graded ops two, `mix` three. Parameters are a generic bag — `Params`
-plus a per-op `OpSchema` — rather than a strongly-typed record per op, so DualC's vocabulary
-grows without new C# types: a new op is a schema row and a builder. The model is
+one, booleans and the graded ops two, `mix` three — and `porous`, a source of a different
+kind, one or two (the volume it fills, then an optional control). An `OpSchema` therefore
+carries an arity **range**, `MinChildren` / `MaxChildren`, equal for every op but `porous`.
+Parameters are a generic bag — `Params` plus a per-op `OpSchema` — rather than a
+strongly-typed record per op, so DualC's vocabulary grows without new C# types: a new op is a
+schema row and a builder. A text parameter whose value is one of a closed set (`porous`'s
+`cells`, `mode`, `dist`, `ramp`) lists it as the spec's `Choices`, and the validator rejects
+any other name, as DualC would. The model is
 **emit-only**: there is no JSON reader in `Boletus.Core`, because DualC parses what Boletus
 writes and nothing ever flows back as a graph. The wire format is **tree-only**: a field
 feeding two consumers serializes as a duplicated subtree, which is correct and merely not
@@ -96,7 +101,13 @@ An `OpCategory` on each schema drives `FieldGraphValidator.IsMetric`: a raw `Tpm
 `winding` are non-metric; a `MetricSource` (every analytic primitive, `mesh`, the strut
 crystals — true SDFs), `Normalize`, `Onion`, `GradedOnion` and a `SmoothBoolean` yield a
 metric field; a one-child `Decorator` propagates its child; a `HardBoolean` is metric only
-when both operands are (`mix` reuses this category, so its control child is ignored).
+when both operands are (`mix` reuses this category, so its control child is ignored). A
+`Porous` node is metric — DualC's value is 1-Lipschitz — so a decorator or smooth boolean over
+it raises nothing; its own checks are that the volume it fills is metric (the seeds are placed
+below a pad measured in distance units), that a graded spacing has its control and `d1`, and
+that it reaches the root through a thickening op (`onion`, `offset`, `round`, or the base of
+`graded-onion` / `graded-offset`) or as a control input — the bare node contours empty, so
+a warning names the cause before the contour does.
 `triangle` / `quad` are categorised `MetricSource` on purpose — unsigned distance with unit
 gradient — so that wrapping one in `onion`, the way it gains thickness, raises no warning;
 that is a judgement call noted in `Ops.cs`, not a DualC classification.

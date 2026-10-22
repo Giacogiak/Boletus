@@ -11,7 +11,7 @@ inside the DLL (the upstream sync, the version trap, and the open asks are in
   increment in [05 § Implemented — strut lattices](05-phase3-grasshopper-components/07-strut-lattice-components.md#implemented--strut-lattices-strut-lattice--graded-offset--mix-2026-07-10).
 - **User-facing component guide** (inputs/outputs, where each belongs in the pipeline): the
   `Strut Lattice` / `Graded Offset` / `Mix` sections of the command reference
-  ([01 § Strut Lattice](../command_reference/01-sources.md#strut-lattice),
+  ([01 § Strut Lattice](../command_reference/01-sources/06-strut-lattice.md#strut-lattice),
   [02 § Graded Offset](../command_reference/02-decorators.md#graded-offset),
   [02 § Mix](../command_reference/02-decorators.md#mix)).
 - **Authoritative DualC syntax & recipes:** `D:\DualC\docs\command_reference\11-dualc_field\02-strut-lattices.md`
@@ -67,7 +67,7 @@ multi-mode convention, like `TPMS`/`Primitive`/`Boolean`).
 **Hard rules the component enforces / warns about:** the infinite extent (the remark and the
 two fixes), the `radius < wavelength/2` rule of thumb and the resolution rule — a cell must be
 smaller than about the radius or thin struts fragment — are the component's page,
-[command reference 01 § Strut Lattice](../command_reference/01-sources.md#strut-lattice); the
+[command reference 01 § Strut Lattice](../command_reference/01-sources/06-strut-lattice.md#strut-lattice); the
 resolution rule itself is DualC's
 ([design 10](../../../DualC/docs/design/10-invariants-and-tolerances.md#the-resolution-rule-a-feature-is--23-cells-or-it-does-not-exist)).
 

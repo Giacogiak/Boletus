@@ -10,10 +10,10 @@ behind the fork [07 § Next increment](07-strut-lattice-components.md#next-incre
 named — the fixed `A / B / N0 / N1` model cannot hold their parameters. The fork was
 decided by reading the parameter shapes, as that entry asked, and the twenty-two solids
 landed in one session on Linux; the two open surfaces stay out (below). The usage contract
-is [cmdref 01 § Primitive](../../command_reference/01-sources.md#primitive), [§ Segment
-Primitive](../../command_reference/01-sources.md#segment-primitive) and [§ Axial
-Primitive](../../command_reference/01-sources.md#axial-primitive); the mechanism is
-[design 04 § The component families](../../design/04-grasshopper-plugin.md#the-component-families).
+is [cmdref 01 § Primitive](../../command_reference/01-sources/02-primitive.md#primitive), [§ Segment
+Primitive](../../command_reference/01-sources/03-segment-primitive.md#segment-primitive) and [§ Axial
+Primitive](../../command_reference/01-sources/04-axial-primitive.md#axial-primitive); the mechanism is
+[design 04 § The component families](../../design/04-grasshopper-plugin/04-component-families.md#the-component-families).
 This page is the development record only.
 
 ### What was built
@@ -55,7 +55,7 @@ plate those cannot express ([decisions](../../decisions/README.md)).
 
 Two things the record keeps for the next source component: `Axial Primitive`'s shapes stand
 on the engine's own axis (Y for most, Z for the prisms) — the component says so and points to
-`Transform` rather than growing an orientation input; and [cmdref 01](../../command_reference/01-sources.md)
+`Transform` rather than growing an orientation input; and [cmdref 01](../../command_reference/01-sources/README.md)
 closed this session a few words under the size cap — the next source component splits it
 into a `01-sources/` folder (principle 5).
 
