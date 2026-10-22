@@ -9,7 +9,7 @@ NuGet dependency (the JSON emitter is hand-rolled), on netstandard2.0. The vocab
 is DualC's: the op tokens, their parameters and the `--expr` grammar are
 [`docs/command_reference/11-dualc_field/01-op-vocabulary.md`](../../../DualC/docs/command_reference/11-dualc_field/01-op-vocabulary.md),
 the primitives' positional parameter order is
-[`02-dualc_primitive.md`](../../../DualC/docs/command_reference/02-dualc_primitive.md), and
+[`11-dualc_field/12-primitive-catalogue.md`](../../../DualC/docs/command_reference/11-dualc_field/12-primitive-catalogue.md), and
 `dualc_field --list` prints the live set.
 
 ## The files
@@ -19,7 +19,7 @@ the primitives' positional parameter order is
 | `FieldValue.cs` | Immutable parameter value — `Scalar(double)`, `Vector(IReadOnlyList<double>)`, `Text(string)` — with value equality. A flat `params` array is a `Vector` under the key `"params"`. |
 | `FieldNode.cs` | Immutable node: `Op` token, `Params` bag, ordered `Children`. Defensive copies make it genuinely immutable; `ToJson()` serializes it as a document root. |
 | `FieldGraphSerializer.cs` | The canonical-JSON emitter, held to a byte match with DualC's `--dump-json` ([§ The byte-match rules](#the-byte-match-rules)). |
-| `OpSchema.cs` | `OpSchema` (token, child arity, `OpCategory`, `ParamSpec`s), `ParamSpec` (name, `ParamKind`, required, vector length) and the `OpCategory` / `ParamKind` enums. |
+| `OpSchema.cs` | `OpSchema` (token, child arity as `MinChildren` / `MaxChildren`, `OpCategory`, `ParamSpec`s), `ParamSpec` (name, `ParamKind`, required, vector length, the closed set of `Choices` a text value may take) and the `OpCategory` / `ParamKind` enums. |
 | `Ops.cs` | The pinned op registry, `Ops.TryGet(token)`: one schema per op of the vocabulary (`Ops.Tokens` lists every registered token), the flat primitives through the `FlatParams(n)` helper that pins each one's element count. |
 | `Field.cs` | Typed static builders — `Field.Gyroid(wavelength)`, `Field.Normalize(child)`, `Field.Onion(child, t)`, `Field.Intersection(a, b)`, `Field.Mesh(path)` / `Field.Mesh(id: …)`, `Field.Bcc(…)`, `Field.Mix(…)` — so a component never hand-writes JSON. Optional parameters are nullable and emitted only when supplied. |
 | `PrimitiveCatalog.cs` | The Rhino-free catalog behind `Segment Primitive` and `Axial Primitive`: one entry per shape with its fixed-slot labels, engine defaults and the `Field` builder it calls; an entry's index is its ID, so a shape is only ever appended (the constructor throws otherwise). |
@@ -72,7 +72,8 @@ through `--dump-json` is the semantic oracle and the byte match a secondary form
   (`sc`, `bcc`, `fcc`, `octet`; `center`, `wavelength`, `radius`, `nodeRadius`, all optional), and
   every analytic primitive: the seven with **grouped keys** (`sphere`, `box`, `roundbox`,
   `capsule`, `cappedcylinder`, `torus`, `ellipsoid`) and the rest through DualC's universal
-  flat `params:[…]` positional array.
+  flat `params:[…]` positional array. And `porous` (volume + optional control; `spacing`
+  required, the other eleven keys optional, `cells` / `mode` / `dist` / `ramp` closed sets).
 - **Booleans and graded ops.** `union`, `intersection`, `difference`, `xor`, the three
   `smooth-*` variants with `k`, `graded-onion` and `graded-offset` (base + control;
   `t1`, `t2`, `d1` required, `d0` optional), and the three-child `mix` (`hi` required, `lo`
@@ -105,9 +106,10 @@ when both operands are (`mix` reuses this category, so its control child is igno
 `Porous` node is metric — DualC's value is 1-Lipschitz — so a decorator or smooth boolean over
 it raises nothing; its own checks are that the volume it fills is metric (the seeds are placed
 below a pad measured in distance units), that a graded spacing has its control and `d1`, and
-that it reaches the root through a thickening op (`onion`, `offset`, `round`, or the base of
-`graded-onion` / `graded-offset`) or as a control input — the bare node contours empty, so
-a warning names the cause before the contour does.
+that its **parent** thickens it (`onion`, `offset`, `round`, or the base of `graded-onion` /
+`graded-offset`) or reads it as a control input (of a graded op, of `porous`, `mix`'s third
+child) — the bare node contours empty, so a warning names the cause before the contour does;
+a thickening op further up, past a domain op, is not looked for.
 `triangle` / `quad` are categorised `MetricSource` on purpose — unsigned distance with unit
 gradient — so that wrapping one in `onion`, the way it gains thickness, raises no warning;
 that is a judgement call noted in `Ops.cs`, not a DualC classification.
@@ -115,8 +117,9 @@ that is a judgement call noted in `Ops.cs`, not a DualC classification.
 **Metric-ness is a warning, not an error.** DualC accepts and contours a non-metric source
 feeding `onion`, `graded-onion` or a smooth boolean — the golden-count graph is exactly such a
 composition — so `ValidateOrThrow` throws only on schema **errors** (arity, a missing or
-unknown or mistyped parameter, an unknown op, both or neither of `path` / `id` on a mesh
-leaf: what DualC itself rejects), and metric-ness surfaces as an actionable warning that
+unknown or mistyped parameter, a text value outside its choices, an unknown op, both or
+neither of `path` / `id` on a mesh leaf, a graded `porous` spacing without its control or
+`d1`: what DualC itself rejects), and metric-ness surfaces as an actionable warning that
 names the fix ("wrap it in `normalize`"). The user-facing rule is
 [06 § The Normalize rule](06-conventions.md#metric-by-default-sources-and-the-normalize-rule).
 

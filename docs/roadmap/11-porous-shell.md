@@ -96,6 +96,11 @@ a required input, not a component message. Docs: `01-sources.md` (14,258 bytes) 
 retargeted — with the `Porous Shell` page and recipes S11–S14; `05` the `porous` row; `06` W5,
 the sponge; `design/04-grasshopper-plugin.md` (15,358 bytes) split the same way into
 `design/04-grasshopper-plugin/` before its families and icons children took the new component.
+`scripts/docs_loss_audit.py --base 2423275 --head 4f4db6d` (a scratch triage, not committed):
+no heading, identifier or sentence of the two split pages lost — one sentence partial, the
+family's "All six sit under" now "seven"; the roadmap index's four residuals are the snapshot
+updated on purpose (the `2fcd19f` pin paragraph and the re-pin item, both closed by #35; the
+2026-10-05 milestone row, out of the D-43 window).
 
 ## #38 The Rhino smoke test
 

@@ -51,7 +51,8 @@ ignored unless Spacing2 differs from Spacing.`; Remark `Jitter is read only when
 At a terminal, from the graph check
 ([00 § Message levels](../00-shared-behaviour.md#message-levels)): Warning `…: the porous field has no thickness —
 its contour is empty; wrap it in onion / offset (or graded-onion / graded-offset)` when the
-output reaches a terminal (or a `Boolean`) without a thickness op above it; Warning `…:
+node's direct parent is not one of those (a `Boolean` or a `Transform` straight after it
+warns; a control input does not); Warning `…:
 'porous' places its seeds by the volume's distance, but '…' is non-metric — wrap it in
 'normalize' so the boundary pores are placed right`. A key out of DualC's range (`Relax`
 above 50, more than 2,000,000 seeds, `Smooth` too large for struts) is DualC's located

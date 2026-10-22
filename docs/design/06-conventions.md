@@ -43,7 +43,9 @@ default**:
 - `Mesh → Volume` is always metric: the parity and pseudonormal signed distances are, and the
   non-metric `winding` field is wrapped in `normalize` inside the component, so a `Normalize`
   after `Mesh → Volume` is never needed.
-- The three `Primitive` components and `Strut Lattice` are true SDFs — metric as they are.
+- The three `Primitive` components and `Strut Lattice` are true SDFs — metric as they are;
+  `Porous Shell` is an unsigned 1-Lipschitz distance — metric too, though zero-thick until a
+  decorator thickens it.
 - **Raw `TPMS` is the deliberate exception**: it stays non-metric because whether to
   normalize it is the user's call (a normalized TPMS costs more per sample and is not always
   wanted), so the canonical chain is `TPMS → Normalize → Onion`.
