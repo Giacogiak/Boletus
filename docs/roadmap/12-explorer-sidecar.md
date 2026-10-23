@@ -169,6 +169,9 @@ said ≈ 25 MB on disk, the zipped `.yak` is about half), the `boletus-gha-folde
 14.0 MB, the native step 11 min 7 s on a cold cache with the two trees, the Windows job
 13 min 38 s. #41 closed; the five runs' record above is why the recipe reads as it does.)*
 
+*(2026-10-23, the sixth run, `fc9d2da`, docs only: green; the native step 4 min 13 s on the
+warm cache — the restore proven — against 11 min 7 s cold.)*
+
 ## #42 The explore switch at the new pin; the default flipped
 
 **PLANNED — waits on 07 § 11 landing upstream and a DualCEditor pin bump.** Pass `--explore`
