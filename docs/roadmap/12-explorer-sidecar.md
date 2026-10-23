@@ -136,6 +136,23 @@ cache carries `restore-keys` so a recipe or editor-pin edit reuses the last tree
 same DualC pin, fetched sources included. The first green Windows run and the `.yak`
 size stay owed.)*
 
+*(2026-10-23, the third run, `f417878` — the retry carried two fetch failures and the
+configure went through; the build then died in MSBuild, `MSB1009: Project file does not
+exist`. The one-tree recipe is wrong on Windows by construction: the editor's CMakeLists
+adds DualC `EXCLUDE_FROM_ALL`, and the Visual Studio generator writes an excluded target
+into the solution only when a solution target depends on it — the editor's host libraries
+are in, `dualc_capi`, `dualc_field`, `dualc_c_demo` and `dualc_field_view` are not, so
+`cmake --build --target` has no project to hand MSBuild. Ninja builds any target in
+`build.ninja`, which is why Linux never showed it. **Dropped for two trees**: DualC top-level
+in `build-native/` exactly as before (the recipe proven since 10 #33), the editor in
+`build-native-editor/` from the same submodule with only `DualCEditor` built there; DualC's
+host libraries compile twice, the cache absorbs it, the one-pin rule holds (both trees
+read the one gitlink). Rejected: `msbuild` on the `.vcxproj` files directly (needs MSBuild
+on PATH, which `cmake --build` does not), the `_dualc/capi/dualc_capi` path trick in
+`--target` (an undocumented branch of CMake's VS build driver), and a
+`CMAKE_PROJECT_dualc_INCLUDE` hook flipping the directory's `EXCLUDE_FROM_ALL` (documented,
+but clever, and a change to the editor's build from outside it).)*
+
 ## #42 The explore switch at the new pin; the default flipped
 
 **PLANNED — waits on 07 § 11 landing upstream and a DualCEditor pin bump.** Pass `--explore`

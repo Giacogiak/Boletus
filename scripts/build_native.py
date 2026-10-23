@@ -14,10 +14,14 @@ and the DualCEditor tree likewise: --editor-dir PATH, $DUALCEDITOR_ROOT, externa
 
 The editor is built when Qt 6 is found (QT_ROOT_DIR / Qt6_DIR / CMAKE_PREFIX_PATH, or qmake
 on PATH) on Windows and the editor tree is checked out; --editor forces it on (and fails
-loudly without Qt), --no-editor off. With the editor on, the editor's CMakeLists is the top
-level and adds DualC as a subdirectory (-DDUALCEDITOR_DUALC_DIR), so DualC compiles once,
-against Boletus's own pin, in the separate tree build-native-editor/; windeployqt then lays
-the Qt runtime beside DualCEditor.exe under native/x64/editor/.
+loudly without Qt), --no-editor off. The editor is a second CMake tree, build-native-editor/:
+the editor's CMakeLists on top, DualC added from the same pinned submodule
+(-DDUALCEDITOR_DUALC_DIR), and only the DualCEditor target built there -- DualC's own
+targets come from the first tree. (One tree with everything was tried and dropped: the
+editor adds DualC EXCLUDE_FROM_ALL, and the Visual Studio generator keeps excluded targets
+out of the solution, so `cmake --build --target dualc_capi` finds no project; Ninja has no
+such limit, which is why it passed on Linux.) windeployqt then lays the Qt runtime beside
+DualCEditor.exe under native/x64/editor/.
 
 Outputs (all gitignored):
     native/linux-x64/libdualc_capi.so, dualc_field           on Linux
@@ -31,6 +35,7 @@ Usage:
     python3 scripts/build_native.py --viewer        # also build dualc_field_view off Windows
     python3 scripts/build_native.py --no-editor     # skip DualCEditor even when Qt is found
     python3 scripts/build_native.py --build-dir D   # default: build-native/ at the repo root
+    python3 scripts/build_native.py --editor-build-dir D   # default: build-native-editor/
     python3 scripts/build_native.py --jobs N
 """
 from __future__ import annotations
@@ -188,8 +193,9 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--dualc", help="DualC checkout (default: $DUALC_ROOT, then external/DualC)")
     ap.add_argument("--editor-dir", help="DualCEditor checkout (default: $DUALCEDITOR_ROOT, then external/DualCEditor)")
     ap.add_argument("--build-dir", default=str(ROOT / "build-native"),
-                    help="CMake build tree (default: build-native/ at the repo root; "
-                         "build-native-editor/ when the editor is on)")
+                    help="DualC's CMake build tree (default: build-native/ at the repo root)")
+    ap.add_argument("--editor-build-dir", default=str(ROOT / "build-native-editor"),
+                    help="DualCEditor's CMake build tree (default: build-native-editor/)")
     ap.add_argument("--viewer", action="store_true",
                     help="build dualc_field_view too (always on Windows; needs GL headers elsewhere)")
     ap.add_argument("--editor", dest="editor", action="store_true", default=None,
@@ -226,8 +232,7 @@ def main(argv: list[str]) -> int:
             die("the editor is deployed with windeployqt and shipped for Rhino on Windows only; pass --no-editor")
 
     bd = Path(args.build_dir).resolve()
-    if editor and args.build_dir == str(ROOT / "build-native"):
-        bd = ROOT / "build-native-editor"
+    ebd = Path(args.editor_build_dir).resolve()
     viewer = IS_WINDOWS or args.viewer
     out = ROOT / "native" / RID
     out.mkdir(parents=True, exist_ok=True)
@@ -245,36 +250,31 @@ def main(argv: list[str]) -> int:
         "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",  # the static libs the .so links need PIC
         "-DDUALC_BUILD_FIELD_VIEW=" + ("ON" if viewer else "OFF"),
     ]
-    if editor:
-        # The editor's CMakeLists is the top level; it add_subdirectory()s DualC from the
-        # path given, so the same DualC pin serves the C ABI, the viewer and the editor.
-        flags += [
-            "-DDUALCEDITOR_DUALC_DIR=" + src.as_posix(),   # CMake-side paths: forward slashes
-            "-DDUALCEDITOR_BUILD_TESTS=OFF",
-            "-DCMAKE_PREFIX_PATH=" + qt.as_posix(),
-        ]
-        cmake_src = editor_src
-    else:
-        cmake_src = src
     print("build_native: python %s, cmake %s, editor %s" % (
         sys.version.split()[0], capture(["cmake", "--version"]).split("\n")[0], "on" if editor else "off"))
-    run(["cmake", "-S", cmake_src, "-B", bd] + gen + flags)
+    run(["cmake", "-S", src, "-B", bd] + gen + flags)
 
-    targets = ["dualc_capi", "dualc_field", "dualc_c_demo"] + (["dualc_field_view"] if viewer else []) \
-        + (["DualCEditor"] if editor else [])
-    build = ["cmake", "--build", bd, "--config", "Release", "--target"] + targets
-    if args.jobs:
-        build += ["--parallel", str(args.jobs)]
-    elif not IS_WINDOWS:
-        build += ["--parallel"]
-    run(build)
+    targets = ["dualc_capi", "dualc_field", "dualc_c_demo"] + (["dualc_field_view"] if viewer else [])
+    parallel = ["--parallel", str(args.jobs)] if args.jobs else ([] if IS_WINDOWS else ["--parallel"])
+    run(["cmake", "--build", bd, "--config", "Release", "--target"] + targets + parallel)
 
-    # Where the targets land: multi-config generators add a Release/ level; with the editor
-    # on top, DualC's targets sit under its subdirectory binary dir, _dualc/.
+    editor_flags: list[str] = []
+    if editor:
+        # The second tree: the editor's CMakeLists on top, DualC add_subdirectory()'d from
+        # the same submodule (the one-pin rule), only the editor's own target built.
+        editor_flags = [
+            "-DDUALCEDITOR_DUALC_DIR=" + src.as_posix(),   # CMake-side paths: forward slashes
+            "-DDUALCEDITOR_BUILD_TESTS=OFF",
+            "-DDUALC_BUILD_TESTS=OFF",
+            "-DCMAKE_PREFIX_PATH=" + qt.as_posix(),  # type: ignore[union-attr]  (qt is set when editor is)
+        ]
+        run(["cmake", "-S", editor_src, "-B", ebd] + gen + editor_flags)
+        run(["cmake", "--build", ebd, "--config", "Release", "--target", "DualCEditor"] + parallel)
+
+    # Where the targets land: multi-config generators add a Release/ level.
     cfg = "Release" if IS_WINDOWS else ""
-    dualc_bd = bd / "_dualc" if editor else bd
-    capi_dir = dualc_bd / "capi" / cfg
-    ex_dir = dualc_bd / "examples" / cfg
+    capi_dir = bd / "capi" / cfg
+    ex_dir = bd / "examples" / cfg
     lib_name = "dualc_capi.dll" if IS_WINDOWS else "libdualc_capi.so"
     copies = [
         (capi_dir / lib_name, out / lib_name),
@@ -299,16 +299,16 @@ def main(argv: list[str]) -> int:
 
     editor_notes: list[str] = []
     if editor:
-        exe = next((p for p in (bd / "bin" / cfg / "DualCEditor.exe", bd / "bin" / "DualCEditor.exe")
+        exe = next((p for p in (ebd / "bin" / cfg / "DualCEditor.exe", ebd / "bin" / "DualCEditor.exe")
                     if p.is_file()), None)
         if exe is None:
-            die("expected build output missing: %s" % (bd / "bin" / cfg / "DualCEditor.exe"))
+            die("expected build output missing: %s" % (ebd / "bin" / cfg / "DualCEditor.exe"))
         editor_out = out / "editor"
         deploy_editor(exe, editor_out, qt)  # type: ignore[arg-type]  (qt is set when editor is)
         editor_notes += write_editor_licenses(editor_out, qt, editor_src)  # type: ignore[arg-type]
         if not args.no_smoke:
             run([editor_out / "DualCEditor.exe", "--version"], cwd=editor_out)
-        print("deployed %s -> %s (%d files)" % (exe.relative_to(bd), editor_out.relative_to(ROOT),
+        print("deployed %s -> %s (%d files)" % (exe.relative_to(ebd), editor_out.relative_to(ROOT),
                                                sum(1 for _ in editor_out.rglob("*") if _.is_file())))
 
     lib = out / lib_name
@@ -325,6 +325,7 @@ def main(argv: list[str]) -> int:
         lines += [
             "DualCEditor commit: " + git_commit(editor_src),  # type: ignore[arg-type]
             "DualCEditor source: " + str(editor_src),
+            "Editor flags: " + " ".join(editor_flags),
             "Qt prefix: " + str(qt),
             "Qt version: " + (capture([qt / "bin" / ("qmake" + EXE), "-query", "QT_VERSION"])  # type: ignore[operator]
                               if (qt / "bin" / ("qmake" + EXE)).is_file() else "unknown"),  # type: ignore[operator]

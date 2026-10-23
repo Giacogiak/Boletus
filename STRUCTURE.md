@@ -139,7 +139,7 @@ Boletus/
 ├── scripts/
 │   ├── check.py                THE GATE (ported from DualC): every docs check + native-built + dotnet build/test in one command — what CI runs
 │   ├── check_data.json         Its declared exceptions: size baseline, index roots, forbidden patterns, the DualC tree paths (submodule first), the test floor, the yak manifest
-│   ├── build_native.py         Builds DualC's C ABI, dualc_field, (Windows) the viewer and (Windows with Qt 6) DualCEditor from external/DualC and external/DualCEditor (or --dualc / DUALC_ROOT, --editor-dir / DUALCEDITOR_ROOT) into native/<rid>/ — one CMake tree with the editor on top — runs dualc_c_demo, windeployqt and DualCEditor --version, writes BUILD-INFO.txt
+│   ├── build_native.py         Builds DualC's C ABI, dualc_field, (Windows) the viewer and (Windows with Qt 6) DualCEditor from external/DualC and external/DualCEditor (or --dualc / DUALC_ROOT, --editor-dir / DUALCEDITOR_ROOT) into native/<rid>/ — DualC's tree build-native/, the editor's build-native-editor/ on the same pin — runs dualc_c_demo, windeployqt and DualCEditor --version, writes BUILD-INFO.txt
 │   ├── docs_loss_audit.py      Did a docs restructuring lose a fact? Set arithmetic over two git trees (ported from DualC)
 │   ├── docs_loss_audit.json    Its triage: one verdict per residual unit, each citation verified on the head tree
 │   ├── check_fixtures/         `check.py --selftest` trees: one pass/ and one fail/ miniature repo per docs check

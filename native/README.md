@@ -64,9 +64,12 @@ or `CMAKE_PREFIX_PATH` in the environment, or `qmake` on `PATH` — what
 `jurplel/install-qt-action` and a Qt installer leave) and the editor tree is checked out;
 `--editor` forces it (and fails loudly without Qt), `--no-editor` skips it, and a skipped
 editor is one printed line — the `.gha` then falls back to the field view. With the editor
-on, the script configures **one CMake tree**, `build-native-editor/`: the editor's
-`CMakeLists.txt` is the top level and adds DualC from `-DDUALCEDITOR_DUALC_DIR=<the DualC
-tree>`, so DualC compiles once and the five targets come from the same pin; then
+on, the script configures a **second CMake tree**, `build-native-editor/` (`--editor-build-dir`):
+the editor's `CMakeLists.txt` on top, DualC added from `-DDUALCEDITOR_DUALC_DIR=<the DualC
+tree>` — the same submodule as `build-native/`, so the one pin serves both — and only the
+`DualCEditor` target built there (DualC adds itself `EXCLUDE_FROM_ALL` under the editor, and
+the Visual Studio generator keeps excluded targets out of the solution, so the C ABI and
+the viewer cannot be built from that tree); then
 `windeployqt --release --no-translations --no-opengl-sw --no-system-d3d-compiler
 --no-compiler-runtime` lays the runtime beside `DualCEditor.exe`, the plugin folders a
 Widgets + OpenGL window never loads (`imageformats`, `iconengines`, `networkinformation`,

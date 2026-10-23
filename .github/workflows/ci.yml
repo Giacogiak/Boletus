@@ -125,7 +125,7 @@ jobs:
           arch: win64_msvc2022_64
           cache: true
 
-      # Both pins and the recipe key the cache: the editor tree holds DualC's objects too.
+      # Both pins and the recipe key the cache: the editor tree compiles DualC's host libs too.
       - uses: actions/cache@v4
         with:
           path: |
