@@ -249,13 +249,15 @@ def main(argv: list[str]) -> int:
         # The editor's CMakeLists is the top level; it add_subdirectory()s DualC from the
         # path given, so the same DualC pin serves the C ABI, the viewer and the editor.
         flags += [
-            "-DDUALCEDITOR_DUALC_DIR=" + str(src),
+            "-DDUALCEDITOR_DUALC_DIR=" + src.as_posix(),   # CMake-side paths: forward slashes
             "-DDUALCEDITOR_BUILD_TESTS=OFF",
-            "-DCMAKE_PREFIX_PATH=" + str(qt),
+            "-DCMAKE_PREFIX_PATH=" + qt.as_posix(),
         ]
         cmake_src = editor_src
     else:
         cmake_src = src
+    print("build_native: python %s, cmake %s, editor %s" % (
+        sys.version.split()[0], capture(["cmake", "--version"]).split("\n")[0], "on" if editor else "off"))
     run(["cmake", "-S", cmake_src, "-B", bd] + gen + flags)
 
     targets = ["dualc_capi", "dualc_field", "dualc_c_demo"] + (["dualc_field_view"] if viewer else []) \

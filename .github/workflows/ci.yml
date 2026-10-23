@@ -111,8 +111,20 @@ jobs:
             build-native-editor
           key: native-${{ runner.os }}-${{ steps.pin.outputs.sha }}-${{ steps.pin.outputs.editor }}-${{ hashFiles('scripts/build_native.py') }}
 
+      # The output is kept: a failing configure is read from the annotations below, not
+      # from the full log (which the public API serves only with a token).
       - name: Build the native side from the submodules (C ABI + viewer + editor)
-        run: python scripts/build_native.py
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/build_native.py 2>&1 | tee native.log
+
+      - name: Native build report as annotations
+        if: failure()
+        shell: bash
+        run: |
+          grep -inE 'error|fatal|traceback|build_native:' native.log | head -40 | while IFS= read -r l; do echo "::error title=native::$l"; done || true
+          tail -30 native.log | while IFS= read -r l; do echo "::error title=native tail::$l"; done || true
 
       - name: Gate
         shell: bash

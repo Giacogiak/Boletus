@@ -114,6 +114,18 @@ cites), the first green Windows run, and its measured `.yak` size written here (
 added at the owner's word; `.gitmodules` has its two entries. What remains owed is the first
 green Windows run with Qt and the measured `.yak` size.)*
 
+*(2026-10-23, evening — the first Windows run, `07cd2f1`: red at the native step after 39 s,
+i.e. in the editor tree's configure, the annotations holding only the exit code. Proven on
+Linux the same evening, the same one-tree configure and build (Ninja, Qt 6 from the
+distribution, `-DDUALCEDITOR_DUALC_DIR` at the pin, the viewer on and off): the editor at
+`74023cf` compiles and links against DualC `4f02b51`, the outputs land where the script
+looks (`_dualc/capi/`, `_dualc/examples/`, `bin/`), `DualCEditor --version` answers. So the
+break is Windows-only and before the compile. Hardened without the log: the CMake-side
+paths the script passes (`-DDUALCEDITOR_DUALC_DIR`, `-DCMAKE_PREFIX_PATH`) are now forward-slash
+(`as_posix`), the script prints its python and cmake versions, and CI keeps the native
+step's output and turns its error lines into annotations on failure — the gate step's
+idiom — so the next red run is readable from the public API.)*
+
 ## #42 The explore switch at the new pin; the default flipped
 
 **PLANNED — waits on 07 § 11 landing upstream and a DualCEditor pin bump.** Pass `--explore`
