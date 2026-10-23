@@ -23,7 +23,7 @@ right: one or more Sources → Decorators / Booleans → a Terminal.
 | 1 | Sources | `TPMS`, `Primitive`, `Segment Primitive`, `Axial Primitive`, `Mesh → Volume`, `Strut Lattice`, `Porous Shell` — one page each | [01-sources/](01-sources/README.md) |
 | 2 | Decorators | `Normalize`, `Onion`, `Graded Onion`, `Transform`, `Offset`, `Twist`, `Bend`, `Displace`, `Graded Offset`, `Mix` | [02-decorators.md](02-decorators.md) |
 | 3 | Booleans | `Boolean` | [03-booleans.md](03-booleans.md) |
-| 4 | Terminals | `Write to File`, `Proxy preview`, `Live Preview` | [04-terminals.md](04-terminals.md) |
+| 4 | Terminals | `Write to File`, `Proxy preview`, `Live Preview` | [04-terminals/](04-terminals/README.md) |
 | 5 | Field-graph ops | the `Field` builder ↔ DualC op-token table (what a canvas can emit through Core) | [05-field-graph-ops.md](05-field-graph-ops.md) |
 | 6 | Worked examples | a clipped sheet lattice, a printable part, a strut-lattice infill, `examples/demo.gh`, a sponge | [06-worked-examples.md](06-worked-examples.md) |
 
@@ -39,9 +39,9 @@ right: one or more Sources → Decorators / Booleans → a Terminal.
 | A sponge, foam or bone inside a volume (sealed cells, open cells, graded) | `Porous Shell` → `Onion` / `Graded Onion` / `Offset` → `Boolean` | [01 § Porous Shell](01-sources/07-porous-shell.md#porous-shell) · [06 W5](06-worked-examples.md#w5--a-sponge-porous-shell--graded-onion--smooth-intersection) |
 | Vary a shell's wall thickness across the part | `Graded Onion` | [02 § Graded Onion](02-decorators.md#graded-onion) |
 | Twist, bend, inflate or texture a volume | `Twist`, `Bend`, `Offset`, `Displace` | [02](02-decorators.md) |
-| Export a printable STL or 3MF | `Write to File` | [04 § Write to File](04-terminals.md#write-to-file) |
-| A quick coarse look in the viewport | `Proxy preview` | [04 § Proxy preview](04-terminals.md#proxy-preview) |
-| An exact, GPU-raymarched preview of a dense lattice | `Live Preview` | [04 § Live Preview](04-terminals.md#live-preview) |
+| Export a printable STL or 3MF | `Write to File` | [04 § Write to File](04-terminals/01-write-to-file.md#write-to-file) |
+| A quick coarse look in the viewport | `Proxy preview` | [04 § Proxy preview](04-terminals/02-proxy-preview.md#proxy-preview) |
+| An exact, GPU-raymarched preview of a dense lattice | `Live Preview` | [04 § Live Preview](04-terminals/03-live-preview.md#live-preview) |
 | Turn a lattice and its enclosing volume into one printable part | the four-step workflow | [06 W2](06-worked-examples.md#w2--a-printable-part-isolate--thicken--skin--union) |
 | Read a warning or error the canvas shows | — | [00 § Troubleshooting](00-shared-behaviour.md#troubleshooting) |
 | What a component emits as DualC JSON, and what the engine's defaults are | — | [05](05-field-graph-ops.md) |

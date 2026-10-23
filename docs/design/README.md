@@ -53,8 +53,13 @@ libdualc + field-graph parser + STL/3MF/OBJ writers
   field-graph *parser* is compiled inside the library, which is why the pin is a commit and
   never a version string ([07](07-invariants-and-limits.md#the-version-trap)).
 - **`dualc_field_view.exe`**, built beside the DLL by the same script, is DualC's GPU
-  raymarch viewer: the live-preview side-car, launched as a separate process, not part of
-  the C ABI.
+  raymarch viewer: the live-preview side-car's fallback window, launched as a separate
+  process, not part of the C ABI.
+- **`editor/DualCEditor.exe`**, built by the same script from the second submodule
+  `external/DualCEditor` against the same DualC pin and deployed with its Qt 6 runtime, is
+  the live-preview side-car's exploration window — the section toolbar, the docks, the
+  status bar; it links DualC's C++ codegen, never the C ABI, and never edits the graph
+  ([04 § Live Preview](04-grasshopper-plugin/07-live-preview.md)).
 
 ## The `Volume` contract
 

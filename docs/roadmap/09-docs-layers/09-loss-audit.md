@@ -82,7 +82,7 @@ parallel: `components.md` (270 keys), the root files (291), the roadmap (246).
 
 **Handed on to a code session** (not a docs fact): the `Info` output's hover description in
 `WriteToFileComponent.cs` still mentions "a BUSY note", while the BUSY text is a runtime
-Warning; [cmdref 04](../../command_reference/04-terminals.md) states the strings as the code
+Warning; [cmdref 04](../../command_reference/04-terminals/README.md) states the strings as the code
 emits them.
 
 ## Rerun

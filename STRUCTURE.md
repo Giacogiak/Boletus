@@ -15,16 +15,17 @@ Boletus/
 ├── STRUCTURE.md                This file
 ├── LICENSE                     MIT (the same text as DualC's)
 ├── CITATION.cff                How to cite Boletus: title, author, version, license, the repository URL
-├── .gitignore                  Ignores bin/, obj/, *.gha, *.rhp, *.yak, __pycache__/, build-native/ and the built binaries under native/x64/ and native/linux-x64/
+├── .gitignore                  Ignores bin/, obj/, *.gha, *.rhp, *.yak, __pycache__/, build-native/, build-native-editor/ and the built binaries under native/x64/ and native/linux-x64/
 ├── .gitattributes              Pins scripts/hooks/* to LF (core.autocrlf would break the shebang)
-├── .gitmodules                 The one submodule: external/DualC → https://github.com/Giacogiak/DualC.git
+├── .gitmodules                 The two submodules: external/DualC → https://github.com/Giacogiak/DualC.git, external/DualCEditor → https://github.com/Giacogiak/DualCEditor.git
 │
 ├── external/
-│   └── DualC/                  The DualC engine as a git submodule, pinned by the gitlink (the pin); built by scripts/build_native.py, never compiled by MSBuild
+│   ├── DualC/                  The DualC engine as a git submodule, pinned by the gitlink (the pin); built by scripts/build_native.py, never compiled by MSBuild
+│   └── DualCEditor/            The DualCEditor Qt 6 app as a git submodule, pinned by its gitlink and bumped with DualC's; built on Windows by the same script against the DualC pin into native/x64/editor/ — the Live Preview explorer window
 │
 ├── .github/
 │   └── workflows/
-│       └── ci.yml              CI: an Ubuntu job and a Windows job each build the native side from the submodule and run the gate; Windows also stages the plugin and uploads the .yak and the bare folder
+│       └── ci.yml              CI: an Ubuntu job and a Windows job each build the native side from the submodules and run the gate; Windows also installs Qt 6 for the editor, stages the plugin with its editor/ folder and uploads the .yak and the bare folder
 │
 ├── yak/
 │   └── manifest.yml            The Yak package manifest (name, version = BoletusInfo.Version, authors, description, url); staged beside the .gha by CI
@@ -55,6 +56,12 @@ Boletus/
 │   │   ├── MeshMaterializingResolver.cs  Terminal rewrite for a separate process: mem://<id> leaves → temp OBJ + mesh(path=…)
 │   │   ├── Export/
 │   │   │   └── ExportPlan.cs   Pure export planning: path/extension from Format, Tiled vs Monolithic strategy, effective tile depth, warnings
+│   │   ├── LivePreview/        The Rhino-free half of the Live Preview terminal (roadmap 12)
+│   │   │   ├── ViewerKind.cs   FieldView = 0 / Editor = 1 — the Viewer dropdown's numbers
+│   │   │   ├── ViewBounds.cs   The Min/Max trace box: six finite numbers, min < max per axis; the --bounds flag value
+│   │   │   ├── ViewerLocator.cs  dualc_field_view.exe beside the .gha, editor/DualCEditor.exe or BOLETUS_EDITOR_EXE; Resolve — the one fallback rule (editor absent → field view, flagged)
+│   │   │   ├── ViewerArguments.cs  Each side-car's command line: the field view's [--bounds], the editor's [--explore] [--title]
+│   │   │   └── LivePreviewDocument.cs  Compose: the canonical graph plus, with bounds, one spliced top-level "view": { "bounds": [...] } line; the serializer untouched
 │   │   └── FieldGraph/         Managed node tree → canonical JSON (byte-identical to DualC's --dump-json)
 │   │       ├── FieldValue.cs   Immutable param value: Scalar / Vector / Text, value equality
 │   │       ├── FieldNode.cs    Immutable graph node: op token, ordinal params, children; ToJson()
@@ -67,7 +74,7 @@ Boletus/
 │   │       └── FieldGraphValidator.cs  Schema errors (arity range, required, unknown, choices) + metric-ness and porous warnings; ValidateOrThrow; IsMetric
 │   │
 │   └── Boletus.Grasshopper/    The GH .gha (net7.0-windows, x64) over Boletus.Core by project reference
-│       ├── Boletus.Grasshopper.csproj  TargetExt=.gha; Grasshopper metapackage compile-only (NU1701 suppressed); copies the built DLL + the viewer exe from native/x64/ beside the .gha (Exists-conditioned)
+│       ├── Boletus.Grasshopper.csproj  TargetExt=.gha; Grasshopper metapackage compile-only (NU1701 suppressed); copies the built DLL, the viewer exe and the editor/ folder from native/x64/ beside the .gha (Exists-conditioned)
 │       ├── BoletusInfo.cs      GH_AssemblyInfo: name, description, id, author, version
 │       ├── BoletusPriority.cs  GH_AssemblyPriority: registers the native-DLL resolver against the Core assembly (where the DllImports live)
 │       ├── BoletusIcons.cs     Procedurally drawn GDI+ glyphs, one per component and parameter; a fresh Bitmap per Icon getter; no image assets
@@ -96,7 +103,7 @@ Boletus/
 │       ├── MixComponent.cs     Boolean: three-child value-lerp morph (mix)
 │       ├── WriteToFileComponent.cs  Terminal: export-only STL/3MF writer — on-canvas Write ▶ / Cancel ■ button, background thread, the engine's progress in the label, cooperative cancel (ABI 0.5.0) or queued restart on an older DLL, BUSY detection
 │       ├── ProxyPreviewComponent.cs Terminal: viewport-only proxy mesh at a depth clamped to a hard ceiling; draws via DrawViewportMeshes
-│       └── LivePreviewComponent.cs  Terminal: launches dualc_field_view.exe (built beside the .gha) on a temp .json of the Volume (a separate process)
+│       └── LivePreviewComponent.cs  Terminal: launches the explorer (editor/DualCEditor.exe) or the field view (dualc_field_view.exe), both built beside the .gha, as a separate process on a temp graph.json of the Volume with the Min/Max view block; the Viewer dropdown, the fallback, the editor's exit report, the temp-OBJ sweep
 │
 ├── tests/
 │   └── Boletus.Core.Tests/     xUnit, net9.0 / win-x64, Rhino-free — the marshaling gate, the field-graph round-trips, the resolvers, the export planner
@@ -112,6 +119,7 @@ Boletus/
 │       ├── MeshBufferTests.cs  The in-memory mesh path hits the same golden counts as the disk path; onion-before-clip; ContentHash; OBJ writer
 │       ├── VolumeResolverTests.cs        mem:// → mesh(id=…) rewrite, buffer dedup, disk paths untouched, missing-buffer error
 │       ├── MeshMaterializingResolverTests.cs  mem:// → temp OBJ + mesh(path=…) rewrite; mesh-free graphs pass through
+│       ├── LivePreviewTests.cs The Live Preview document (Compose == Serialize without bounds; one view line with them; the C ABI and --dump-json ignore the key), ViewBounds, both command lines, the locator and the fallback rule
 │       ├── ExportPlanTests.cs  ExportPlan.Resolve: extension rules, strategy table, tile-depth default and warnings, error cases
 │       ├── ProgressAndCancelTests.cs  The 0.5.0 overloads: golden counts through the hooked calls, stage shapes, a pre-cancelled token, a cancel from the callback and from another thread (no file, no .part), a throwing consumer
 │       ├── ConcurrencyTests.cs Independent handles on independent threads at once in one process — six exports (tiled and monolithic) and four contours in parallel, each at the golden counts
@@ -121,7 +129,7 @@ Boletus/
 │
 ├── native/                     Where scripts/build_native.py drops the binaries it builds from the submodule — never committed
 │   ├── README.md               The pin (the submodule's commit), how to build, what lands where, the version trap, the ABI contract pointer
-│   ├── x64/                    (gitignored) dualc_capi.dll, dualc_field.exe, dualc_field_view.exe, BUILD-INFO.txt — the Windows build
+│   ├── x64/                    (gitignored) dualc_capi.dll, dualc_field.exe, dualc_field_view.exe, BUILD-INFO.txt and editor/ (DualCEditor.exe, the Qt runtime, LICENSES/) — the Windows build
 │   └── linux-x64/              (gitignored) libdualc_capi.so, dualc_field, BUILD-INFO.txt — the Linux build, so the Core tests run there
 │
 ├── examples/
@@ -131,7 +139,7 @@ Boletus/
 ├── scripts/
 │   ├── check.py                THE GATE (ported from DualC): every docs check + native-built + dotnet build/test in one command — what CI runs
 │   ├── check_data.json         Its declared exceptions: size baseline, index roots, forbidden patterns, the DualC tree paths (submodule first), the test floor, the yak manifest
-│   ├── build_native.py         Builds DualC's C ABI, dualc_field and (Windows) the viewer from external/DualC (or --dualc / DUALC_ROOT) into native/<rid>/, runs dualc_c_demo, writes BUILD-INFO.txt
+│   ├── build_native.py         Builds DualC's C ABI, dualc_field, (Windows) the viewer and (Windows with Qt 6) DualCEditor from external/DualC and external/DualCEditor (or --dualc / DUALC_ROOT, --editor-dir / DUALCEDITOR_ROOT) into native/<rid>/ — one CMake tree with the editor on top — runs dualc_c_demo, windeployqt and DualCEditor --version, writes BUILD-INFO.txt
 │   ├── docs_loss_audit.py      Did a docs restructuring lose a fact? Set arithmetic over two git trees (ported from DualC)
 │   ├── docs_loss_audit.json    Its triage: one verdict per residual unit, each citation verified on the head tree
 │   ├── check_fixtures/         `check.py --selftest` trees: one pass/ and one fail/ miniature repo per docs check
@@ -148,17 +156,19 @@ Boletus/
 - `Boletus.Core.Tests` — xUnit runner (net9.0, win-x64); `dotnet test` is the second tier
   of the gate.
 - `Boletus.Grasshopper` — net7.0-windows library with output extension `.gha`; the `.gha`,
-  `Boletus.Core.dll`, `dualc_capi.dll` and `dualc_field_view.exe` are what a Rhino install
-  needs, and nothing else is emitted beside them. CI's Windows job packages exactly those
-  four with `yak/manifest.yml` into one `.yak`.
-- The native side — `dualc_capi`, `dualc_field`, `dualc_field_view` — is CMake-built from
-  the submodule by `scripts/build_native.py`, outside MSBuild, before the solution.
+  `Boletus.Core.dll`, `dualc_capi.dll`, `dualc_field_view.exe` and the `editor/` folder
+  (`DualCEditor.exe` with its Qt runtime and `LICENSES/`) are what a Rhino install needs,
+  and nothing else is emitted beside them. CI's Windows job packages exactly those with
+  `yak/manifest.yml` into one `.yak`.
+- The native side — `dualc_capi`, `dualc_field`, `dualc_field_view`, `DualCEditor` — is
+  CMake-built from the submodules by `scripts/build_native.py`, outside MSBuild, before the
+  solution.
 
 ## What is intentionally absent
 
 - **No C++ source of Boletus's own, and no `add_subdirectory` of DualC from MSBuild.** The
-  engine is built from the submodule by one script, and the managed projects only copy the
-  outputs; the procedure is `native/README.md`.
+  engine and the editor are built from the submodules by one script, and the managed
+  projects only copy the outputs; the procedure is `native/README.md`.
 - **No committed binaries.** `native/<rid>/` is gitignored; a clone builds it.
 - **No image assets.** Every component icon is drawn in code (`BoletusIcons.cs`).
 - **No release job and no Yak-server push.** CI uploads the `.yak` as a run artifact only.

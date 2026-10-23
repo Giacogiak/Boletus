@@ -2,7 +2,7 @@
 
 Three canvases end to end — the canonical sheet lattice, the four-step printable part and a
 strut-lattice infill — plus the demo definition under `examples/`. Each names the components
-by their page (families [1](01-sources/README.md)–[4](04-terminals.md)) and the graph it emits.
+by their page (families [1](01-sources/README.md)–[4](04-terminals/README.md)) and the graph it emits.
 
 ## W1 — a clipped sheet lattice
 

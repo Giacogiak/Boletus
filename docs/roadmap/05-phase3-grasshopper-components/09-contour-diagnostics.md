@@ -33,7 +33,7 @@ received NULL. The session bound it end to end, Core → tests → the two termi
   diagnostics and, after a completed write whose contour was empty, post a warning naming the
   file that holds only the placeholder. The tiled path has no diagnostics in the ABI and
   reports nothing; cancel and restart are untouched because the warning exists only on
-  success. The strings are on [command reference 04](../../command_reference/04-terminals.md)
+  success. The strings are on [command reference 04](../../command_reference/04-terminals/README.md)
   and in the [troubleshooting table](../../command_reference/00-shared-behaviour.md#troubleshooting).
 
 ### Design choices and the rejected probes

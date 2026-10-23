@@ -1,12 +1,14 @@
 # Native binaries — built from the DualC submodule, never committed
 
 This folder receives the **DualC C ABI** that `Boletus.Core` P/Invokes, DualC's
-**`dualc_field` CLI** (the oracle of the parity tests) and, on Windows, the **GPU raymarch
-viewer** the Phase-5 live-preview side-car launches. Everything below `x64/` and
-`linux-x64/` is a build output and gitignored: nothing prebuilt is in the repository, on the
-developer's machine or in CI. Rationale and alternatives:
-[`../docs/roadmap/02-dependency-strategy.md`](../docs/roadmap/02-dependency-strategy.md) and
-[`../docs/roadmap/10-public-delivery/README.md`](../docs/roadmap/10-public-delivery/README.md).
+**`dualc_field` CLI** (the oracle of the parity tests) and, on Windows, the two side-car
+windows `Live Preview` launches: DualC's **GPU raymarch viewer** and **DualCEditor** with its
+Qt runtime, under `x64/editor/`. Everything below `x64/` and `linux-x64/` is a build output
+and gitignored: nothing prebuilt is in the repository, on the developer's machine or in CI.
+Rationale and alternatives:
+[`../docs/roadmap/02-dependency-strategy.md`](../docs/roadmap/02-dependency-strategy.md),
+[`../docs/roadmap/10-public-delivery/README.md`](../docs/roadmap/10-public-delivery/README.md)
+and, for the editor, [`../docs/roadmap/12-explorer-sidecar.md`](../docs/roadmap/12-explorer-sidecar.md).
 
 ## The pin
 
@@ -23,6 +25,12 @@ and Linux libraries are therefore always built from the same commit; the plugin 
 the loaded library's **ABI level** by entry point (`DualcField.SupportsProgress`,
 `SupportsDiagnostics`), never by version string — see § The version trap.
 
+The editor has a second gitlink, `external/DualCEditor` (read the same way), and is built
+**against Boletus's DualC pin**, not against the DualC commit its own CMake would fetch —
+one DualC per `.yak`, so every op the plugin emits parses in the window. A DualC pin bump
+therefore comes with a DualCEditor pin bump in the same commit, the editor's own CI at that
+DualC commit being the pre-check (decision D-52).
+
 ## How to build
 
 ```
@@ -31,7 +39,8 @@ python scripts/build_native.py                    # Linux: python3
 ```
 
 The script (`scripts/build_native.py`) is the one home of the recipe; CI runs the same
-command. It takes the DualC tree from `--dualc PATH`, else `DUALC_ROOT`, else the submodule;
+command. It takes the DualC tree from `--dualc PATH`, else `DUALC_ROOT`, else the submodule
+(and the editor tree from `--editor-dir PATH`, else `DUALCEDITOR_ROOT`, else its submodule);
 configures `build-native/` (gitignored; `--build-dir` overrides) with
 `-DDUALC_BUILD_C_ABI=ON -DDUALC_BUILD_EXAMPLES=ON -DDUALC_BUILD_TESTS=OFF
 -DCMAKE_POSITION_INDEPENDENT_CODE=ON` (Visual Studio 2022 x64 on Windows, Ninja Release
@@ -42,18 +51,37 @@ elsewhere; the viewer with `-DDUALC_BUILD_FIELD_VIEW=ON` on Windows, or `--viewe
 | Platform | Into | Files |
 | --- | --- | --- |
 | Windows | `x64/` | `dualc_capi.dll`, `dualc_field.exe`, `dualc_field_view.exe` |
+| Windows, with Qt | `x64/editor/` | `DualCEditor.exe`, the Qt 6 DLLs and `platforms/` + `styles/` plugins `windeployqt` lays down, `LICENSES/` |
 | Linux | `linux-x64/` | `libdualc_capi.so`, `dualc_field` |
 
 plus a `BUILD-INFO.txt` beside them: the DualC commit, host, flags, the library's sha256 and
-size, and on Linux its `dualc_` export count and `ldd`. That file is the provenance of the
-build on this machine; it is gitignored like the binaries.
+size, on Linux its `dualc_` export count and `ldd`, and with the editor its commit, the Qt
+version, the folder's size and which licence texts were found. That file is the provenance
+of the build on this machine; it is gitignored like the binaries.
+
+**The editor** is built when the script is on Windows, finds Qt 6 (`QT_ROOT_DIR`, `Qt6_DIR`
+or `CMAKE_PREFIX_PATH` in the environment, or `qmake` on `PATH` — what
+`jurplel/install-qt-action` and a Qt installer leave) and the editor tree is checked out;
+`--editor` forces it (and fails loudly without Qt), `--no-editor` skips it, and a skipped
+editor is one printed line — the `.gha` then falls back to the field view. With the editor
+on, the script configures **one CMake tree**, `build-native-editor/`: the editor's
+`CMakeLists.txt` is the top level and adds DualC from `-DDUALCEDITOR_DUALC_DIR=<the DualC
+tree>`, so DualC compiles once and the five targets come from the same pin; then
+`windeployqt --release --no-translations --no-opengl-sw --no-system-d3d-compiler
+--no-compiler-runtime` lays the runtime beside `DualCEditor.exe`, the plugin folders a
+Widgets + OpenGL window never loads (`imageformats`, `iconengines`, `networkinformation`,
+`tls`, `generic`) are pruned, `LICENSES/` gets Qt's LGPL texts (from the installation's
+`Licenses/` folder when present), DualCEditor's `LICENSE` when its tree has one and a
+`THIRD-PARTY.md` notice always, and `DualCEditor --version` is the smoke. Qt is LGPL,
+linked dynamically, shipped unmodified; Boletus's own code stays MIT.
 
 Prerequisites: CMake, a C++17 toolchain (Visual Studio 2022; or `g++` + Ninja, `cmake
 ninja-build g++` on Ubuntu), network on the first configure (geometry-central, Eigen; GLFW
-for the viewer). The viewer off Windows also needs the X11 development headers DualC's
-README lists. `dualc_field` is not vendored anywhere: the csproj copies it from here beside
-the test assembly, and the CLI-backed tests run instead of returning early; `DUALC_FIELD_EXE`
-and `DUALC_SAMPLES_DIR` still override.
+for the viewer), and for the editor Qt 6.4 or newer (CI installs 6.8). The viewer off
+Windows also needs the X11 development headers DualC's README lists. `dualc_field` is not
+vendored anywhere: the csproj copies it from here beside the test assembly, and the
+CLI-backed tests run instead of returning early; `DUALC_FIELD_EXE` and `DUALC_SAMPLES_DIR`
+still override. `BOLETUS_EDITOR_EXE` points the running plugin at an editor built elsewhere.
 
 The csproj copy items are `Exists`-conditioned, so the managed projects compile before the
 native build has run; the gate's `native-built` check fails with the command above when the
@@ -77,6 +105,14 @@ self-contained executable (GLFW/glad static) that needs an OpenGL 3.3 driver, au
 the graph file on change, and is launched by `LivePreviewComponent` as a separate process —
 not part of the C ABI, no P/Invoke. Why/how in DualC's `docs/roadmap/12-field-graph-and-app/`
 and `docs/command_reference/12-dualc_field_view/README.md`.
+
+`DualCEditor` is the owner's Qt 6 Widgets editor for DualC field graphs
+(`https://github.com/Giacogiak/DualCEditor`): it links DualC's C++ codegen libraries
+(`dualc_examples_fieldglsl`), not the C ABI, and sphere-traces the same generated shader
+in a `QOpenGLWidget`; `Live Preview` runs it as its exploration window, feeding it the same
+graph file, with its own camera and docks. Its docs are its own (`docs/README.md` in the
+submodule); what Boletus asks of it is
+[07 § 11](../docs/roadmap/07-upstream-coordination/04-dualceditor-explorer.md#11-dualceditor-as-the-explorer-side-car--ask).
 
 ## The version trap
 

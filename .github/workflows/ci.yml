@@ -1,7 +1,8 @@
 # The gate, hosted. Both jobs build DualC's C ABI from the submodule with
 # scripts/build_native.py and then run scripts/check.py -- the same command the
-# developer runs. The Windows job additionally packages the plugin as one .yak
-# (an artifact of the run; nothing is ever pushed to the Yak server).
+# developer runs. The Windows job additionally builds the GPU viewer and the
+# DualCEditor side-car (Qt 6) and packages the plugin as one .yak (an artifact of
+# the run; nothing is ever pushed to the Yak server).
 name: ci
 
 on:
@@ -82,21 +83,35 @@ jobs:
         with:
           submodules: true
 
-      - name: DualC pin
+      - name: DualC and DualCEditor pins
         id: pin
         shell: bash
-        run: echo "sha=$(git rev-parse HEAD:external/DualC)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "sha=$(git rev-parse HEAD:external/DualC)" >> "$GITHUB_OUTPUT"
+          echo "editor=$(git rev-parse HEAD:external/DualCEditor 2>/dev/null || echo none)" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
 
+      # Qt for the DualCEditor side-car (the editor's own gate uses the same action and
+      # version); QT_ROOT_DIR is what build_native.py reads. Never continue-on-error: a
+      # .yak quietly missing the editor must be a red run, not a silent fallback.
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.8.*"
+          arch: win64_msvc2022_64
+          cache: true
+
+      # Both pins and the recipe key the cache: the editor tree holds DualC's objects too.
       - uses: actions/cache@v4
         with:
-          path: build-native
-          key: native-${{ runner.os }}-${{ steps.pin.outputs.sha }}-${{ hashFiles('scripts/build_native.py') }}
+          path: |
+            build-native
+            build-native-editor
+          key: native-${{ runner.os }}-${{ steps.pin.outputs.sha }}-${{ steps.pin.outputs.editor }}-${{ hashFiles('scripts/build_native.py') }}
 
-      - name: Build the native side from the submodule (C ABI + viewer)
+      - name: Build the native side from the submodules (C ABI + viewer + editor)
         run: python scripts/build_native.py
 
       - name: Gate
@@ -135,7 +150,14 @@ jobs:
           foreach ($f in "Boletus.Grasshopper.gha", "Boletus.Core.dll", "dualc_capi.dll", "dualc_field_view.exe") {
             Copy-Item "$out/$f" dist/boletus/
           }
-          Get-ChildItem dist/boletus
+          # The editor folder, whole (DualCEditor.exe, the Qt runtime, LICENSES/); the two
+          # files every working deploy has are asserted so a half-deployed folder fails here.
+          Copy-Item -Recurse "$out/editor" dist/boletus/editor
+          foreach ($f in "editor/DualCEditor.exe", "editor/Qt6Core.dll", "editor/platforms/qwindows.dll", "editor/LICENSES/THIRD-PARTY.md") {
+            if (-not (Test-Path "dist/boletus/$f")) { throw "missing from the package: $f" }
+          }
+          Get-ChildItem -Recurse dist/boletus | Select-Object FullName, Length
+          "editor folder: {0:N1} MB" -f ((Get-ChildItem -Recurse dist/boletus/editor | Measure-Object Length -Sum).Sum / 1MB)
 
       - name: yak build
         shell: pwsh
@@ -143,7 +165,7 @@ jobs:
           Invoke-WebRequest -Uri https://files.mcneel.com/yak/tools/latest/yak.exe -OutFile yak.exe
           Set-Location dist/boletus
           & ../../yak.exe build --platform win
-          Get-ChildItem *.yak
+          Get-ChildItem *.yak | ForEach-Object { "{0}  {1:N1} MB" -f $_.Name, ($_.Length / 1MB) }
 
       - uses: actions/upload-artifact@v4
         with:

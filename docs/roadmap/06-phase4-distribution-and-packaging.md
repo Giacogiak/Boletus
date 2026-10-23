@@ -56,6 +56,12 @@ The `.yak` bundles, in the Grasshopper layout:
 - `dualc_capi.dll` (the vendored native bridge)
 - a `manifest.yml` (id, version, authors, Rhino/platform = win-x64)
 
+*(2026-10-23, roadmap 12: the package as CI builds it also carries `dualc_field_view.exe` —
+since the side-car of 2026-07-03 — and the `editor/` folder: `DualCEditor.exe`, its Qt 6
+runtime and `LICENSES/`, which moves the `.yak` from under 1 MB to an estimated 25 MB; the
+measured size is owed to [12 #41](12-explorer-sidecar.md#41-build-package-ci-the-second-submodule-qt-the-editor-folder-in-the-yak).
+The list above stands as written.)*
+
 ### For development right now
 
 No packaging is needed at all: build the `.gha` and drop it (+ `Boletus.Core.dll` +

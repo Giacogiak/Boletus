@@ -24,6 +24,13 @@ stays under the cap by rule, not by baseline ([D-43](../decisions/01-settled.md)
 
 ## Current focus
 
+**The explorer side-car** ([12](12-explorer-sidecar.md), 2026-10-23): DualCEditor becomes
+`Live Preview`'s exploration-only window, Grasshopper the single input (D-52; the lighter
+paths dropped, D-53; the field view kept as the fallback, D-54). Landed: the Core launcher
+half and the `view` bounds block (#39), the asks filed to DualCEditor (#40,
+[07 § 11](07-upstream-coordination/04-dualceditor-explorer.md#11-dualceditor-as-the-explorer-side-car--ask)),
+the build and CI ready for the second submodule and Qt (#41, its first green run owed).
+
 **The porous shell is bound** ([11](11-porous-shell.md), 2026-10-22): the pin moved to DualC
 `main` with its `porous` source, Core gained the arity range and the closed-set keys it needs,
 and the `Porous Shell` source reaches the canvas, Core-tested; its Rhino smoke test (#38) is
@@ -38,46 +45,39 @@ Windows DLL is no longer behind it); and the gate hosted as GitHub Actions on Ub
 Windows, the Windows job packaging one `.yak` artifact (#34). The pre-publication record
 below stands as written; its commit hashes name the archive.
 
-**The documentation restructuring** ([09](09-docs-layers/README.md)) — the docs split into
-layers on DualC's model, the gate green at every close, the first two `/docs-semantic-lint` runs
-recorded ([09/06](09-docs-layers/06-semantic-lint/README.md), the second a same-day verification of the first's fixes) — is **DONE** (2026-09-21, Phases 0–5); the lint runs monthly from here (into the folder `scripts/check_data.json` names — D-41) and after any session that
-edits both `src/` and `docs/design/`. Two post-close children (2026-10-02) made the gate
-portable to a second machine and audited the restructuring for lost facts
-([09/08](09-docs-layers/08-gate-portability.md), [09/09](09-docs-layers/09-loss-audit.md)); a
-third (2026-10-03) made Linux a build-and-test platform, the full gate green there
-([09/10](09-docs-layers/10-linux-native.md), D-44). The fourth lint run
-([09/06](09-docs-layers/06-semantic-lint/README.md), 2026-10-03, after the broader-`Primitive`
-session) handed twelve findings on; the 2026-10-05 session applied all twelve (the
-design-prose fixes, and the three that converged on DualC's ABI 0.5.0 with the re-vendor), so
-the fifth and sixth runs ([09/06](09-docs-layers/06-semantic-lint/README.md), both 2026-10-05, after Phase C and after the contour diagnostics) found four, then seven design sentences behind the code, each fixed the same day; the seventh ([09/06](09-docs-layers/06-semantic-lint/README.md), 2026-10-06, after the publication) found three, one of them in the code; the eighth (2026-10-22, after the porous shell) seven, all fixed that day; the next is due by 2026-11-22. **Block 05 is DONE** (2026-10-05): the broader
-`Primitive` set closed increment 3b.3 on 2026-10-03
-([05/08](05-phase3-grasshopper-components/08-broader-primitive-set.md)), and `Write to File`
-Phase C — a `Cancel ■` button that stops a write at the engine's next checkpoint and the
-engine's percentage in the label — landed on 2026-10-05 over DualC ABI 0.5.0
+**The documentation restructuring** ([09](09-docs-layers/README.md)) is **DONE**
+(2026-09-21, Phases 0–5) with three post-close children — the gate portable to a second
+machine ([09/08](09-docs-layers/08-gate-portability.md)), the loss audit
+([09/09](09-docs-layers/09-loss-audit.md)), Linux as a build-and-test platform
+([09/10](09-docs-layers/10-linux-native.md), D-44); the `/docs-semantic-lint` runs accumulate
+in [09/06](09-docs-layers/06-semantic-lint/README.md) — monthly (into the folder
+`scripts/check_data.json` names, D-41) and after any session that edits both `src/` and
+`docs/design/`, every finding so far fixed the day it was found or handed on, the next run due by
+2026-11-23. **Block 05 is DONE** (2026-10-05): the broader `Primitive` set
+([05/08](05-phase3-grasshopper-components/08-broader-primitive-set.md)), `Write to File`
+Phase C — cooperative cancel and the engine's percentage over DualC ABI 0.5.0
 ([05/06 § Phase C](05-phase3-grasshopper-components/06-write-to-file.md#phase-c--cooperative-cancel-and-a-real-percentage),
-D-30 settled); the same day the 0.4.0 diagnostics twins were bound, so `Proxy preview` warns
-instead of drawing the engine's placeholder triangle when a contour is empty, and
-`Write to File` after such a write
-([05/09](05-phase3-grasshopper-components/09-contour-diagnostics.md), D-37 settled). The plugin still detects an older DLL at runtime and keeps its Phase-A path
+D-30) — and the contour diagnostics
+([05/09](05-phase3-grasshopper-components/09-contour-diagnostics.md), D-37); the plugin
+still detects an older DLL at runtime and keeps its Phase-A path
 ([07 § 7](07-upstream-coordination/03-export-callback-and-strut-sync.md#7-export-progress--cancel-callback--unlocks-true-abort--a-real-progress-bar-phase-c)).
-Every value pillar of the
-MVP — a TPMS or strut lattice, clipped and shelled, previewed coarse in the viewport or
-exactly in the GPU side-car, exported as a tiled STL or a 3MF, cancellable — shipped between 2026-06-18
-and 2026-10-05 ([05](05-phase3-grasshopper-components/README.md),
+Every value pillar of the MVP — a TPMS or strut lattice, clipped and shelled, previewed
+coarse in the viewport or exactly in the GPU side-car, exported as a tiled STL or a 3MF,
+cancellable — shipped between 2026-06-18 and 2026-10-05
+([05](05-phase3-grasshopper-components/README.md),
 [07 § 5](07-upstream-coordination/02-viewer-and-uniform-push.md#5-dualc_field_view-viewer-binary--gates-the-raymarch-preview-phase)),
-Core-tested; the Grasshopper paths have no automated coverage and several increments —
-the primitive components and Phase C among them — still list their manual Rhino smoke test as
-pending in their records.
+Core-tested; the Grasshopper paths have no automated coverage and several increments still
+list their manual Rhino smoke test as pending in their records.
 
 **Recent milestones** — date, one clause, the record:
 
 | Date | What landed | Record |
 | --- | --- | --- |
+| 2026-10-23 | **The explorer side-car, Boletus side** — `Boletus.Core.LivePreview`, the `view` bounds block, the `Viewer` dropdown with the field-view fallback, the editor's exit report; the DualCEditor hand-off filed; `build_native.py`, the csproj and CI ready for the second submodule and Qt. | [12](12-explorer-sidecar.md) · [07 § 11](07-upstream-coordination/04-dualceditor-explorer.md#11-dualceditor-as-the-explorer-side-car--ask) |
 | 2026-10-22 | **The porous shell** — the pin at DualC `main` with `porous` (ABI 0.5.2); the arity range and closed-set keys in Core; the `Porous Shell` source, its icon and pages; the OBJ path measured to build the same cells. | [11](11-porous-shell.md) |
 | 2026-10-07 | **The flaky Windows gate explained and fixed upstream** — DualC measured it on the runner image: an inherited handle, not a scanner; output handles non-inheritable, ABI 0.5.1; the pin moved to `350cb3a`. | [07 § 10](07-upstream-coordination/README.md#10-a-bounded-rename-retry-in-atomicoutputcommit-on-windows--ask) |
 | 2026-10-06 | **Boletus is public** — a fresh root commit, the history archived offline on DualC's procedure, MIT + `CITATION.cff`; the local-only rule reversed (D-46). | [10 #32](10-public-delivery/01-fresh-root.md#32-published-with-a-fresh-root-the-history-archived-offline) |
 | 2026-10-06 | **DualC as a submodule, the gate as CI** — `external/DualC` at the pin, `build_native.py` in place of the committed binaries (D-47, D-10 settled), GitHub Actions on Ubuntu and Windows with one `.yak` artifact. | [10 #33](10-public-delivery/02-submodule.md#33-dualc-as-a-git-submodule--the-binaries-built-never-committed) · [10 #34](10-public-delivery/03-ci.md#34-ci--the-gate-as-a-github-actions-workflow-and-one-yak) |
-| 2026-10-05 | **The contour diagnostics bound** — DualC's 0.4.0 `DualcDiagnostics` behind `out` overloads and a second entry-point probe; `Proxy preview` warns and draws nothing on an empty contour, `Write to File` warns after one; D-37 settled. | [05/09](05-phase3-grasshopper-components/09-contour-diagnostics.md) · [07 § 9](07-upstream-coordination/03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use) |
 
 ## Next up
 
@@ -98,14 +98,19 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    ([07 § 10](07-upstream-coordination/README.md#10-a-bounded-rename-retry-in-atomicoutputcommit-on-windows--ask),
    [10/03](10-public-delivery/03-ci.md#the-flaky-windows-gate--open)). **DONE** (2026-10-07);
    the Windows runs at the new pin are the confirmation owed.
-3. **Distribution & packaging** ([06](06-phase4-distribution-and-packaging.md)) — the `.yak`
+3. **The explorer side-car's remaining items** ([12](12-explorer-sidecar.md)): the first
+   green Windows run with Qt and its `.yak` size (#41); DualCEditor landing
+   [07 § 11](07-upstream-coordination/04-dualceditor-explorer.md#11-dualceditor-as-the-explorer-side-car--ask),
+   then one commit bumping both pins and passing `--explore` (#42); the Rhino smoke test
+   (#43). **PLANNED.**
+4. **Distribution & packaging** ([06](06-phase4-distribution-and-packaging.md)) — the `.yak`
    exists as a CI artifact; zero-prerequisite install waits on DualC's static-runtime build
    ([D-05](../decisions/README.md)); a Yak-server release is the owner's call. **PLANNED.**
-4. **What the pinned DualC offers and Boletus does not bind**, each on its trigger
+5. **What the pinned DualC offers and Boletus does not bind**, each on its trigger
    ([07 § 9](07-upstream-coordination/03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use)):
    tiled 3MF through the ABI (D-32), a version bump per vocabulary change (D-08); and the standing asks — the
    uniform-push channel (D-27), DAG-ref serialization (D-06).
-5. **Palette gaps, DEFERRED on a canvas that needs them**: `Mirror` / `Elongate` / `Repeat`
+6. **Palette gaps, DEFERRED on a canvas that needs them**: `Mirror` / `Elongate` / `Repeat`
    (D-23), `Triangle` / `Quad` plates (D-45), proxy refinements past the depth ceiling (D-19);
    a single-file `.gha` with embedded natives (D-48).
 
@@ -126,11 +131,12 @@ present-tense effect is [design 06](../design/06-conventions.md).
 | 04 | [Phase 3a — field-graph model & serializer](04-phase3-field-graph-serializer.md#04--phase-3a-field-graph-model--serializer) | The managed node tree, the canonical serializer, the builders, the validator; the full op vocabulary pinned. | DONE |
 | 05 | [Phase 3b — Grasshopper components](05-phase3-grasshopper-components/README.md#05--phase-3b-grasshopper-components-mvp) | The `.gha`: the plan, then every increment — the thin slice, the `Volume` palette, the diskless flip, tiled STL, the proxy, the icons, the warps, the example graph, `Write to File` and its Phase C, the strut lattices, the broader `Primitive` set. | DONE — the Rhino smoke tests pending on Windows |
 | 06 | [Phase 4 — distribution & packaging](06-phase4-distribution-and-packaging.md#06--phase-4-distribution--packaging) | The local Yak and the zero-prerequisite install; the local-only constraint. | PLANNED |
-| 07 | [Upstream coordination with DualC](07-upstream-coordination/README.md#07--upstream-coordination-with-dualc) | What Boletus needs from or triggers in DualC: the in-memory mesh resolver, the viewer binary and the file-watch, the uniform push, the export callback, the strut-vocabulary sync, the version trap, the inventory at the pin, the rename retry on Windows. | PARTIAL — per item |
+| 07 | [Upstream coordination with DualC](07-upstream-coordination/README.md#07--upstream-coordination-with-dualc) | What Boletus needs from or triggers in DualC: the in-memory mesh resolver, the viewer binary and the file-watch, the uniform push, the export callback, the strut-vocabulary sync, the version trap, the inventory at the pin, the rename retry on Windows — and, addressed to DualCEditor, the explorer side-car's four asks. | PARTIAL — per item |
 | 08 | [Strut lattices](08-strut-lattices.md) | The strut-lattice node vocabulary as pinned, the `--expr` exemplars the tests round-trip, the Boletus-side implementation (#20). | DONE |
 | 09 | [Docs layers](09-docs-layers/README.md#docs-layers--the-documentation-restructuring) | The 2026-09-21 documentation restructuring: the plan, items #21–#31, the phase table, the per-phase records, the post-close gate portability, loss audit and Linux build, the DualC handoff. | DONE — Phases 0–5 and three post-close children; the semantic-lint runs accumulate under it |
 | 10 | [Public delivery](10-public-delivery/README.md#10--public-delivery-the-repo-as-others-build-it) | Taking Boletus public: the fresh root and the offline archive (#32), DualC as a git submodule the build compiles (#33), the gate as CI with one `.yak` artifact (#34). | DONE |
 | 11 | [Porous shell](11-porous-shell.md) | DualC's `porous` source on the canvas: the re-pin to DualC `main` (#35), the Core vocabulary and tests with the OBJ path measured (#36), the `Porous Shell` component and its pages (#37), the Rhino smoke test (#38). | PARTIAL: DONE (2026-10-22, #35–#37); the rest PLANNED |
+| 12 | [The explorer side-car](12-explorer-sidecar.md) | DualCEditor bundled as `Live Preview`'s exploration window, `dualc_field_view` the fallback: the Core launcher half and the `view` block (#39), the hand-off to DualCEditor (#40), the second submodule, Qt and the `editor/` folder in the `.yak` (#41), the explore switch at the new pin (#42), the Rhino smoke test (#43). | PARTIAL: DONE (2026-10-23, #39, #40); the rest PLANNED |
 
 ## How the blocks relate
 
@@ -144,3 +150,6 @@ increment dated, and **08** the one vocabulary extension large enough for its ow
 **07** is the seam with DualC — what landed upstream because Boletus asked, and what is still
 asked. **09** is the documentation system these pages live in, **10** the public repository
 and the CI they are published through. **11** binds a DualC source the canvas did not have.
+**12** gives the side-car of **05** a second window — the owner's editor, bundled as a
+second submodule on the model of **10** — and what it asks of that editor sits in **07**,
+the seam, as the one section addressed to a repository other than DualC.

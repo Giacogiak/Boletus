@@ -5,7 +5,9 @@ progress/cancel callback, upstream 2026-10-02, Boletus side 2026-10-05) and § 8
 strut-lattice vocabulary sync) are DONE; § 5 (the viewer binary) DONE with its 5a/5b phases;
 § 9 is the dated inventory of what the pinned DualC offers beyond what Boletus binds;
 § 2, § 3 and § 6 are DEFERRED, each with its trigger and its row in the [decisions index](../../decisions/README.md);
-§ 4 (version pinning) is the standing hygiene ask the version trap keeps open.
+§ 4 (version pinning) is the standing hygiene ask the version trap keeps open; § 10 (the
+Windows rename retry) DONE upstream; § 11 — the one section addressed to **DualCEditor**
+rather than DualC, the explorer side-car's four asks — PLANNED, open upstream.
 
 Items Boletus **needs from** or **triggers in** the DualC repo (the submodule `external/DualC`;
 `D:\DualC`, the sibling checkout, in the dated text), one numbered
@@ -26,6 +28,7 @@ the long sections are the children, every heading verbatim.
 | this page | [§ 2 static-linked MSVC runtime](#2-static-linked-msvc-runtime-mt--zero-prerequisite-install) · [§ 3 DAG-ref serialization](#3-dag-ref-graph-serialization--optional-optimization) · [§ 4 version pinning / provenance](#4-version-pinning--provenance--maintainability-hygiene) |
 | [02 The viewer binary and the uniform push](02-viewer-and-uniform-push.md) | [§ 5 `dualc_field_view` viewer binary](02-viewer-and-uniform-push.md#5-dualc_field_view-viewer-binary--gates-the-raymarch-preview-phase) · [§ 6 real-time parameter push](02-viewer-and-uniform-push.md#6-real-time-parameter-push-uniform-ipc-channel--deferred-performance-optimization) |
 | [03 The export callback and the strut-lattice sync](03-export-callback-and-strut-sync.md) | [§ 7 export progress + cancel callback](03-export-callback-and-strut-sync.md#7-export-progress--cancel-callback--unlocks-true-abort--a-real-progress-bar-phase-c) · [§ 9 DualC at the pin — the 2fcd19f inventory](03-export-callback-and-strut-sync.md#9-dualc-at-the-pin--what-2fcd19f-offers-that-boletus-does-not-use) · [§ 8 strut-lattice vocabulary sync](03-export-callback-and-strut-sync.md#8-strut-lattice-vocabulary-sync-d6b2808--done-boletus-side-2026-07-10) |
+| [04 DualCEditor as the explorer side-car](04-dualceditor-explorer.md) | [§ 11 the four asks of DualCEditor — the explore switch, the `view.bounds` key, a deploy step, layout persistence](04-dualceditor-explorer.md#11-dualceditor-as-the-explorer-side-car--ask) |
 
 ## 2. Static-linked MSVC runtime (`/MT`) — *zero-prerequisite install*
 

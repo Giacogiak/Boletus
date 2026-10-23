@@ -6,7 +6,8 @@ decided and the entry that holds the argument. Same columns and the same ID sequ
 open table on the README; a row here never changes status (a settled decision that is
 reversed gets a new row, on the README, with the new date). The present-tense *effect* of
 these decisions lives in [`docs/design/`](../design/README.md) — this table is the pointer
-to *why*.
+to *why*. This page is at the size contract: the table continues, from D-52 on, in
+[02-settled-continued.md](02-settled-continued.md).
 
 | ID | Decision | Status | Date | Where recorded |
 | --- | --- | --- | --- | --- |

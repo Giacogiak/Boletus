@@ -33,14 +33,14 @@ at `7e7c95f`):
 | Sources — TPMS (with "Keep the TPMS raw, or Normalize it?"), Primitive, Mesh → Volume, Strut Lattice | [01](../../command_reference/01-sources/README.md) |
 | Decorators — Normalize … Mix (ten components) | [02](../../command_reference/02-decorators.md) |
 | Booleans — Boolean | [03](../../command_reference/03-booleans.md) |
-| Terminals — Write to File, Proxy preview, Live Preview; the shared bounds / depth paragraph | [04](../../command_reference/04-terminals.md); [00 § Bounds](../../command_reference/00-shared-behaviour.md#bounds--min--max-on-a-terminal), [§ Depth](../../command_reference/00-shared-behaviour.md#depth) |
+| Terminals — Write to File, Proxy preview, Live Preview; the shared bounds / depth paragraph | [04](../../command_reference/04-terminals/README.md); [00 § Bounds](../../command_reference/00-shared-behaviour.md#bounds--min--max-on-a-terminal), [§ Depth](../../command_reference/00-shared-behaviour.md#depth) |
 | The `Volume` wire type | [00 § The `Volume` wire](../../command_reference/00-shared-behaviour.md#the-volume-wire) |
 | Worked example — a clipped sheet lattice; — a printable part; — a strut-lattice infill; the `demo.gh` pointer | [06](../../command_reference/06-worked-examples.md) W1, W2, W3, W4 |
 | Quick troubleshooting | [00 § Troubleshooting](../../command_reference/00-shared-behaviour.md#troubleshooting), every string re-quoted from the source |
 
 Roadmap 04's "Pinned op signatures" tables and roadmap 05's two Write-to-File I/O tables went
 to [05 — Field-graph ops](../../command_reference/05-field-graph-ops.md) and
-[04 § Write to File](../../command_reference/04-terminals.md#write-to-file); roadmap 08's node
+[04 § Write to File](../../command_reference/04-terminals/01-write-to-file.md#write-to-file); roadmap 08's node
 tables stay where they are, as the vocabulary pinned at the sync (they pass `usage-in-record`
 as written and the plan did not name them).
 

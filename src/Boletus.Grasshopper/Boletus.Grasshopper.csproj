@@ -65,6 +65,16 @@
       <Link>dualc_field_view.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <!-- DualCEditor, the exploration side-car (roadmap 12): built from the submodule
+         external/DualCEditor against the same DualC pin by the same script, deployed with
+         its Qt runtime (windeployqt) into native/x64/editor/, and copied as that whole
+         folder to editor/ beside the .gha. LivePreviewComponent launches
+         editor\DualCEditor.exe and falls back to dualc_field_view.exe when the folder is
+         absent (no Qt on the build machine, or the script's no-editor switch). -->
+    <None Include="..\..\native\x64\editor\**\*" Condition="Exists('..\..\native\x64\editor\DualCEditor.exe')">
+      <Link>editor\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -9,8 +9,8 @@ construction API of DualC's native C ABI (`dualc_capi`, built from the submodule
 
 Windows or Linux x64, the .NET SDK, CMake and a C++17 toolchain. The native binaries are
 **never committed**: `scripts/build_native.py` builds DualC's C ABI (plus `dualc_field` and,
-on Windows, the GPU viewer) from the submodule into the gitignored `native/<rid>/`, and CI
-does the same. The Grasshopper project restores its reference packages from nuget.org on the
+on Windows, the GPU viewer and, with Qt 6, the DualCEditor explorer window from the second
+submodule `external/DualCEditor`) into the gitignored `native/<rid>/`, and CI does the same. The Grasshopper project restores its reference packages from nuget.org on the
 first build. Nothing is pushed to the Yak server or a NuGet feed without the owner's say-so.
 On Linux the dotnet commands take `-p:EnableWindowsTargeting=true` (the gate passes it); no
 Rhino runs there, so the `.gha` only compiles.

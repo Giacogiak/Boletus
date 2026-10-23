@@ -115,7 +115,7 @@ already in flight finishes harmlessly in the background and its completion callb
 The inputs table (eight inputs, their defaults — Depth 6, Format 0, Mode 0, Tile depth
 Depth − 2 — and the two outputs `Info` / `File`) is the usage contract and lives on the
 component's command-reference page,
-[04 § Write to File](../../command_reference/04-terminals.md#write-to-file). *(2026-09-21,
+[04 § Write to File](../../command_reference/04-terminals/01-write-to-file.md). *(2026-09-21,
 roadmap 09 Phase 4: the two tables that stood here moved there, where they are kept true
 against the source.)*
 

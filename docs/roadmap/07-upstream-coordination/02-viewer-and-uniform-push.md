@@ -122,6 +122,15 @@ structural, and the sender. Boletus is the *driver* (the reason to do it); the c
 **Trigger:** a user workflow that leans on **continuous slider scrubbing** of a dense lattice and finds
 the per-change recompile hitch limiting. Until then, the file-watch (§5) is sufficient.
 
+*(2026-10-23, roadmap [12](../12-explorer-sidecar.md): DualC closed its twin D-25 on
+2026-10-19 (DualC D-66) — the uniform edit lives inside DualCEditor's own process, its
+Parameters dock one `glUniform` per spin box, and "a channel that Boletus needs would be a
+new item". The editor is now the side-car's window, so the hand-driven tier exists there;
+the canvas-driven push this section describes would be a protocol on both sides and is
+still DEFERRED on the same trigger, the ask now addressed to DualCEditor
+([07 § 11](04-dualceditor-explorer.md#11-dualceditor-as-the-explorer-side-car--ask) lists it
+among what Boletus does not ask yet).)*
+
 ---
 
 ← Back to the [Upstream coordination index](README.md) · the [Roadmap index](../README.md).

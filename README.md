@@ -54,17 +54,18 @@ geometry-central from the network. Rhino is needed only to *run* the plugin.
 ```sh
 git clone --recurse-submodules https://github.com/Giacogiak/Boletus.git
 cd Boletus
-python scripts/build_native.py    # DualC's C ABI (+ dualc_field, and the GPU viewer on Windows) → native/<rid>/
+python scripts/build_native.py    # DualC's C ABI (+ dualc_field; on Windows the GPU viewer and, with Qt 6, DualCEditor) → native/<rid>/
 dotnet build Boletus.sln -c Debug
 dotnet test  tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj -c Debug
 python scripts/check.py           # the gate: docs contract + native present + build + test — what CI runs
 ```
 
 - **The native side** is built, never committed: `scripts/build_native.py` configures and
-  builds the submodule (or a checkout named by `--dualc` / `DUALC_ROOT`) and drops the
-  library, DualC's `dualc_field` CLI and, on Windows, `dualc_field_view.exe` into
-  `native/<rid>/`, which is gitignored. The pin is the submodule's commit:
-  [`native/README.md`](native/README.md).
+  builds the submodules (or checkouts named by `--dualc` / `DUALC_ROOT` and `--editor-dir` /
+  `DUALCEDITOR_ROOT`) and drops the library, DualC's `dualc_field` CLI and, on Windows,
+  `dualc_field_view.exe` and — when Qt 6 is installed — the `editor/` folder (DualCEditor
+  with its Qt runtime, the `Live Preview` explorer window) into `native/<rid>/`, which is
+  gitignored. The pins are the submodules' commits: [`native/README.md`](native/README.md).
 - **NuGet:** `Boletus.Core` and its tests restore from the cache; the `Boletus.Grasshopper`
   build restores the `Grasshopper` metapackage and the reference packs online. On Linux
   the solution takes `-p:EnableWindowsTargeting=true` (the gate passes it); the `.gha`

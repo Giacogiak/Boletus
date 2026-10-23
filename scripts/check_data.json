@@ -46,7 +46,8 @@
     "_comment": "Tables status-vocab reads in addition to status_tables and status-sync does not: their Status cells use the legend, but their links land on the record anchor of the decision, so the first-body-line comparison status-sync makes would be false disagreement. decisions-index checks these rows' anchors and triggers instead. Written by roadmap 09 Phase 3: the open/rejected table on the README and the settled table on 01-settled.md.",
     "tables": [
       "docs/decisions/README.md",
-      "docs/decisions/01-settled.md"
+      "docs/decisions/01-settled.md",
+      "docs/decisions/02-settled-continued.md"
     ]
   },
   "heading_status_baseline": {
@@ -139,6 +140,8 @@
   },
   "index_roots": [
     "docs/command_reference",
+    "docs/command_reference/01-sources",
+    "docs/command_reference/04-terminals",
     "docs/design",
     "docs/decisions",
     "docs/roadmap",
@@ -174,7 +177,8 @@
     "docs/decisions/": "one line; indexed by docs/decisions/README.md",
     "docs/command_reference/": "one line; indexed by docs/command_reference/README.md",
     "scripts/check_fixtures/": "one line; miniature pass/fail trees for `check.py --selftest`, one pair per docs check",
-    "external/DualC": "one line; the DualC git submodule -- its files are DualC's, indexed by DualC's own docs/README.md"
+    "external/DualC": "one line; the DualC git submodule -- its files are DualC's, indexed by DualC's own docs/README.md",
+    "external/DualCEditor": "one line; the DualCEditor git submodule -- its files are the editor's, indexed by its own docs/README.md"
   },
   "structure_ignore": [
     ".gitignore",
@@ -207,7 +211,7 @@
     "solution": "Boletus.sln",
     "configuration": "Debug",
     "test_project": "tests/Boletus.Core.Tests/Boletus.Core.Tests.csproj",
-    "tests_expected_min": 196,
+    "tests_expected_min": 213,
     "warnings_allowed": [],
     "non_windows_args": [
       "-p:EnableWindowsTargeting=true"
