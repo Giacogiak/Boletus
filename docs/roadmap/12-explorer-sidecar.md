@@ -1,6 +1,6 @@
 # 12 — The explorer side-car: DualCEditor bundled, `dualc_field_view` the fallback
 
-**PARTIAL: DONE (2026-10-23, #39, #40); #41 PLANNED, #42 PLANNED, #43 PLANNED.** The record of
+**PARTIAL: DONE (2026-10-23, #39, #40, #41); #42 PLANNED, #43 PLANNED.** The record of
 replacing the keyboard-and-console GPU viewer `Live Preview` launches with the owner's Qt 6
 app **DualCEditor** (`https://github.com/Giacogiak/DualCEditor`, MIT, the plan P00–P07 that
 built it done 2026-10-14) used as an **exploration-only** side-car: Grasshopper stays the
@@ -90,7 +90,7 @@ pin that has them (#42; gated by the pin, never probed — the version-trap rule
 
 ## #41 Build, package, CI: the second submodule, Qt, the `editor/` folder in the `.yak`
 
-**PLANNED.** `scripts/build_native.py` learnt the editor on 2026-10-23 — `--editor` /
+**DONE — 2026-10-23.** `scripts/build_native.py` learnt the editor on 2026-10-23 — `--editor` /
 `--no-editor` (default: on when Windows, Qt 6 found by `QT_ROOT_DIR` / `Qt6_DIR` /
 `CMAKE_PREFIX_PATH` / `qmake` on PATH, and the editor tree checked out), `--editor-dir` /
 `DUALCEDITOR_ROOT` with the `--dualc` precedence; **one CMake tree** when the editor is on
@@ -162,6 +162,12 @@ box nobody can click. Fixed in the script: the smoke runs with the output piped,
 `QT_COMMAND_LINE_PARSER_NO_GUI_MESSAGE_BOXES=1` and `QT_QPA_PLATFORM=offscreen`, under a
 120 s deadline, and its answer must contain `DualCEditor`; the CI step has
 `timeout-minutes: 60`, so a hang is a red step, never a six-hour job.)*
+
+*(2026-10-23, the fifth run, `a653e69`: **green on both jobs** — the first Windows run with
+Qt. Measured: the `boletus-yak` artifact 13.6 MB (0.9 MB before the editor; the estimate
+said ≈ 25 MB on disk, the zipped `.yak` is about half), the `boletus-gha-folder` artifact
+14.0 MB, the native step 11 min 7 s on a cold cache with the two trees, the Windows job
+13 min 38 s. #41 closed; the five runs' record above is why the recipe reads as it does.)*
 
 ## #42 The explore switch at the new pin; the default flipped
 

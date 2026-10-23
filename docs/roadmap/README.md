@@ -29,7 +29,7 @@ stays under the cap by rule, not by baseline ([D-43](../decisions/01-settled.md)
 paths dropped, D-53; the field view kept as the fallback, D-54). Landed: the Core launcher
 half and the `view` bounds block (#39), the asks filed to DualCEditor (#40,
 [07 § 11](07-upstream-coordination/04-dualceditor-explorer.md#11-dualceditor-as-the-explorer-side-car--ask)),
-the build and CI ready for the second submodule and Qt (#41, its first green run owed).
+the second submodule, Qt and the `editor/` folder in the `.yak` (#41, green 2026-10-23, 13.6 MB).
 
 **The porous shell is bound** ([11](11-porous-shell.md), 2026-10-22): the pin moved to DualC
 `main` with its `porous` source, Core gained the arity range and the closed-set keys it needs,
@@ -98,8 +98,7 @@ every DEFERRED item in its [decisions](../decisions/README.md) row.
    ([07 § 10](07-upstream-coordination/README.md#10-a-bounded-rename-retry-in-atomicoutputcommit-on-windows--ask),
    [10/03](10-public-delivery/03-ci.md#the-flaky-windows-gate--open)). **DONE** (2026-10-07);
    the Windows runs at the new pin are the confirmation owed.
-3. **The explorer side-car's remaining items** ([12](12-explorer-sidecar.md)): the first
-   green Windows run with Qt and its `.yak` size (#41); DualCEditor landing
+3. **The explorer side-car's remaining items** ([12](12-explorer-sidecar.md)): DualCEditor landing
    [07 § 11](07-upstream-coordination/04-dualceditor-explorer.md#11-dualceditor-as-the-explorer-side-car--ask),
    then one commit bumping both pins and passing `--explore` (#42); the Rhino smoke test
    (#43). **PLANNED.**
@@ -136,7 +135,7 @@ present-tense effect is [design 06](../design/06-conventions.md).
 | 09 | [Docs layers](09-docs-layers/README.md#docs-layers--the-documentation-restructuring) | The 2026-09-21 documentation restructuring: the plan, items #21–#31, the phase table, the per-phase records, the post-close gate portability, loss audit and Linux build, the DualC handoff. | DONE — Phases 0–5 and three post-close children; the semantic-lint runs accumulate under it |
 | 10 | [Public delivery](10-public-delivery/README.md#10--public-delivery-the-repo-as-others-build-it) | Taking Boletus public: the fresh root and the offline archive (#32), DualC as a git submodule the build compiles (#33), the gate as CI with one `.yak` artifact (#34). | DONE |
 | 11 | [Porous shell](11-porous-shell.md) | DualC's `porous` source on the canvas: the re-pin to DualC `main` (#35), the Core vocabulary and tests with the OBJ path measured (#36), the `Porous Shell` component and its pages (#37), the Rhino smoke test (#38). | PARTIAL: DONE (2026-10-22, #35–#37); the rest PLANNED |
-| 12 | [The explorer side-car](12-explorer-sidecar.md) | DualCEditor bundled as `Live Preview`'s exploration window, `dualc_field_view` the fallback: the Core launcher half and the `view` block (#39), the hand-off to DualCEditor (#40), the second submodule, Qt and the `editor/` folder in the `.yak` (#41), the explore switch at the new pin (#42), the Rhino smoke test (#43). | PARTIAL: DONE (2026-10-23, #39, #40); the rest PLANNED |
+| 12 | [The explorer side-car](12-explorer-sidecar.md) | DualCEditor bundled as `Live Preview`'s exploration window, `dualc_field_view` the fallback: the Core launcher half and the `view` block (#39), the hand-off to DualCEditor (#40), the second submodule, Qt and the `editor/` folder in the `.yak` (#41), the explore switch at the new pin (#42), the Rhino smoke test (#43). | PARTIAL: DONE (2026-10-23, #39–#41); #42, #43 PLANNED |
 
 ## How the blocks relate
 
