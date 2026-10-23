@@ -75,7 +75,7 @@ the viewer cannot be built from that tree); then
 Widgets + OpenGL window never loads (`imageformats`, `iconengines`, `networkinformation`,
 `tls`, `generic`) are pruned, `LICENSES/` gets Qt's LGPL texts (from the installation's
 `Licenses/` folder when present), DualCEditor's `LICENSE` when its tree has one and a
-`THIRD-PARTY.md` notice always, and `DualCEditor --version` is the smoke. Qt is LGPL,
+`THIRD-PARTY.md` notice always, and `DualCEditor --version` is the smoke — run with its output piped, `QT_COMMAND_LINE_PARSER_NO_GUI_MESSAGE_BOXES=1` and a 120 s deadline, because Qt's parser on Windows answers with a message box when it finds no console window. Qt is LGPL,
 linked dynamically, shipped unmodified; Boletus's own code stays MIT.
 
 Prerequisites: CMake, a C++17 toolchain (Visual Studio 2022; or `g++` + Ninja, `cmake

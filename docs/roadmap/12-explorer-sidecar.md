@@ -153,6 +153,16 @@ on PATH, which `cmake --build` does not), the `_dualc/capi/dualc_capi` path tric
 `CMAKE_PROJECT_dualc_INCLUDE` hook flipping the directory's `EXCLUDE_FROM_ALL` (documented,
 but clever, and a change to the editor's build from outside it).)*
 
+*(2026-10-23, the fourth run, `c320d38` — both trees built and deployed; the step then hung
+(56 min against a 7 min baseline, cancelled by the next push through the workflow's
+concurrency group). The hang is the smoke `DualCEditor --version`: Qt's `QCommandLineParser`
+on Windows "uses message boxes to display usage information and errors if no console
+window can be obtained" (Qt 6.8 class reference), and a runner's step has none — a message
+box nobody can click. Fixed in the script: the smoke runs with the output piped, with
+`QT_COMMAND_LINE_PARSER_NO_GUI_MESSAGE_BOXES=1` and `QT_QPA_PLATFORM=offscreen`, under a
+120 s deadline, and its answer must contain `DualCEditor`; the CI step has
+`timeout-minutes: 60`, so a hang is a red step, never a six-hour job.)*
+
 ## #42 The explore switch at the new pin; the default flipped
 
 **PLANNED — waits on 07 § 11 landing upstream and a DualCEditor pin bump.** Pass `--explore`

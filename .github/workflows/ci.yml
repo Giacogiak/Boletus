@@ -142,6 +142,7 @@ jobs:
       # from the full log (which the public API serves only with a token).
       - name: Build the native side from the submodules (C ABI + viewer + editor)
         shell: bash
+        timeout-minutes: 60   # two trees build in ~30 min; a hang must not run the job's 6 h out
         run: |
           set -o pipefail
           # Three attempts, but only when the failure is a fetch: DualC's configure clones

@@ -73,6 +73,25 @@ def run(cmd: list[str], cwd: Path | None = None) -> None:
     subprocess.run([str(c) for c in cmd], cwd=str(cwd) if cwd else None, check=True)
 
 
+def run_captured(cmd: list[str], cwd: Path, env: dict[str, str], timeout: int) -> str:
+    """run() with the output piped and a deadline: for the editor's --version smoke. Piped
+    standard handles are what makes a Qt program on Windows print --version to the console
+    instead of showing a message box when no console is attached (the message box has no
+    one to click it in CI and waits forever, 2026-10-23); the deadline turns any other hang
+    into a failure with a message."""
+    print("+ " + " ".join(str(c) for c in cmd), flush=True)
+    try:
+        r = subprocess.run([str(c) for c in cmd], cwd=str(cwd), env=env, timeout=timeout,
+                           capture_output=True, text=True, errors="replace")
+    except subprocess.TimeoutExpired:
+        die("%s did not exit within %d s" % (cmd[0], timeout))
+    out = (r.stdout + r.stderr).strip()
+    print(out, flush=True)
+    if r.returncode != 0:
+        die("%s exited %d: %s" % (cmd[0], r.returncode, out or "no output"))
+    return out
+
+
 def capture(cmd: list[str], cwd: Path | None = None) -> str:
     return subprocess.run([str(c) for c in cmd], cwd=str(cwd) if cwd else None,
                           check=True, capture_output=True, text=True).stdout.strip()
@@ -307,7 +326,11 @@ def main(argv: list[str]) -> int:
         deploy_editor(exe, editor_out, qt)  # type: ignore[arg-type]  (qt is set when editor is)
         editor_notes += write_editor_licenses(editor_out, qt, editor_src)  # type: ignore[arg-type]
         if not args.no_smoke:
-            run([editor_out / "DualCEditor.exe", "--version"], cwd=editor_out)
+            env = dict(os.environ, QT_COMMAND_LINE_PARSER_NO_GUI_MESSAGE_BOXES="1",
+                       QT_QPA_PLATFORM="offscreen")
+            version = run_captured([editor_out / "DualCEditor.exe", "--version"], editor_out, env, 120)
+            if "DualCEditor" not in version:
+                die("DualCEditor --version answered %r" % version)
         print("deployed %s -> %s (%d files)" % (exe.relative_to(ebd), editor_out.relative_to(ROOT),
                                                sum(1 for _ in editor_out.rglob("*") if _.is_file())))
 
