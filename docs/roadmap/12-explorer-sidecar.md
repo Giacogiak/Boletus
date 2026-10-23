@@ -126,6 +126,16 @@ paths the script passes (`-DDUALCEDITOR_DUALC_DIR`, `-DCMAKE_PREFIX_PATH`) are n
 step's output and turns its error lines into annotations on failure — the gate step's
 idiom — so the next red run is readable from the public API.)*
 
+*(2026-10-23, later — the cause, read from the second run's annotations (`19f3593`): the
+configure died in geometry-central's fetch of Eigen, `fatal: remote error: GitLab is
+currently unable to handle this request due to load` — a gitlab.com outage, hit twice
+because each run started from an empty cache (a failed job saves none). Not a fault of
+the editor tree: the same configure passed on Linux. CI now retries the native step up to
+three times, 60 s apart, only when the log shows a fetch failure, and both jobs' native
+cache carries `restore-keys` so a recipe or editor-pin edit reuses the last tree at the
+same DualC pin, fetched sources included. The first green Windows run and the `.yak`
+size stay owed.)*
+
 ## #42 The explore switch at the new pin; the default flipped
 
 **PLANNED — waits on 07 § 11 landing upstream and a DualCEditor pin bump.** Pass `--explore`
