@@ -17,19 +17,22 @@ namespace Boletus.Grasshopper
     /// </summary>
     public abstract class PrimitiveFamilyComponent : GH_Component
     {
-        private readonly PrimitiveFamily _family;
-        private readonly Point3d[] _pointDefaults;
         private readonly HashSet<int> _typesSeen = new HashSet<int>();
 
-        protected PrimitiveFamilyComponent(string name, string nickname, string description,
-            PrimitiveFamily family, Point3d[] pointDefaults)
+        protected PrimitiveFamilyComponent(string name, string nickname, string description)
             : base(name, nickname, description, "Boletus", "Sources")
         {
-            _family = family;
-            _pointDefaults = pointDefaults;
         }
 
-        private int NumberStart => 1 + _family.PointSlots.Count;
+        // Not constructor arguments on purpose: GH_Component's constructor calls RegisterInputParams
+        // before this class's constructor body runs, so a field set here would still be null then.
+        // Each derived component returns its family and defaults from a property instead.
+        /// <summary>The catalog family this component shows.</summary>
+        protected abstract PrimitiveFamily Family { get; }
+        /// <summary>The default of each point slot, aligned with <see cref="PrimitiveFamily.PointSlots"/>.</summary>
+        protected abstract Point3d[] PointDefaults { get; }
+
+        private int NumberStart => 1 + Family.PointSlots.Count;
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -37,23 +40,23 @@ namespace Boletus.Grasshopper
             {
                 Name = "Type",
                 NickName = "T",
-                Description = "Shape: " + string.Join(", ", _family.Shapes.Select(s => $"{s.Index} {s.Name}")) + ".",
+                Description = "Shape: " + string.Join(", ", Family.Shapes.Select(s => $"{s.Index} {s.Name}")) + ".",
             };
-            foreach (var s in _family.Shapes) type.AddNamedValue(s.Name, s.Index);
+            foreach (var s in Family.Shapes) type.AddNamedValue(s.Name, s.Index);
             type.SetPersistentData(0);
             pManager.AddParameter(type);
 
-            var first = _family.Shapes[0];
-            for (int i = 0; i < _family.PointSlots.Count; i++)
+            var first = Family.Shapes[0];
+            for (int i = 0; i < Family.PointSlots.Count; i++)
             {
                 var use = first.Points[i];
-                pManager.AddPointParameter(use?.Name ?? _family.PointSlots[i], use?.NickName ?? _family.PointSlots[i],
-                    use?.Description ?? "", GH_ParamAccess.item, _pointDefaults[i]);
+                pManager.AddPointParameter(use?.Name ?? Family.PointSlots[i], use?.NickName ?? Family.PointSlots[i],
+                    use?.Description ?? "", GH_ParamAccess.item, PointDefaults[i]);
             }
-            for (int i = 0; i < _family.NumberSlots.Count; i++)
+            for (int i = 0; i < Family.NumberSlots.Count; i++)
             {
                 var use = first.Numbers[i];
-                int at = pManager.AddNumberParameter(use?.Name ?? _family.NumberSlots[i], use?.NickName ?? _family.NumberSlots[i],
+                int at = pManager.AddNumberParameter(use?.Name ?? Family.NumberSlots[i], use?.NickName ?? Family.NumberSlots[i],
                     use?.Description ?? "", GH_ParamAccess.item);
                 pManager[at].Optional = true;
             }
@@ -76,23 +79,23 @@ namespace Boletus.Grasshopper
             da.GetData(0, ref type);
             _typesSeen.Add(type);
 
-            var shape = _family.Find(type);
+            var shape = Family.Find(type);
             if (shape is null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error,
-                    $"Unknown {_family.Name} type {type} (expected 0..{_family.Shapes.Count - 1}).");
+                    $"Unknown {Family.Name} type {type} (expected 0..{Family.Shapes.Count - 1}).");
                 return;
             }
 
-            var points = new (double X, double Y, double Z)[_family.PointSlots.Count];
+            var points = new (double X, double Y, double Z)[Family.PointSlots.Count];
             for (int i = 0; i < points.Length; i++)
             {
-                Point3d p = _pointDefaults[i];
+                Point3d p = PointDefaults[i];
                 da.GetData(1 + i, ref p);
                 points[i] = (p.X, p.Y, p.Z);
             }
 
-            var numbers = new double?[_family.NumberSlots.Count];
+            var numbers = new double?[Family.NumberSlots.Count];
             for (int i = 0; i < numbers.Length; i++)
             {
                 double v = double.NaN;
@@ -111,7 +114,7 @@ namespace Boletus.Grasshopper
             base.AfterSolveInstance();
             // One type across the solution: name the slots after it. Several (a list on Type):
             // the slots keep the generic names, since no one shape describes them.
-            var shape = _typesSeen.Count == 1 ? _family.Find(_typesSeen.First()) : null;
+            var shape = _typesSeen.Count == 1 ? Family.Find(_typesSeen.First()) : null;
             Message = shape?.Name ?? (_typesSeen.Count > 1 ? "(mixed)" : null);
             if (Relabel(shape)) Attributes?.ExpireLayout();
         }
@@ -119,10 +122,10 @@ namespace Boletus.Grasshopper
         private bool Relabel(PrimitiveShape? shape)
         {
             bool changed = false;
-            for (int i = 0; i < _family.PointSlots.Count; i++)
-                changed |= Label(Params.Input[1 + i], shape?.Points[i], _family.PointSlots[i], shape);
-            for (int i = 0; i < _family.NumberSlots.Count; i++)
-                changed |= Label(Params.Input[NumberStart + i], shape?.Numbers[i], _family.NumberSlots[i], shape);
+            for (int i = 0; i < Family.PointSlots.Count; i++)
+                changed |= Label(Params.Input[1 + i], shape?.Points[i], Family.PointSlots[i], shape);
+            for (int i = 0; i < Family.NumberSlots.Count; i++)
+                changed |= Label(Params.Input[NumberStart + i], shape?.Numbers[i], Family.NumberSlots[i], shape);
             return changed;
         }
 

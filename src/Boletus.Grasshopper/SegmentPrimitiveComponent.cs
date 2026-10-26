@@ -13,14 +13,19 @@ namespace Boletus.Grasshopper
     /// </summary>
     public sealed class SegmentPrimitiveComponent : PrimitiveFamilyComponent
     {
+        private static readonly Point3d[] Defaults = { new Point3d(0, -1, 0), new Point3d(0, 1, 0) };
+
         public SegmentPrimitiveComponent()
             : base("Segment Primitive", "SegPrim",
                    "A primitive spanned between two points (capsule/cappedcylinder/roundcone/vesica/" +
                    "infinitecylinder). The inputs rename themselves after the selected type; an empty " +
-                   "number takes the type's default.",
-                   PrimitiveCatalog.Segment, new[] { new Point3d(0, -1, 0), new Point3d(0, 1, 0) })
+                   "number takes the type's default.")
         {
         }
+
+        protected override PrimitiveFamily Family => PrimitiveCatalog.Segment;
+
+        protected override Point3d[] PointDefaults => Defaults;
 
         public override Guid ComponentGuid =>
             new Guid("4F1B2A30-0000-4000-8000-000000000041");

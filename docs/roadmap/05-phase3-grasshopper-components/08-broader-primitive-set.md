@@ -90,6 +90,25 @@ into a `01-sources/` folder (principle 5).
   posts its remark and contours under terminal bounds; a canvas saved with the type set to
   Rhombus reopens with the Rhombus labels.
 
+### Load failure of the two Source components in Rhino
+
+- **Dated 2026-10-26.** **Symptom:** Grasshopper's load report named `SegmentPrimitiveComponent` and
+  `AxialPrimitiveComponent` (each a `TargetInvocationException` around a
+  `NullReferenceException`); the other components loaded. Rhino 8 SR35 on Windows.
+- **Cause (read from the stack trace):** `GH_Component`'s constructor calls the virtual
+  `RegisterInputParams` through `PostConstructor` *before* the subclass constructor body runs.
+  `PrimitiveFamilyComponent` took its `PrimitiveFamily` and point defaults as constructor
+  arguments and stored them in fields, so `RegisterInputParams` read a null `_family`. The
+  catalog data was never at fault (the 162 Core tests pass); no unit test builds a Grasshopper
+  component, so CI stayed green.
+- **Fix:** the family and the point defaults are now abstract properties on
+  `PrimitiveFamilyComponent`, which each subclass implements (`Family`, `PointDefaults`). Nothing
+  reads a field of the subclass during the base constructor. Components, inputs and outputs are
+  unchanged, so the command reference needs no edit.
+- **Verified:** `dotnet build` Release, 0 warnings, 0 errors; the gate green. A trace script run
+  inside Rhino 8 reproduced the NRE before the fix; after reinstalling the rebuilt `.gha`, the
+  user reports the components load. The manual smoke above is still pending.
+
 ---
 
 ← Back to the [Phase 3b index](README.md) · the [Roadmap index](../README.md).
